@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><link rel="stylesheet" href="/_astro/common-CDAh9.css" type="text/css"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My Astro Site</title><link rel="stylesheet" href="/_astro/index-Z6aRvb.css" type="text/css"></head><body><main><header><h1>Welcome to My Blog</h1></header><article class="astro-ivAwT2xp"><h1 class="astro-ivAwT2xp" id="this-is-a-heading">This is a heading</h1><hr class="astro-ivAwT2xp"><p>Seems to be working</p><pre class="language-python"><code class="language-python">
+    <span class="token keyword">from</span> functools <span class="token keyword">import</span> wraps
+    <span class="token keyword">def</span> <span class="token function">bang</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token decorator annotation punctuation">@wraps</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span>
+        <span class="token keyword">def</span> <span class="token function">inner</span><span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            string <span class="token operator">=</span> func<span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> string <span class="token operator">+</span> <span class="token string">'!'</span>
+        
+        <span class="token keyword">return</span> inner
+
+    <span class="token decorator annotation punctuation">@bang</span>
+    <span class="token keyword">def</span> <span class="token function">greet</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string-interpolation"><span class="token string">f'Hello, </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span><span class="token string">'</span></span>
+    
+    <span class="token keyword">print</span><span class="token punctuation">(</span>greet<span class="token punctuation">(</span><span class="token string">'Tushar'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  </code></pre></article></main></body></html>
