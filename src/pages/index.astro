@@ -1,0 +1,23 @@
+---
+import Blog from './posts/first-blog.astro';
+
+const title = 'My Astro Site';
+---
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <link rel="stylesheet" href="/style/global.css">
+  <link rel="stylesheet" href="/style/home.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Welcome to My Blog</h1>
+    </header>
+
+    <Blog />
+  </main>
+</body>
+</html>
