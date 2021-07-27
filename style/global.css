@@ -40,3 +40,12 @@ body::-webkit-scrollbar-thumb {
 pre {
   background: var(--highlight-color);
 }
+@media screen and (min-width: 1601px) {
+  html {
+    font-size: 1vw;
+  }
+}
+
+h1 {
+  color: var(--primary-color);
+}
