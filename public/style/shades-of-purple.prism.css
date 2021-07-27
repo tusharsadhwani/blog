@@ -20,9 +20,9 @@ pre[class*="language-"] {
     "Ubuntu Mono", monospace;
   font-weight: 400;
   font-size: 1rem;
-  line-height: 25px;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px #222245;
+  line-height: 1.5rem;
+  letter-spacing: 0.04rem;
+  text-shadow: 0 0.1rem #222245;
 }
 
 pre[class*="language-"]::-moz-selection,
@@ -44,7 +44,7 @@ pre[class*="language-"] {
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-  border-radius: 6px;
+  border-radius: 0.5rem;
 }
 
 :not(pre) > code[class*="language-"] {
@@ -180,7 +180,7 @@ code.language-css .token.selector > .token.pseudo-element {
 pre .line-highlight,
 pre .line-highlight.line-highlight,
 pre > code.line-highlight {
-  margin-top: 36px;
+  margin-top: 2rem;
   background: linear-gradient(to right, rgba(179, 98, 255, 0.17), transparent);
 }
 
