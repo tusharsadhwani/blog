@@ -38,14 +38,12 @@ code[class*="language-"] ::selection {
 }
 
 pre[class*="language-"] {
-  padding: 1em;
   margin: 0.5em 0;
   overflow: auto;
 }
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-  background: #1e1e3f;
   border-radius: 6px;
 }
 
