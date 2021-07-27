@@ -9,6 +9,17 @@ const title = 'My Astro Site';
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title}</title>
   <link rel="stylesheet" href="/style/global.css">
+  <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+  />
+  <link
+    rel="stylesheet"
+    media="print"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+    onload="this.media='all'"
+  />
 </head>
 <body>
   <main>
