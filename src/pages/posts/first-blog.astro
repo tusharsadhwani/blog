@@ -1,43 +1,29 @@
 ---
-import { Markdown, Prism } from 'astro/components';
+import { Markdown } from 'astro/components';
 ---
 <head>
   <link rel="stylesheet" href="/style/shades-of-purple.prism.css">
 </head>
-<article>
-  <Markdown>
-    ## This is a heading
-    <hr />
+<Markdown>
+  ## This is a heading
+  <hr />
 
-    Seems to be working
-  </Markdown>
-  <Prism lang="python" code={`
-    from functools import wraps
-    def bang(func):
-        @wraps(func)
-        def inner(*args, **kwargs):
-            string = func(*args, **kwargs)
-            return string + '!'
-        
-        return inner
+  Seems to be working
 
-    @bang
-    def greet(name):
-        return f'Hello, {name}'
-    
-    print(greet('Tushar'))
-  `}></Prism>
-</article>
+  ```python
+  from functools import wraps
+  def bang(func):
+      @wraps(func)
+      def inner(*args, **kwargs):
+          string = func(*args, **kwargs)
+          return string + '!'
+      
+      return inner
 
-<style>
-  article {
-    padding-top: 2em;
-    line-height: 1.5;
-  }
-  pre,
-  code {
-    font-family: var(--font-mono);
-    background: var(--color-light);
-    border-radius: 4px;
-  }
-</style>
+  @bang
+  def greet(name):
+      return f'Hello, {name}'
+  
+  print(greet('Tushar'))
+  ```
+</Markdown>
