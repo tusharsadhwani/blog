@@ -80,4 +80,4 @@ You can find the complete solution [here](https://github.com/tusharsadhwani/leet
 
 Currently this package only works with Python solutions. But if required, it can be extended to use any language at all. If you're interested in working on other language support, do let me know.
 
-Thanks for reading, I hope this helps you be more productive. :sparkles:
+Thanks for reading, I hope this helps you be more productive. ✨

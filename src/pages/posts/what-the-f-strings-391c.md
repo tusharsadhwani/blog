@@ -8,7 +8,7 @@ alt: "Test"
 layout: "../../layouts/BlogPost.astro"
 ---
 
-So a couple months ago, I wrote a [comprehensive blog on mypy](https://dev.to/tusharsadhwani/the-comprehensive-guide-to-mypy-561m). Today I'm planning to do the same with f-strings, putting everything I know about them into a single source of knowledge. It's an awesome Python feature, and I hope you'll get to learn something new about it :sparkles:
+So a couple months ago, I wrote a [comprehensive blog on mypy](https://dev.to/tusharsadhwani/the-comprehensive-guide-to-mypy-561m). Today I'm planning to do the same with f-strings, putting everything I know about them into a single source of knowledge. It's an awesome Python feature, and I hope you'll get to learn something new about it ✨
 
 ## Index
 
@@ -230,9 +230,9 @@ datetime.datetime(2021, 7, 6, 2, 21, 56, 698285)
 datetime.datetime(2021, 7, 6, 2, 22, 17, 709937)
 >>> print(f'{datetime.now()!s}')  # str value
 2021-07-06 02:22:20.081837
->>> sparkles = ':sparkles:'
+>>> sparkles = '✨'
 >>> print(f'{sparkles}')
-:sparkles:
+✨
 >>> print(f'{sparkles!a}')        # ascii-safe value
 '\u2728'
 ```
@@ -351,4 +351,4 @@ Some nitpicks from my side about f-strings are:
 
 All in all, f-strings are awesome, and everyone should use them :P
 
-Anywho, if you have any questions or suggestions, drop them below. I'd love to hear from you :sparkles:
+Anywho, if you have any questions or suggestions, drop them below. I'd love to hear from you ✨
