@@ -1,0 +1,24 @@
+---
+import { Markdown } from 'astro/components';
+import BaseHead from '../components/BaseHead.astro';
+import BlogHeader from '../components/BlogHeader.astro';
+import BlogPost from '../components/BlogPost.astro';
+
+const {content} = Astro.props;
+const {title, description, publishDate, author, heroImage, permalink, alt} = content;
+---
+<html lang={ content.lang || 'en' }>
+  <head>
+    <BaseHead title={title} description={description} permalink={permalink} />
+    <link rel="stylesheet" href="/style/global.css" />
+    <link rel="stylesheet" href="/style/shades-of-purple.prism.css" />
+  </head>
+
+  <body>
+    <BlogHeader />
+    <BlogPost title={title} author={author} heroImage={heroImage} publishDate={publishDate} alt={alt}>
+      <slot />
+    </BlogPost>
+  </body>
+</html>
+
