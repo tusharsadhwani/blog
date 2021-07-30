@@ -1,5 +1,5 @@
 ---
-title: "Connecting androind apps to localost, simplified"
+title: "Connecting android apps to localost, simplified"
 description: "This is a test."
 publishDate: "Tuesday, July 30 2021"
 author: "Tushar"
