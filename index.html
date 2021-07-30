@@ -1,15 +1,43 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My Astro Site</title><link rel="stylesheet" href="/_astro/index-4z4SL.css" type="text/css"><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&amp;display=swap"><link rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&amp;display=swap" onload="this.media='all'"></head><body><main><header><h1>Welcome to My Blog</h1></header><link rel="stylesheet" href="/_astro/common-Z1WyBFq.css" type="text/css"><h2 class="astro-ivAwT2xp" id="this-is-a-heading">This is a heading</h2><hr><p>Seems to be working</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> wraps
-<span class="token keyword">def</span> <span class="token function">bang</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token decorator annotation punctuation">@wraps</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span>
-    <span class="token keyword">def</span> <span class="token function">inner</span><span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        string <span class="token operator">=</span> func<span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
-        <span class="token keyword">return</span> string <span class="token operator">+</span> <span class="token string">'!'</span>
-    
-    <span class="token keyword">return</span> inner
+<!DOCTYPE html><html lang="en"><head><link rel="stylesheet" href="/_astro/index-ZEwbz4.css" type="text/css"><link rel="stylesheet" href="/_astro/common-19Y2Ta.css" type="text/css"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>"><title>Example Blog</title><meta name="title" content="Example Blog"><meta name="description" content="The perfect starter for your perfect blog."><meta property="og:type" content="website"><meta property="og:url" content="https://example.com/"><meta property="og:title" content="Example Blog"><meta property="og:description" content="The perfect starter for your perfect blog."><meta property="og:image" content="https://astro.build/social.jpg?v=1"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://example.com/"><meta property="twitter:title" content="Example Blog"><meta property="twitter:description" content="The perfect starter for your perfect blog."><meta property="twitter:image" content="https://astro.build/social.jpg?v=1"><link rel="preconnect" href="https://fonts.gstatic.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&amp;family=IBM+Plex+Sans:wght@400;700&amp;display=swap"><style type="text/css">
 
-<span class="token decorator annotation punctuation">@bang</span>
-<span class="token keyword">def</span> <span class="token function">greet</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">return</span> <span class="token string-interpolation"><span class="token string">f'Hello, </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span><span class="token string">'</span></span>
+      body {
+        width: 100%;
+        display: grid;
+        grid-template-rows: 3.5rem 1fr;
+        --gutter: 0.5rem;
+        --doc-padding: 2rem;
+      }
 
-<span class="token keyword">print</span><span class="token punctuation">(</span>greet<span class="token punctuation">(</span><span class="token string">'Tushar'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-</code></pre></main></body></html>
+      header.astro-ldKR6c5M {
+        width: 100%;
+        height: 100%;
+        background-color: var(--theme-bg-offset);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content.astro-ldKR6c5M {
+        margin-top: 4rem;
+        margin-bottom: 8rem;
+      }
+
+      .content.astro-ldKR6c5M main > * + * {
+        margin-top: 1rem;
+      }
+
+      .intro.astro-ldKR6c5M {
+        padding-bottom: 4rem;
+        margin-bottom: 2rem;
+        border-bottom: 4px solid var(--theme-divider);
+      }
+
+      .intro.astro-ldKR6c5M > .astro-ldKR6c5M {
+        margin: 0;
+      }
+
+      .latest.astro-ldKR6c5M {
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+    </style></head><body><header class="layout astro-mYHAcGzO"><article class="astro-mYHAcGzO"><h1 class="astro-mYHAcGzO"><a href="/" class="astro-mYHAcGzO"><span class="astro-mYHAcGzO">My Blog</span></a></h1></article></header><div class="layout astro-ldKR6c5M"><article class="content astro-ldKR6c5M"><section class="intro astro-ldKR6c5M"><h1 class="latest astro-ldKR6c5M">Example Blog</h1><p class="astro-ldKR6c5M">The perfect starter for your perfect blog.</p></section><section class="astro-ldKR6c5M"><article class="post-preview astro-m3wp0aQL"><header class="astro-m3wp0aQL"><h3 class="publish-date astro-m3wp0aQL">Tuesday, July 30 2021</h3><a href="/posts/test-post" class="astro-m3wp0aQL"><h1 class="title astro-m3wp0aQL">Test post</h1></a></header><main class="astro-m3wp0aQL"><p class="astro-m3wp0aQL">This is a test.</p><a href="/posts/test-post" class="astro-m3wp0aQL">Read more</a></main></article></section></article></div></body></html>
