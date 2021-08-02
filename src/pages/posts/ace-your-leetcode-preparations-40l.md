@@ -26,16 +26,35 @@ And it has made me many times more productive in solving leetcode problems.
 
 ## An example workflow
 
-- I start with opening my github repo where I store all of my leetcode problems: ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0ekjb1stgjvd4u5thl3i.png)
+- I start with opening my github repo where I store all of my leetcode problems:
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0ekjb1stgjvd4u5thl3i.png)
 
 - Then I head over to any leetcode problem page (example: [Plus One](https://leetcode.com/problems/plus-one/)). I copy the problem title and format it to be used as my file name (I specifically created the [snekify](https://github.com/tusharsadhwani/snekify) cli tool for that), and then copy over the Solution code snippet.
+
 ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/g7xrybu53nwgqgpyicwi.png)
-<figcaption>This creates the filename I want.</figcaption> 
+
+<figcaption>This creates the filename I want.</figcaption>
+
 ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ppcrdakrnpoq4aojeovj.png) <figcaption>I also use static type checking, but feel free to remove that!</figcaption>
+
 - Then I copy over the given example test cases into a variable called `tests`:
-  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/qm7pahnnorj770nzctfu.png) ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/582b21d0z9a54p4faare.png)
-- Then it's time to write a solution and test it using the `pyleet` command given by my testing library: ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0z3g5tsc73x5fzrxb9at.png) ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ys4g5eg77ib2thkfc33d.png)
-- Uh oh. Looks like I missed an edge case. Let's fix the code: ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/g1thm3azff0w7cnsherp.png) ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ovyi625a9wyf9f43189n.png)
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/qm7pahnnorj770nzctfu.png)
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/582b21d0z9a54p4faare.png)
+
+- Then it's time to write a solution and test it using the `pyleet` command given by my testing library:
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0z3g5tsc73x5fzrxb9at.png)
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ys4g5eg77ib2thkfc33d.png)
+
+- Uh oh. Looks like I missed an edge case. Let's fix the code:
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/g1thm3azff0w7cnsherp.png)
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ovyi625a9wyf9f43189n.png)
 
 And now all tests pass. Now you can copy your code file (yes, with the `tests` and all) straight into leetcode's editor and submit it. No more silly "Wrong Answers".
 
@@ -59,10 +78,22 @@ A `validator` is a function that receives 3 arguments:
 
 - Head to [the question](https://leetcode.com/problems/linked-list-cycle/).
 - Copy the problem title, format it, and paste the sample code and examples.
-  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0q77wea4f4f293gcdg2q.png) ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ozbqxvspqwhjsuc7x4gw.png)
-- Now to be able to run the tests locally, we need to write our own code to convert the array into a linked list: ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cs5i3k298is70mq30b3z.png)
-- Now we can solve the question: ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hmhyiymwdgvo9xxl5irx.png)
-- Running the tests: ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vm0wg2di5w4thu882y47.png)
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0q77wea4f4f293gcdg2q.png)
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ozbqxvspqwhjsuc7x4gw.png)
+
+- Now to be able to run the tests locally, we need to write our own code to convert the array into a linked list:
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cs5i3k298is70mq30b3z.png)
+
+- Now we can solve the question:
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hmhyiymwdgvo9xxl5irx.png)
+
+- Running the tests:
+
+  ![image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vm0wg2di5w4thu882y47.png)
 
 And sure enough, we passed all the test cases. Now simply copy the entire code over to leetcode, and:
 
