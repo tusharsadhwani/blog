@@ -18,7 +18,7 @@ body {
 }
 
 body {
-  padding: 2rem;
+  padding: 1rem;
   background: var(--background-color);
   color: white;
   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, Segoe UI,
@@ -56,4 +56,21 @@ pre {
 
 h1 {
   color: var(--primary-color);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 1rem auto;
+}
+a {
+  color: var(--link-color);
+}
+::marker {
+  content: "•";
+  font-family: sans-serif;
+  font-size: 1rem;
+}
+li {
+  padding-left: 0.5rem;
 }
