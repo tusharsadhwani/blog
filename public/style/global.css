@@ -73,6 +73,9 @@ img {
 }
 a {
   color: var(--link-color);
+  text-underline-offset: 0.25rem;
+  text-decoration-thickness: 0.04rem;
+  text-decoration-style: dashed;
 }
 a:visited {
   color: var(--primary-color);
