@@ -55,7 +55,19 @@ pre {
   background: var(--highlight-color);
   padding: 1em;
   border: 2px solid var(--border-color);
+  overflow: auto;
 }
+pre::-webkit-scrollbar {
+  height: 0.3rem;
+}
+pre::-webkit-scrollbar-track {
+  height: 0.3rem;
+}
+pre::-webkit-scrollbar-thumb {
+  height: 0.3rem;
+  background-color: var(--border-color);
+}
+
 @media screen and (min-width: 1601px) {
   html {
     font-size: 1vw;
@@ -73,6 +85,9 @@ img {
 }
 a {
   color: var(--link-color);
+  text-underline-offset: 0.25rem;
+  text-decoration-thickness: 0.04rem;
+  text-decoration-style: dashed;
 }
 a:visited {
   color: var(--primary-color);
