@@ -1,8 +1,8 @@
 ---
 title: "What the f-strings?"
-description: "This is a test."
+description: "A comprehensive overview of Python's hottest new feature: f-strings."
 publishDate: "Tuesday, July 30 2021"
-author: "Tushar"
+author: "Tushar Sadhwani"
 heroImage: "/social.jpg"
 alt: "Test"
 layout: "../../layouts/BlogPost.astro"

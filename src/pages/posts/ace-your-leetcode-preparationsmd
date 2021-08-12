@@ -1,8 +1,8 @@
 ---
 title: "Ace your leetcode preparations"
-description: "This is a test."
+description: "The things I made and tips I learned while practicing my Data Structures and Algorithms on LeetCode."
 publishDate: "Tuesday, July 30 2021"
-author: "Tushar"
+author: "Tushar Sadhwani"
 heroImage: "/social.jpg"
 alt: "Test"
 layout: "../../layouts/BlogPost.astro"
