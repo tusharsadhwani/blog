@@ -3,8 +3,8 @@ title: "How to setup PostgreSQL on Manjaro linux / Arch"
 description: "This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do."
 publishDate: "Saturday, 26 September 2020"
 author: "Tushar Sadhwani"
-heroImage: "/social.jpg"
-alt: "Test"
+heroImage: "/images/postgres.jpg"
+alt: "How to setup PostgreSQL on Manjaro linux / Arch"
 layout: "../../layouts/BlogPost.astro"
 ---
 

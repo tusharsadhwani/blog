@@ -3,8 +3,8 @@ title: "What the f-strings?"
 description: "A comprehensive overview of Python's hottest new feature: f-strings."
 publishDate: "Wednesday, July 7 2021"
 author: "Tushar Sadhwani"
-heroImage: "/social.jpg"
-alt: "Test"
+heroImage: "/images/f-strings.jpg"
+alt: "What the f-strings?"
 layout: "../../layouts/BlogPost.astro"
 ---
 
