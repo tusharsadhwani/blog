@@ -13,7 +13,7 @@
   --shadow-color: rgb(26, 26, 36);
 }
 
-* + * {
+body * + * {
   margin-top: 1rem;
 }
 
