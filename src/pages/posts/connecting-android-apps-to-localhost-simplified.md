@@ -1,7 +1,7 @@
 ---
 title: "Connecting android apps to localost, simplified"
 description: "Figure out how to setup your android development environment, the right way."
-publishDate: "Tuesday, July 30 2021"
+publishDate: "Saturday, 17 April 2021"
 author: "Tushar Sadhwani"
 heroImage: "/social.jpg"
 alt: "Test"

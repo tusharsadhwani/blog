@@ -1,7 +1,7 @@
 ---
 title: "Does Python need types?"
 description: "Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?"
-publishDate: "Tuesday, July 30 2021"
+publishDate: "Wednesday, 28 April 2021"
 author: "Tushar Sadhwani"
 heroImage: "/social.jpg"
 alt: "Test"
