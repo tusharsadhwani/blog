@@ -114,3 +114,7 @@ figcaption {
   font-size: 1rem;
   margin-top: 0;
 }
+details {
+  border-left: 0.15rem solid currentColor;
+  padding-left: 0.6rem;
+}
