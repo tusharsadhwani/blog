@@ -1,5 +1,7 @@
 code[class*="language-"],
 pre[class*="language-"] {
+  display: block;
+
   color: #9efeff;
   direction: ltr;
   text-align: left;
@@ -20,7 +22,7 @@ pre[class*="language-"] {
     "Ubuntu Mono", monospace;
   font-weight: 400;
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.4;
   letter-spacing: 0.04rem;
   text-shadow: 0 0.1rem #222245;
 }
