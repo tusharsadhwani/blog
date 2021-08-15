@@ -49,7 +49,8 @@ body::-webkit-scrollbar-thumb {
   width: 0.5rem;
   background-color: rgba(255, 255, 255, 0.25);
   border-radius: 1rem;
-  border: 0.4rem solid var(--background-color);
+  border: solid var(--background-color);
+  border-width: 0.2rem 0.4rem;
 }
 pre {
   background: var(--highlight-color);
