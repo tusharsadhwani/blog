@@ -68,10 +68,19 @@ pre::-webkit-scrollbar-thumb {
   height: 0.3rem;
   background-color: var(--border-color);
 }
+pre,
+code {
+  font-family: "Inconsolata", monospace;
+  font-size: 1.37rem;
+}
 
 @media screen and (min-width: 1601px) {
   html {
     font-size: 1vw;
+  }
+  pre,
+  code {
+    font-size: 0.75vw;
   }
 }
 
@@ -92,6 +101,9 @@ a {
 }
 a:visited {
   color: var(--primary-color);
+}
+a:active {
+  color: var(--active-color);
 }
 li::marker {
   content: "•";
