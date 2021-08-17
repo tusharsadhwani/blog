@@ -68,6 +68,10 @@ pre::-webkit-scrollbar-thumb {
   height: 0.3rem;
   background-color: var(--border-color);
 }
+pre,
+code {
+  font-family: "Inconsolata", monospace;
+}
 
 @media screen and (min-width: 1601px) {
   html {
