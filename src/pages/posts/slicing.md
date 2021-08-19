@@ -128,9 +128,9 @@ And here's an updated `slice` Python function that factors this in:
 ```python
 def slice(array, start, stop, step=1):
     if start < 0:
-        start = len(array) - start
+        start = len(array) + start
     if stop < 0:
-        stop = len(array) - stop
+        stop = len(array) + stop
 
     result = []
     index = start
@@ -172,9 +172,9 @@ If you want an updated Python code that factors this in, here it is:
 ```python
 def slice(array, start, stop, step=1):
     if start < 0:
-        start = len(array) - start
+        start = len(array) + start
     if stop < 0:
-        stop = len(array) - stop
+        stop = len(array) + stop
 
     result = []
     index = start
