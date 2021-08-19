@@ -56,7 +56,7 @@ def slice(array, start, stop, step):
     result = []
     index = start
     while index < stop:
-        result.append(array[start])
+        result.append(array[index])
         index += step
 
     return result
@@ -135,7 +135,7 @@ def slice(array, start, stop, step):
     result = []
     index = start
     while index < stop:
-        result.append(array[start])
+        result.append(array[index])
         index += step
 
     return result
@@ -181,12 +181,12 @@ def slice(array, start, stop, step):
 
     if step >= 0:
         while index < stpp:
-            result.append(array[start])
+            result.append(array[index])
             index += step
     else:
         # Negative slice
         while index > stop:
-            result.append(array[start])
+            result.append(array[index])
             index += step
 
     return result
