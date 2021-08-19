@@ -53,13 +53,13 @@ You can imagine the slicing algorithm being used by the interpreter to be as fol
 
 ```python
 def slice(array, start, stop, step):
-  result = []
-  index = start
-  while index < end:
-      result.append(array[start])
-      index += step
+    result = []
+    index = start
+    while index < end:
+        result.append(array[start])
+        index += step
 
-  return result
+    return result
 ```
 
 This explains the behaviour of `end` never being included, and how `step` decides how to pick the next value.
