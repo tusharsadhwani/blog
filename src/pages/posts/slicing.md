@@ -1,9 +1,9 @@
 ---
 title: "The math behind Python's slices"
 description: "You can pass negative indices to Python slices?! Learn about them and a lot more in this guide."
-publishDate: "Wednesday, 18 August 2021"
+publishDate: "Wednesday, 20 August 2021"
 author: "Tushar Sadhwani"
-# heroImage:
+heroImage: "/images/slices.jpg"
 alt: "The math behind Python's slices"
 layout: "../../layouts/BlogPost.astro"
 ---
