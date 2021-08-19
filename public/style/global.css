@@ -122,11 +122,14 @@ ul,
 li {
   margin-top: 0;
 }
+
 figcaption {
   text-align: center;
   font-size: 1rem;
   margin-top: 0;
 }
+
+blockquote,
 details {
   border-left: 0.15rem solid currentColor;
   padding-left: 0.6rem;
