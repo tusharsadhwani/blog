@@ -52,7 +52,7 @@ Apart from these, there's also a third argument: `step`, which tells how many nu
 You can imagine the slicing algorithm being used by the interpreter to be as following:
 
 ```python
-def slice(array, start, stop, step):
+def slice(array, start, stop, step=1):
     result = []
     index = start
     while index < stop:
@@ -126,7 +126,7 @@ For example:
 And here's an updated `slice` Python function that factors this in:
 
 ```python
-def slice(array, start, stop, step):
+def slice(array, start, stop, step=1):
     if start < 0:
         start = len(array) - start
     if stop < 0:
@@ -170,7 +170,7 @@ That explains why `nums[-1:-3:-1]` returns `[6, 5]`, it's because it starts with
 If you want an updated Python code that factors this in, here it is:
 
 ```python
-def slice(array, start, stop, step):
+def slice(array, start, stop, step=1):
     if start < 0:
         start = len(array) - start
     if stop < 0:
