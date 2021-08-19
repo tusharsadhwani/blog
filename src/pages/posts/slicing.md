@@ -119,7 +119,7 @@ For example:
 [1, 2, 3, 4, 5]
 >>> nums[:-3]    # all values except the last three
 [1, 2, 3]
->>> nums[-3:-1]  # all values from last 3rd, except the last one
+>>> nums[-3:]  # all values from last 3rd
 [4, 5]
 ```
 
