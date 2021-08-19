@@ -102,12 +102,12 @@ Well, the same thing happens in slices as well:
 Like, all of these 3 mean the same thing:
 
 ```python
->>> nums[  5 :   3 : -1]
-[6, 5]
->>> nums[6-1 : 6-3 : -1]
-[6, 5]
->>> nums[ -1 :  -3 : -1]
-[6, 5]
+>>> nums[  3 :   5]
+[4, 5]
+>>> nums[6-3 : 6-1]
+[4, 5]
+>>> nums[ -3 :  -1]
+[4, 5]
 ```
 
 And once you know this, _it's simple math_.
