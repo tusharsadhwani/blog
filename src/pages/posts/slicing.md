@@ -199,3 +199,7 @@ Well that's easy. Since -1 points to the end of the array, and step is 1 (positi
 ## Summary
 
 Hopefully it is evident that Python's slices are rather straightforward, once you understand a couple basic concepts about how they function.
+
+Also note, that my `slice` function isn't an exact implementation of the algorithm, though it comes close. Currently it has no way of _not_ specifying a start or an end, and it also creates an infinite loop for `step=0`. But apart from that, it's pretty much identical to the Python builtin slice implementation.
+
+So that's pretty much all the math about Python slices, and how they work under the hood. ✨
