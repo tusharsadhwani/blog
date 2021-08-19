@@ -55,7 +55,7 @@ You can imagine the slicing algorithm being used by the interpreter to be as fol
 def slice(array, start, stop, step):
     result = []
     index = start
-    while index < end:
+    while index < stop:
         result.append(array[start])
         index += step
 
@@ -134,7 +134,7 @@ def slice(array, start, stop, step):
 
     result = []
     index = start
-    while index < end:
+    while index < stop:
         result.append(array[start])
         index += step
 
@@ -180,11 +180,12 @@ def slice(array, start, stop, step):
     index = start
 
     if step >= 0:
-        while index < end:
+        while index < stpp:
             result.append(array[start])
             index += step
     else:
-        while index > end:
+        # Negative slice
+        while index > stop:
             result.append(array[start])
             index += step
 
