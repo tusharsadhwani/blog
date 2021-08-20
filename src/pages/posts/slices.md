@@ -26,7 +26,7 @@ Like so:
 [4, 5, 6]
 ```
 
-> Note that the `end` index, when provided, is never included in the result
+> Note that the `end` index, when provided, is never included in the result.
 
 And just for completion's sake, if you don't provide either, it just clones the entire list:
 
