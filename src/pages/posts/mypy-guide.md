@@ -271,9 +271,9 @@ print(unique_count([1, 2, 1, 3, 1, 2, 4, 3, 1]))  # 4
 Since the set has no items to begin with, mypy can't statically infer what type it should be.
 
 <details>
-<summary>PS:</summary>
+<summary>PS.</summary>
 
-> _Small note, if you try to run mypy on the piece of code above, it'll actually succeed. It's because the mypy devs are smart, and they added simple cases of look-ahead inference. Meaning, new versions of mypy can figure out such types in simple cases. Keep in mind that it doesn't always work._
+_Small note, if you try to run mypy on the piece of code above, it'll actually succeed. It's because the mypy devs are smart, and they added simple cases of look-ahead inference. Meaning, new versions of mypy can figure out such types in simple cases. Keep in mind that it doesn't always work._
 
 </details>
 
@@ -1039,7 +1039,7 @@ reveal_type(fake_func)                  # FakeFuncs
 <details>
 <summary>PS.</summary>
 
-> _Running mypy over the above code is going to give a cryptic error about "Special Forms", don't worry about that right now, we'll fix this in the [Protocol](#protocol) section. All I'm showing right now is that the Python code works._
+_Running mypy over the above code is going to give a cryptic error about "Special Forms", don't worry about that right now, we'll fix this in the [Protocol](#protocol) section. All I'm showing right now is that the Python code works._
 
 </details>
 
