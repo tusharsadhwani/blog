@@ -71,7 +71,7 @@ pre::-webkit-scrollbar-thumb {
 pre,
 code {
   font-family: "Inconsolata", monospace;
-  font-size: 1.37rem;
+  font-size: 1.1em;
 }
 
 @media screen and (min-width: 1601px) {
