@@ -8,7 +8,7 @@
   &lt;/script&gt; --&gt;</span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span>
 </code></pre><p>This script, when ran in a browser, will redirect you to <strong>medium.com</strong> immediately. Put this file in a repository on GitHub, add the domain name <strong>tshr.me</strong> to the GitHub Pages custom domain field, and BOOM!💥</p><p><strong>tshr.me</strong> now redirects to <strong>medium.com</strong>.</p><p>… you don’t seem very impressed. Don’t worry, we’ll get there.</p><h2 id="just-automate-it-with-python">Just Automate it (with&nbsp;Python!)</h2><p>Here comes the fun part:</p><p>If we could generate all the static short links we want that use the above technique to redirect to the actual URL we want, then this technique might be of some actual use, right?</p><p>So I wrote a python scripts that takes in JSON data of various short links and their corresponding redirect URLs, and generates all the HTML pages for me.</p><pre class=""><code class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    html <span class="token operator">=</span> <span class="token string">'&lt;html&gt;&lt;head&gt;&lt;meta http-equiv="refresh" content="0;url=&amp;#123;url}" /&gt;&lt;/head&gt;&lt;/html&gt;'</span>
+    html <span class="token operator">=</span> <span class="token string">'&lt;html&gt;&lt;head&gt;&lt;meta http-equiv="refresh" content="0;url={url}" /&gt;&lt;/head&gt;&lt;/html&gt;'</span>
 
     <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'links.json'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
         links <span class="token operator">=</span> json<span class="token punctuation">.</span>load<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
@@ -19,7 +19,7 @@
         html_document <span class="token operator">=</span> html<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>url<span class="token operator">=</span>link<span class="token punctuation">[</span><span class="token string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
         linkname <span class="token operator">=</span> link<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span>
-        file_path <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'dist/&amp;#123;linkname}.html'</span></span>
+        file_path <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'dist/</span><span class="token interpolation"><span class="token punctuation">{</span>linkname<span class="token punctuation">}</span></span><span class="token string">.html'</span></span>
 
         <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>file_path<span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
             f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>html_document<span class="token punctuation">)</span>
@@ -28,11 +28,11 @@
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre><p>The corresponding JSON data looks like this:</p><pre class=""><code class="language-json"><span class="token punctuation">[</span>
-  &amp;#<span class="token number">123</span>;
+  <span class="token punctuation">{</span>
     <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"index"</span><span class="token punctuation">,</span>
     <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"https://tusharsadhwani.dev"</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  &amp;#<span class="token number">123</span>;
+  <span class="token punctuation">{</span>
     <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"cv"</span><span class="token punctuation">,</span>
     <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"https://tusharsadhwani.dev/assets/resume.pdf"</span>
   <span class="token punctuation">}</span>
@@ -66,7 +66,7 @@ It should look something like this:</li></ul><p><img src="https://dev-to-uploads
       <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to GitHub Pages
         <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v3
         <span class="token key atrule">with</span><span class="token punctuation">:</span>
-          <span class="token key atrule">deploy_key</span><span class="token punctuation">:</span> $&amp;<span class="token comment">#123;&amp;#123; secrets.ACTIONS_DEPLOY_KEY }}</span>
+          <span class="token key atrule">deploy_key</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.ACTIONS_DEPLOY_KEY <span class="token punctuation">}</span><span class="token punctuation">}</span>
           <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./dist
 </code></pre><p>And we’re done!</p><blockquote><p>You can create your own free URL shortener by simply forking my repository:</p></blockquote><p><a href="https://github.com/tusharsadhwani/url-shortener">https://github.com/tusharsadhwani/url-shortener</a>,</p><p>adding a secret and a deploy key to your repo with write access, and changing the website name from <strong>tshr.me</strong> to whatever your domain name is, in the <code>main.py</code> file.</p><p>Thanks for reading this article!<br>
 Big thanks from my side to <a href="https://www.youtube.com/channel/UCLNgu_OupwoeESgtab33CCw">Coding Garden</a>, whose videos motivated me to make this project in the first place, and <a href="https://medium.com/@cmichel/how-to-deploy-a-create-react-app-with-github-actions-5e01f7a7b6b">this article</a>, which led me to the free hack that I came up with. Also thanks to <a href="https://github.com/wojpawlik">Wojtek Pawlik</a><em>(GingerPlusPlus)</em> for suggesting a non-javascript method for redirects.</p></main></div></article></div></body></html>
