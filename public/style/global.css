@@ -73,6 +73,15 @@ code {
   font-family: "Inconsolata", monospace;
   font-size: 1.12em;
 }
+code {
+  background: rgb(0, 0, 0, 0.3);
+  padding: 0.2rem;
+  border-radius: 0.3rem;
+}
+pre > code {
+  background: unset;
+  padding: unset;
+}
 
 @media screen and (min-width: 1601px) {
   html {
@@ -92,6 +101,7 @@ img {
   display: block;
   max-width: 100%;
   margin: auto;
+  border-radius: 0.5rem;
 }
 a {
   color: var(--link-color);
