@@ -1,10 +1,10 @@
 ---
-title: "A guide to Python's builtins"
-description: "Python has a whole lot of builtin functions that are unknown to most people. This guide aims to introduce you to them."
+title: "A tour of Python, through its builtins"
+description: "Python has a whole lot of builtins that are unknown to most people. This guide aims to introduce you to everything that Python has to offer, through its seemingly obscute builtins."
 publishDate: "Wednesday, 18 August 2021"
 author: "Tushar Sadhwani"
 heroImage: "/images/leetcode-prep.jpg"
-alt: "A guide to Python's builtins"
+alt: "A tour of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
 ---
 
