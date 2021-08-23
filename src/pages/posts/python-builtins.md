@@ -19,3 +19,7 @@ layout: "../../layouts/BlogPost.astro"
 - `iter` and `next`
 - `code` type and the `compile` function
 - `print(dir(__builtins__))`
+
+## Where to learn more?
+
+Through python's docs :D
