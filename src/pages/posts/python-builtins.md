@@ -11,5 +11,11 @@ layout: "../../layouts/BlogPost.astro"
 ## \[WIP\]
 
 - The fact that (most) builtins come from the `builtins` module
-- interesting ones like `format`, `sorted`, `any` and `vars`
+- Interesting ones like `format`, `sorted`, `any` and `vars`
+- Interacting with `locals` and `globals`
+- Descriptors: `property`, `staticmethod`, etc.
+- Truly dynamic: `eval` and `exec`
+- Interesting data types: `frozenset`, `complex`, `memoryview`, etc.
+- `iter` and `next`
+- `code` type and the `compile` function
 - `print(dir(__builtins__))`
