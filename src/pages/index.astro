@@ -3,16 +3,15 @@ import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
 import BlogPostPreview from '../components/BlogPostPreview.astro';
 
-let title = 'Tushar\'s Blog';
+let title = 'Tushar&#39;s Blog';
 let description = 'My thoughts and learnings.';
-let permalink = 'https://example.com/';
 
 let allPosts = Astro.fetchContent('./posts/*.md');
 allPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
 ---
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} permalink={permalink} />
+    <BaseHead title={title} description={description} />
     <link rel="stylesheet" href="/style/global.css" />
 
     <style>

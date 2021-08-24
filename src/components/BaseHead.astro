@@ -2,9 +2,8 @@
 export interface Props {
   title: string;
   description: string;
-  permalink: string;
 }
-const { title, description, permalink, heroImage } = Astro.props;
+const { title, description, heroImage } = Astro.props;
 ---
 
 <meta charset="utf-8" />
@@ -21,14 +20,14 @@ const { title, description, permalink, heroImage } = Astro.props;
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={permalink} />
+<meta property="og:url" content={Astro.site.origin} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={Astro.site.origin + heroImage} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={permalink} />
+<meta property="twitter:url" content={Astro.site.origin} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={Astro.site.origin + heroImage} />
