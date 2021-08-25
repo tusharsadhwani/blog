@@ -17,8 +17,8 @@ const { post } = Astro.props;
 </article>
 
 <style>
-.content :global(main > * + *) {
-  margin-top: 1rem;
+body * + * {
+  margin-top: unset;
 }
 
 .post-preview {
