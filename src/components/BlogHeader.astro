@@ -1,12 +1,12 @@
 ---
-import Switch from '../components/Switch.astro'
+import Switch from '../components/Switch/Switch.jsx'
 ---
 <header>
   <a href="/">
     <img src="/ts.svg" alt="TS">
   </a>
   <div class="right">
-    <Switch />
+    <Switch client:load />
   </div>
 </header>
 
