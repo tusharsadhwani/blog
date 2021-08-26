@@ -54,6 +54,7 @@ allPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishD
       .cat {
         width: 250px;
         margin: 1rem 0;
+        border-radius: 0.5rem;
       }
     </style>
   </head>
@@ -64,7 +65,7 @@ allPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishD
       <section class="intro">
         <h1 class="latest">{title}</h1>
         <p>{description}</p>
-        <img class="cat" src="/cat.gif" alt="Cat typing on keyboard">
+        <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay="autoplay" loop>
       </section>
       <section>
         {allPosts.map(p => <BlogPostPreview post={p} />)}
