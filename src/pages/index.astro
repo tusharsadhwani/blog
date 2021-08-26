@@ -65,7 +65,7 @@ allPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishD
       <section class="intro">
         <h1 class="latest">{title}</h1>
         <p>{description}</p>
-        <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay="autoplay" loop>
+        <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop>
       </section>
       <section>
         {allPosts.map(p => <BlogPostPreview post={p} />)}
