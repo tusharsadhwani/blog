@@ -26,6 +26,10 @@ const { title, author, publishDate, heroImage, alt } = Astro.props;
 </div>
 
 <style>
+main :global(* + *) {
+  margin-top: 1rem;
+}
+
 .hero-image {
   width: 100vw;
   object-fit: cover;
