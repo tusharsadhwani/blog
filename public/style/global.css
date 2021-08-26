@@ -50,7 +50,7 @@ body {
   background-size: 2.5rem 2.5rem;
   background-image: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.06) 0.12rem,
+    rgba(83, 69, 124, 0.25) 0.12rem,
     transparent 0
   );
   background-attachment: fixed;
