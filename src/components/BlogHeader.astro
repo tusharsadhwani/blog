@@ -1,63 +1,25 @@
-<header class="layout">
-  <article>
-    <h1>
-      <a href="/">
-        <img src="/ts.svg" alt="TS">
-      </a>
-    </h1>
-  </article>
+---
+import Switch from '../components/Switch.astro'
+---
+<header>
+  <a href="/">
+    <img src="/ts.svg" alt="TS">
+  </a>
+  <div class="right">
+    <Switch />
+  </div>
 </header>
 
 <style>
-article {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.header-subitem {
-  display: flex;
-  flex-grow: 0;
-  gap: 0.5em;
-  align-items: center;
-  justify-content: center;
-  color: var(--theme-text-lighter);
-  font-size: initial;
-  padding: 0.5rem;
-}
-.header-subitem:hover {
-  color: var(--theme-accent);
-}
-.header-subitem svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-@media (max-width: 32em) {
-  .header-subitem {
-    display: none;
+  header,
+  .right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-}
-
-h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  max-width: 100%;
-  display: flex;
-  flex-grow: 1;
-}
-
-.logo {
-  transform: translateY(0.25rem);
-}
-
-img {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0;
-}
-
-h1 a {
-  text-decoration: none;
-  display: inline-flex;
-}
+  img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0;
+  }
 </style>
