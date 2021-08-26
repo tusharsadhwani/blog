@@ -20,7 +20,6 @@ const Switch = () => {
     const textColor = computedCssVars.getPropertyValue("--text-color").trim();
     const currentTheme = textColor === "white" ? "dark" : "light";
     const newTheme = currentTheme === "dark" ? "light" : "dark";
-    console.log({ textColor, currentTheme, newTheme });
 
     for (const cssVar of cssVariables) {
       root.style.setProperty(cssVar, `var(${cssVar}-${newTheme})`);
