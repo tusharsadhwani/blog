@@ -14,6 +14,7 @@ label {
   cursor: pointer;
   transition: 0.5s;
   box-shadow: 0 0 0.125rem var(--shadow-color);
+  -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 }
 label::after {
   content: "";
