@@ -3,7 +3,7 @@ title: "A tour of Python, through its builtins"
 description: "Python has a whole lot of builtins that are unknown to most people. This guide aims to introduce you to everything that Python has to offer, through its seemingly obscute builtins."
 publishDate: "Wednesday, 18 August 2021"
 author: "Tushar Sadhwani"
-heroImage: "/images/leetcode-prep.jpg"
+heroImage: "/images/builtins.jpg"
 alt: "A tour of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
 ---
