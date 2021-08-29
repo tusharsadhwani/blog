@@ -8,6 +8,8 @@ alt: "A tour of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
 ---
 
+> ### This blog is currently a work in progress.
+
 Python as a language is comparatively simple. And I believe, that you can learn quite a bit about Python and its features, just by learning what all of its builtins are, and what they do. And to back up that claim, I'll be doing just that.
 
 ## So what's a builtin?
