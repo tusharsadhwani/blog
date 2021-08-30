@@ -161,6 +161,158 @@ You can use the `dir` function to print all the variables defined inside a modul
 ['ArithmeticError', 'AssertionError', 'AttributeError', 'BaseException', 'BlockingIOError', 'BrokenPipeError', 'BufferError', 'BytesWarning', 'ChildProcessError', 'ConnectionAbortedError', 'ConnectionError', 'ConnectionRefusedError', 'ConnectionResetError', 'DeprecationWarning', 'EOFError', 'Ellipsis', 'EnvironmentError', 'Exception', 'False', 'FileExistsError', 'FileNotFoundError', 'FloatingPointError', 'FutureWarning', 'GeneratorExit', 'IOError', 'ImportError', 'ImportWarning', 'IndentationError', 'IndexError', 'InterruptedError', 'IsADirectoryError', 'KeyError', 'KeyboardInterrupt', 'LookupError', 'MemoryError', 'ModuleNotFoundError', 'NameError', 'None', 'NotADirectoryError', 'NotImplemented', 'NotImplementedError', 'OSError', 'OverflowError', 'PendingDeprecationWarning', 'PermissionError', 'ProcessLookupError', 'RecursionError', 'ReferenceError', 'ResourceWarning', 'RuntimeError', 'RuntimeWarning', 'StopAsyncIteration', 'StopIteration', 'SyntaxError', 'SyntaxWarning', 'SystemError', 'SystemExit', 'TabError', 'TimeoutError', 'True', 'TypeError', 'UnboundLocalError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'UnicodeError', 'UnicodeTranslateError', 'UnicodeWarning', 'UserWarning', 'ValueError', 'Warning', 'ZeroDivisionError', '__build_class__', '__debug__', '__doc__', '__import__', '__loader__', '__name__', '__package__', '__spec__', 'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'breakpoint', 'bytearray', 'bytes', 'callable', 'chr', 'classmethod', 'compile', 'complex', 'copyright', 'credits', 'delattr', 'dict', 'dir', 'divmod', 'enumerate', 'eval', 'exec', 'exit', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'help', 'hex', 'id', 'input', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'license', 'list', 'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord', 'pow', 'print', 'property', 'quit', 'range', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip']
 ```
 
+...yeah, there's a lot. But don't worry, we'll break these down into various groups, and knock them down one by one.
+
+So let's tackle the biggest group by far:
+
+## Exceptions
+
+Python has 66 built-in exception classes, each one intended to be used by the user, the standard library and everyone else, to serve as meaningful ways to interpret and catch errors in your code.
+
+To explain exactly why there's separate Exception classes in Python, here's a quick example:
+
+```python
+def fetch_from_cache(key):
+    if key is None:
+        raise ValueError('key must not be None')
+
+    return cached_items[key]
+
+def get_value(key):
+    try:
+        value = fetch_from_cache(key)
+    except KeyError:
+        value = fetch_from_api(key)
+
+    return value
+```
+
+Focus on the `get_value` function. It's supposed to return a cached value if it exists, otherwise fetch data from an API.
+
+There's 3 things that can happen in that function:
+
+- If the `key` is not in the cache, trying to access `cached_items[key]` raises a `KeyError`. This is caught in the `try` block, and an API call is made to get the data.
+- If they `key` _is_ present in the cache, it is returned as is.
+- There's also a third case, where `key` is `None`.
+
+  If the key is `None`, `fetch_from_cache` raises a `ValueError`, indicating that the value provided to this function was inappropriate. And since the `try` block only catches `KeyError`, this error is shown directly to the user.
+
+  ```python
+  >>> x = None
+  >>> get_value(x)
+  Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "<stdin>", line 3, in get_value
+    File "<stdin>", line 3, in fetch_from_cache
+  ValueError: key must not be None
+  >>>
+  ```
+
+If `ValueError` and `KeyError` weren't predefined, meaningful error types, there wouldn't be any way to differentiate between error types in this way.
+
+<details>
+<summary>P.S. Some Extra Exception trivia...</summary>
+A fun fact about exceptions is that they can be sub-classed to make your own, more specific error types. For example, you can create a `InvalidEmailError` extending `ValueError`, to raise errors when you expected to receive an E-mail string, but it wasn't valid. If you do this, you'll be able to catch `InvalidEmailError` by doing `except ValueError` as well.
+
+Another fact about exceptions is that every exception is a subclasses of `BaseException`, and nearly all of them are subclasses of `Exception`, other than a few that aren't supposed to be normally caught. So if you ever wanted to be able to catch any exception normally thrown by code, you could do
+
+```python
+except Exception: ...
+```
+
+and if you wanted to catch _every possible error_, you could do
+
+```python
+except BaseException: ...
+```
+
+Doing that would even catch `KeyboardInterrupt`, which would make you unable to close your program by pressing `Ctrl+C`. To read about the hierarchy of which Error is subclassed from which in Python, you can check the [Exception hierarchy](https://docs.python.org/3/library/exceptions.html#exception-hierarchy) in the docs.
+
+</details>
+
+Now I should point it out that now _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
+
+## Constants
+
+There's exactly 5 constants: `True`, `False`, `None`, `Ellipsis`, and `NotImplemented`.
+
+`True` `False` and `None` are the most obvious constants.
+
+`Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](/mypy-guide), and for some very fancy slicing support.
+
+`NotImplemented` is the most interesting of them all _(other than the fact that `True` and `False` actually function as `1` and `0` if you didn't know that, but I digress)_. `NotImplemented` is used inside a class' operator definitions, when you want to tell Python that a certain operator isn't defined for this class.
+
+Now I should mention that all objects in Python can add support for all Python operators, such as `+`, `-`, `+=`, etc., by defining special methods inside their class, such as `__add__` for `+`, `__iadd__` for `+=`, and so on.
+
+Let's see a quick example of that:
+
+```python
+class MyNumber:
+    def __add__(self, other):
+        return other + 42
+```
+
+<details>
+<summary>P.S.</summary>
+
+If you're wondering from the code example above why I never tried to do `3 + n`, it's because it doesn't work yet:
+
+```python
+>>> 100 + n
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported operand type(s) for +: 'int' and 'MyNumber'
+```
+
+But, support for that can be added pretty easily by adding the `__radd__` operator, which adds support for _right-addition_:
+
+```python
+class MyNumber:
+    def __add__(self, other):
+        return other + 42
+
+    def __radd__(self, other):
+        return other + 42
+```
+
+As a bonus, this also adds support for adding two `MyNumber` classes:
+
+```python
+>>> n = MyNumber()
+>>> n + 100
+142
+>>> 3 + n
+45
+>>> n + n
+84
+```
+
+</details>
+
+But let's say you only want to support integer addition with this class, and not floats. This is where you'd use `NotImplemented`:
+
+```python
+class MyNumber:
+    def __add__(self, other):
+        if isinstance(other, float):
+            return NotImplemented
+
+        return other + 42
+```
+
+Returning `NotImplemented` from an operator method tells Python that this is an unsupported operation. Python then conveniently wraps this into a `TypeError` with a meaningful message:
+
+```python
+>>> n + 0.12
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported operand type(s) for +: 'MyNumber' and 'float'
+>>> n + 10
+52
+```
+
+A weird fact about constants is that they aren't even implemented in Python, they're implemented directly in C code, like [this](https://github.com/python/cpython/blob/7e246a3/Include/object.h#L610) for example.
+
 - Interesting ones like `format`, `sorted`, `any` and `vars`
 - Interacting with `locals` and `globals`
 - Descriptors: `property`, `staticmethod`, etc.
