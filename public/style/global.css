@@ -162,6 +162,6 @@ details {
   border-left: 0.15rem solid currentColor;
   padding-left: 0.6rem;
 }
-details {
+summary {
   cursor: pointer;
 }
