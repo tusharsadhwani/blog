@@ -33,6 +33,8 @@ This article is going to be a deep dive for anyone who wants to learn about mypy
 - [Any type](#any-type)
 - [Miscellaneous types](#miscellaneous-types)
   - [Tuple](#tuple)
+  - [TypedDict](#typeddict)
+  - [Literal](#literal)
   - [Final](#final)
   - [NoReturn](#noreturn)
 - [Typing classes](#typing-classes)
@@ -333,7 +335,7 @@ However, some of you might be wondering where `reveal_type` came from. We didn't
 And sure enough, if you try to run the code:
 
 ```bash
-py test.py
+$ py test.py
 Traceback (most recent call last):
   File "/home/tushar/code/test/test.py", line 12, in <module>
     reveal_type(counts)
@@ -448,7 +450,7 @@ In our case, `item` was correctly identified as `List[str]` inside the `isinstan
 
 This is an extremely powerful feature of mypy, called **Type narrowing**.
 
-Now, here's a more contrived example, a tpye-annotated Python implementation of the builtin function `abs`:
+Now, here's a more contrived example, a type-annotated Python implementation of the builtin function `abs`:
 
 ```python
 from math import sqrt
@@ -541,12 +543,13 @@ A good example is sqlite:
 
 Tuples also come in handy when you want to return multiple values from a function, for example:
 
-````python
+```python
 def next_two(x):
     return x+1, x+2
 
 nums = next_two(3)
-print(nums)  # (4, 5)```
+print(nums)  # (4, 5)
+```
 
 Because of these reasons, tuples tend to have a fixed length, with each index having a specific type. (Our sqlite example had an array of length 3 and types `int`, `str` and `int` respectively.
 
@@ -560,7 +563,8 @@ def print_info(user_info: Tuple[str, int, str]) -> None:
     print(f"My name is {name}, I am {age} years old, and I am a {bio}")
 
 user_info = ('Tushar', 21, 'Developer from India.')
-print_info(user_info) # My name is Tushar, I am 21 years old, and I am a Developer from India.```
+print_info(user_info) # My name is Tushar, I am 21 years old, and I am a Developer from India.
+```
 
 However, sometimes you do have to create variable length tuples. You can use the `Tuple[X, ...]` syntax for that.
 
@@ -574,7 +578,8 @@ def print_veggies(veggies: Tuple[str, ...]) -> None:
         print(veg)
 
 veggies = ('Potato', 'Tomato', 'Onion')
-print_veggies(veggies)```
+print_veggies(veggies)
+```
 
 ## TypedDict
 
@@ -592,7 +597,8 @@ class Vector(TypedDict):
 a: Vector = {'x': 1, 'y': 2, 'label': 'good'}  # OK
 b: Vector = {'z': 3, 'label': 'bad'}           # Fails type check
 
-print(Vector(x=1, y=2, label='first') == dict(x=1, y=2, label='first')) # True```
+print(Vector(x=1, y=2, label='first') == dict(x=1, y=2, label='first')) # True
+```
 
 By default, all keys must be present in a `TypedDict`. It is possible to override this by specifying `total=False`.
 
@@ -608,7 +614,7 @@ def i_only_take_5(val : Literal[5]) -> None:
 
 i_only_take_5(5)  # OK
 i_only_take_5(6)  # Fails type check
-````
+```
 
 ```bash
 $ mypy test.py
@@ -1830,3 +1836,7 @@ And that's it!
 I've worked pretty hard on this article, distilling down everything I've learned about mypy in the past year, into a single source of knowledge. If you have any doubts, thoughts, or suggestions, be sure to comment below and I'll get back to you.
 
 Also, if you read the whole article till here, Thank you! And congratulations, you now know almost everything you'll need to be able to write fully typed Python code in the future. I hope you liked it ✨
+
+```
+
+```
