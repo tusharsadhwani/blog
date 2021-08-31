@@ -150,7 +150,7 @@ You can inspect the builtins directly if you want, by importing the `builtins` m
 builtins.abs(    builtins.all(    builtins.any(    builtins.ascii(
 ```
 
-And for some reason unknown to me, Python exposes the builtins module as `__builtins__` by default in the global namespace. So you can also access `__builtins__` directly, without importing anything.
+And for some reason unknown to me, Python exposes the builtins module as `__builtins__` by default in the global namespace. So you can also access `__builtins__` directly, without importing anything. Note, that `__builtins__` being available is a CPython implementation detail, and other Python implementations might not have it. `import builtins` is the most correct way to access the builtins module.
 
 ## _ALL_ the builtins
 
@@ -320,7 +320,7 @@ A weird fact about constants is that they aren't even implemented in Python, the
 - Interesting data types: `frozenset`, `complex`, `memoryview`, etc.
 - `iter` and `next`
 - `code` type and the `compile` function
-- `print(dir(__builtins__))`
+- Overriding python internals by assigning to builtins, like `__import__`
 
 ## Where to learn more?
 
