@@ -146,7 +146,7 @@ You can inspect the builtins directly if you want, by importing the `builtins` m
 
 ```python
 >>> import builtins
->>> builtins.a
+>>> builtins.a   # press <Tab> here
 builtins.abs(    builtins.all(    builtins.any(    builtins.ascii(
 ```
 
@@ -312,6 +312,80 @@ TypeError: unsupported operand type(s) for +: 'MyNumber' and 'float'
 ```
 
 A weird fact about constants is that they aren't even implemented in Python, they're implemented directly in C code, like [this](https://github.com/python/cpython/blob/7e246a3/Include/object.h#L610) for example.
+
+## Funky globals
+
+There's another group of odd-looking values in the builtins output we saw above: values like `__spec__`, `__loader__`, `__debug__` etc.
+
+These are actually not unique to the `builtins` module. These properties are all present in the global scope of every module in Python, as they are _module attributes_. These hold information about the module that is required for the **import machinery**. Let's take a look at them:
+
+### `__name__`
+
+Contains the name of the module. `builtins.__name__` will be the string `'builtins'`. When you run a Python file, that is also run as a module, and the module name for that is `__main__`. This should explain why `if __name__ == '__main__'` is used in Python files.
+
+### `__doc__`
+
+Contains the module's docstring. It's what's shown as the module description when you do `help(module_name)`.
+
+```python
+>>> import time
+>>> print(time.__doc__)
+This module provides various functions to manipulate time values.
+
+There are two standard representations of time.  One is the number...
+>>> help(time)
+Help on built-in module time:
+
+NAME
+    time - This module provides various functions to manipulate time values.
+
+DESCRIPTION
+    There are two standard representations of time.  One is the number...
+```
+
+> More Python trivia: this is why the [PEP8 style guide](https://python.org/dev/peps/pep-0008) says "docstrings should have a line length of 72 characters": because docstrings can be indented upto two levels in the `help()` message, so to neatly fit on an 80-character wide terminal they must be at a maximum, 72 characters wide.
+
+### `__package__`
+
+The package to which this module belongs. For top-level modules it is the same as `__name__`. For sub-modules it is the package's `__name__`. For example:
+
+```python
+>>> import urllib.request
+>>> urllib.__package__
+'urllib'
+>>> urllib.request.__package__
+'urllib'
+```
+
+### `__spec__`
+
+This refers to the module spec. It contains metadata such as the module name, what kind of module it is, as well as how it was created and loaded.
+
+```python
+$ tree mytest
+mytest
+└── a
+    └── b.py
+
+1 directory, 1 file
+
+$ python -q
+>>> import mytest.a.b
+>>> mytest.__spec__
+ModuleSpec(name='mytest', loader=<_frozen_importlib_external._NamespaceLoader object at 0x7f28c767e5e0>, submodule_search_locations=_NamespacePath(['/tmp/mytest']))
+>>> mytest.a.b.__spec__
+ModuleSpec(name='mytest.a.b', loader=<_frozen_importlib_external.SourceFileLoader object at 0x7f28c767e430>, origin='/tmp/mytest/a/b.py')
+```
+
+- `__import__`: pending... you can override it to change the import behaviour, such as logging
+- `__loader__`: pending... frozen modules, `__hello__` easter egg
+
+- `__build_class__`: pending... added in python3.1, this is how classes are made
+- `__debug__`: pending... this is always true unless python is running in optimized mode, which makes this false and asserts stop working. Also, `__debug__`, `True` `False` and `None` are the only true constants.
+
+- `__cached__`: `.pyc` files, and python's compilation and VM interpretation steps.
+
+### Pending:
 
 - Interesting ones like `format`, `sorted`, `any` and `vars`
 - Interacting with `locals` and `globals`
