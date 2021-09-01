@@ -11,14 +11,13 @@ export interface Props {
 const { title, author, publishDate, heroImage, alt } = Astro.props;
 ---
 <div class="layout">
+  <header>
+    <p class="publish-date">{publishDate}</p>
+    <h1 class="title">{title}</h1>
+    <img src="{heroImage}" alt="{title}">
+    <Author name="@tusharsadhwani" href="https://tusharsadhwani.dev" />
+  </header>
   <article class="content">
-  <div>
-    <header>
-      <p class="publish-date">{publishDate}</p>
-      <h1 class="title">{title}</h1>
-      <img src="{heroImage}" alt="{title}">
-      <Author name="@tusharsadhwani" href="https://tusharsadhwani.dev" />
-    </header>
     <main>
       <slot />
     </main>
@@ -26,6 +25,10 @@ const { title, author, publishDate, heroImage, alt } = Astro.props;
 </div>
 
 <style>
+header > img {
+  max-width: 700px;
+}
+
 main :global(* + *) {
   margin-top: 1rem;
 }
