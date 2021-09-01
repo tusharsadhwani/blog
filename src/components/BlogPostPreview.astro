@@ -12,14 +12,13 @@ const { post } = Astro.props;
   </header>
   <main>
     <p>{post.description}</p>
-    <a href={post.url}>Read more</a>
+    <img src="{post.heroImage}">
   </main>
 </article>
 
 <style>
 .post-preview {
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   border-bottom: 4px solid var(--theme-divider);
 }
 
