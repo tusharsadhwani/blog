@@ -1,16 +1,18 @@
 ---
-title: "A tour of Python, through its builtins"
+title: "Understanding all of Python, through its builtins"
 description: "Python has a whole lot of builtins that are unknown to most people. This guide aims to introduce you to everything that Python has to offer, through its seemingly obscute builtins."
 publishDate: "Wednesday, 18 August 2021"
 author: "Tushar Sadhwani"
 heroImage: "/images/builtins.jpg"
-alt: "A tour of Python, through its builtins"
+alt: "Understanding all of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
 ---
 
 > ### This blog is currently a work in progress.
 
-Python as a language is comparatively simple. And I believe, that you can learn quite a bit about Python and its features, just by learning what all of its builtins are, and what they do. And to back up that claim, I'll be doing just that.
+Python as a language is comparatively simple. And I believe, that you can learn quite a lot about Python and its features, just by learning what all of its builtins are, and what they do. And to back up that claim, I'll be doing just that.
+
+> Just to be clear, this is not going to be a tutorial post. Covering such a vast amount of material in a single blog post, while starting from the beginning is pretty much impossible. So I'll be assuming you have a basic to intermediate understanding of Python. But other than that, we should be good to go.
 
 ## So what's a builtin?
 
