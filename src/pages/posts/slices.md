@@ -12,6 +12,8 @@ layout: "../../layouts/BlogPost.astro"
 
 Let's get the basics out of the way first:
 
+Slicing in Python is a way to easily extract a section of a list.
+
 The simplest form of a slice only considers the first two parts, a `start` index and an `end` index. Not providing either the start or the end will result in you getting all the numbers from the beginning and/or the end.
 
 Like so:
