@@ -1,0 +1,61 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import BlogHeader from '../../components/BlogHeader.astro';
+import BlogPostPreview from '../../components/BlogPostPreview.astro';
+import Pagination from '../../components/Pagination.astro';
+
+let title = 'Tushar&#39;s Blog';
+let description = 'My thoughts and learnings.';
+
+export async function getStaticPaths({paginate, rss}) {
+  const allPosts = Astro.fetchContent('../post/*.md');
+  const sortedPosts = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Generate an RSS feed from this collection of posts.
+    rss({
+      title: 'Don’s Blog',
+      description: 'An example blog on Astro',
+      customData: `<language>en-us</language>`,
+      items: sortedPosts.map(item => ({
+        title: item.title,
+        description: item.description,
+        link: item.url,
+        pubDate: item.date,
+      })),
+    });
+  
+  // Return a paginated collection of paths for all posts
+  return paginate(sortedPosts, {pageSize: 6});
+}
+
+const { page } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <link rel="stylesheet" href="/style/global.css" />
+
+    <style>
+      .content {
+        margin: 2rem auto;
+        max-width: 700px;
+      }
+
+      .content :global(main > * + *) {
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="content">
+      <section>
+        <small class="count">{page.start + 1}–{page.end + 1} of {page.total}</small>
+        {page.data.map((p) => <BlogPostPreview post={p} />)}
+      </section>
+      <footer>
+        <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+      </footer>
+    </main>
+  </body>
+</html>
