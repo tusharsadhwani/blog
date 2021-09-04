@@ -54,7 +54,6 @@ body {
     transparent 0
   );
   background-attachment: fixed;
-  transition: 200ms linear;
 }
 body::-webkit-scrollbar {
   width: 1rem;
