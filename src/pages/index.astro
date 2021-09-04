@@ -2,12 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
 import BlogPostPreview from '../components/BlogPostPreview.astro';
+import Pagination from '../components/Pagination.astro';
 
 let title = 'Tushar&#39;s Blog';
 let description = 'My thoughts and learnings.';
 
-let allPosts = Astro.fetchContent('./posts/*.md');
-allPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+const allPosts = Astro.fetchContent('./post/*.md');
+const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate)).slice(0, 6);
 ---
 <html lang="en">
   <head>
@@ -56,20 +57,32 @@ allPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishD
         margin: 1rem 0;
         border-radius: 0.5rem;
       }
+
+      footer {
+        display: flex;
+      }
+      .next {
+        text-transform: uppercase;
+        font-size: 0.8em;
+        margin-left: auto;
+      }
     </style>
   </head>
 
   <body>
     <BlogHeader />
-    <article class="content">
+    <main class="content">
       <section class="intro">
         <h1 class="latest">{title}</h1>
         <p>{description}</p>
         <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop>
       </section>
       <section>
-        {allPosts.map(p => <BlogPostPreview post={p} />)}
+        {latestPosts.map(p => <BlogPostPreview post={p} />)}
       </section>
-    </article>
+      <footer>
+        <a class="next" href='/posts/2' aria-label="Next Page">Next</a>
+      </footer>
+    </main>
   </body>
 </html>
