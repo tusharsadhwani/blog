@@ -4,7 +4,7 @@ import BlogHeader from '../../components/BlogHeader.astro';
 import BlogPostPreview from '../../components/BlogPostPreview.astro';
 import Pagination from '../../components/Pagination.astro';
 
-let title = 'Tushar&#39;s Blog';
+let title = 'Tushar&#39;s Blog';  // TODO: remove html escape
 let description = 'My thoughts and learnings.';
 
 export async function getStaticPaths({paginate, rss}) {
@@ -13,7 +13,8 @@ export async function getStaticPaths({paginate, rss}) {
 
   // Generate an RSS feed from this collection of posts.
     rss({
-      title: 'Tushar\'s blog',
+      title: 'Tushar\'s blog',  // TODO: use variable
+      description: description,
       items: sortedPosts.map(item => ({
         title: item.title,
         description: item.description,
