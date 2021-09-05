@@ -12,17 +12,17 @@ export async function getStaticPaths({paginate, rss}) {
   const sortedPosts = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Generate an RSS feed from this collection of posts.
-    rss({
-      title: 'Tushar\'s blog',  // TODO: use variables
-      description: 'My thoughts and learnings.',
-      items: sortedPosts.map(item => ({
-        title: item.title,
-        description: item.description,
-        link: item.url,
-        pubDate: item.date,
-      })),
-    });
-  
+  rss({
+    title: 'Tushar\'s blog',  // TODO: use variables
+    description: 'My thoughts and learnings.',
+    items: sortedPosts.map(item => ({
+      title: item.title,
+      description: item.description,
+      link: item.url,
+      pubDate: item.date,
+    })),
+  });
+
   // Return a paginated collection of paths for all posts
   return paginate(sortedPosts, {pageSize: 6});
 }
