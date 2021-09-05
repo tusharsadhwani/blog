@@ -13,8 +13,8 @@ export async function getStaticPaths({paginate, rss}) {
 
   // Generate an RSS feed from this collection of posts.
     rss({
-      title: 'Tushar\'s blog',  // TODO: use variable
-      description: description,
+      title: 'Tushar\'s blog',  // TODO: use variables
+      description: 'My thoughts and learnings.',
       items: sortedPosts.map(item => ({
         title: item.title,
         description: item.description,
