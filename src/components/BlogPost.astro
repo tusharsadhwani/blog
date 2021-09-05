@@ -83,4 +83,12 @@ header {
   font-size: 2.25rem;
   font-weight: 700;
 }
+:global(.content) {
+  position: relative;
+}
+:global(.content h2:hover::before) {
+  content: '🔗';
+  position: absolute;
+  left: -1.25em;
+}
 </style>
