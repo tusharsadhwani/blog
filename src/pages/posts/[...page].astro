@@ -48,6 +48,7 @@ const { page } = Astro.props;
   </head>
 
   <body>
+    <BlogHeader />
     <main class="content">
       <section>
         <small class="count">{page.start + 1}–{page.end + 1} of {page.total}</small>
