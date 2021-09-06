@@ -8,5 +8,8 @@
   },
   "devDependencies": {
     "astro": "^0.19.1"
+  },
+  "dependencies": {
+    "rehype-autolink-headings": "^6.1.0"
   }
 }
