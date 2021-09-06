@@ -83,4 +83,20 @@ header {
   font-size: 2.25rem;
   font-weight: 700;
 }
+
+:global(.content) {
+  position: relative;
+}
+:global(
+  .content h1:hover > a::after,
+  .content h2:hover > a::after,
+  .content h3:hover > a::after,
+  .content h4:hover > a::after,
+  .content h5:hover > a::after,
+  .content h6:hover > a::after
+) {
+  content: "🔗";
+  position: absolute;
+  left: -1.25em;
+}
 </style>
