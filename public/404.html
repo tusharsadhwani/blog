@@ -2,8 +2,10 @@
 <html lang="en">
   <body>
     <script>
-      if (location.pathname.startsWith('/posts/')) {
-        location.pathname = '/post/' + location.pathname.slice(7)
+      if (location.pathname.startsWith("/posts/")) {
+        location.pathname = "/post/" + location.pathname.slice(7);
+      } else {
+        location.pathname = "/";
       }
     </script>
   </body>
