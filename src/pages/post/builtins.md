@@ -458,10 +458,79 @@ Well this `__hello__` module was originally added to Python as a test for frozen
 
 Essentially, every import statement can be translated into an `__import__` function call. Internally, that's pretty much what Python is doing to the import statements (but directly in C).
 
-- `__build_class__`: pending... added in python3.1, this is how classes are made
-- `__debug__`: pending... this is always true unless python is running in optimized mode, which makes this false and asserts stop working. Also, `__debug__`, `True` `False` and `None` are the only true constants.
+> Now, there's three more of these properties left: `__debug__` and `__build_class__` which are only present globally and are not module variables, and `__cached__`, which is only present in imported modules.
 
-- `__cached__`: `.pyc` files, and python's compilation and VM interpretation steps.
+### `__debug__`
+
+This is a global, constant value in Python, which is almost always set to `True`.
+
+What it refers to, is Python running in _debug mode_. And Python always runs in debug mode by default.
+
+The other mode that Python can run in, is _"optimized mode"_. To run python in "optimized mode", you can invoke it by passing the `-O` flag. And all it does, is prevents assert statements from doing anything (at least so far), which is in all honesty, not really useful at all.
+
+```python
+$ python
+>>> __debug__
+True
+>>> assert False, 'some error'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError: some error
+>>>
+
+$ python -O
+>>> __debug__
+False
+>>> assert False, 'some error'
+>>>
+```
+
+Also, `__debug__`, `True` `False` and `None` are the only **true constants** in Python, i.e. these 4 are the only global variables in Python that you cannot overwrite with a new value.
+
+```python
+>>> True = 42
+  File "<stdin>", line 1
+    True = 42
+    ^
+SyntaxError: cannot assign to True
+>>> __debug__ = False
+  File "<stdin>", line 1
+SyntaxError: cannot assign to __debug__
+```
+
+### `__build_class__`
+
+This global was added in Python 3.1, to allow for class definitions to accept arbitrary positional and keyword arguments. There are long, technical reasons to why this is a feature, and it touches advanced topics like metaclasses, so unfortunately I won't be explaining why it exists.
+
+But all you need to know is that this is what allows you to do things like this while making a class:
+
+```python
+>>> class C:
+...     def __init_subclass__(self, **kwargs):
+...         print(f'Subclass got data: {kwargs}')
+...
+>>> class D(C, num=42, data='xyz'):
+...     pass
+...
+Subclass got data: {'num': 42, 'data': 'xyz'}
+>>>
+```
+
+Before Python 3.1, The class creation syntax only allowed passing base classes to inherit from, and a metaclass property. The new requirements were to allow variable number of positional and keyword arguments. This would be a bit messy and complex to add to the language.
+
+But, we already have this, of course, in the code for calling regular functions. So it was proposed that the `Class X(...)` syntax will simply delegate to a function call underneath: `__build_class__(cls, ...)`.
+
+### `__cached__`
+
+This is an interesting one.
+
+```python
+>>> import test
+>>> test.__cached__
+'/usr/lib/python3.9/test/__pycache__/__init__.cpython-39.pyc'
+```
+
+> TODO: `.pyc` files, and python's compilation and VM interpretation steps.
 
 ### Pending:
 
