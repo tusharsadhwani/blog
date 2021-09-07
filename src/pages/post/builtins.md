@@ -409,8 +409,54 @@ ModuleSpec(name='mytest', loader=<_frozen_importlib_external._NamespaceLoader ob
 ModuleSpec(name='mytest.a.b', loader=<_frozen_importlib_external.SourceFileLoader object at 0x7f28c767e430>, origin='/tmp/mytest/a/b.py')
 ```
 
-- `__import__`: pending... you can override it to change the import behaviour, such as logging
-- `__loader__`: pending... frozen modules, `__hello__` easter egg
+You can see through it that, `mytest` was located using something called `NamespaceLoader` from the directory `/tmp/mytest`, and `mytest.a.b` was loaded using a `SourceFileLoader`, from the source file `b.py`.
+
+### `__loader__`
+
+Let's see what this is, directly in the REPL:
+
+```python
+>>> __loader__
+<class '_frozen_importlib.BuiltinImporter'>
+```
+
+The `__loader__` is set to the loader object that the import machinery used when loading the module. This specific one is defined within the `_frozen_importlib` module, and is what's used to import the builtin modules.
+
+Looking slightly more closely at the example before this, you might notice that the `loader` attributes of the module spec are `Loader` classes that come from the slightly different `_frozen_importlib_external` module.
+
+So you might ask, what are these weird `_frozen` modules? Well, my friend, it's exactly as they say &mdash; they're _frozen modules_.
+
+The _actual_ source code of these two modules is actually inside the `importlib.machinery` module. These `_frozen` aliases are frozen versions of the source code of these loaders. To create a frozen module, the Python code is compiled to a code object, marshalled into a file, and then added to the Python executable.
+
+Python freezes these two modules because they implement the core of the import system and, thus, cannot be imported like other Python files when the interpreter boots up. Essentially, they are needed to exist to _bootstrap the import system_.
+
+Funnily enough, there's another well-defined frozen module in Python: it's `__hello__`:
+
+```python
+>>> import __hello__
+Hello world!
+```
+
+Is this the shortest hello world code in any language? :P
+
+Well this `__hello__` module was originally added to Python as a test for frozen modules, to see whether or not they work properly. It has stayed in the language as an easter egg ever since.
+
+### `__import__`
+
+`__import__` is the builtin function that defines how import statements work in Python.
+
+```python
+>>> import random
+>>> random
+<module 'random' from '/usr/lib/python3.9/random.py'>
+>>> __import__('random')
+<module 'random' from '/usr/lib/python3.9/random.py'>
+>>> np = __import__('numpy')  # Same as doing 'import numpy as np'
+>>> np
+<module 'numpy' from '/home/tushar/.local/lib/python3.9/site-packages/numpy/__init__.py'>
+```
+
+Essentially, every import statement can be translated into an `__import__` function call. Internally, that's pretty much what Python is doing to the import statements (but directly in C).
 
 - `__build_class__`: pending... added in python3.1, this is how classes are made
 - `__debug__`: pending... this is always true unless python is running in optimized mode, which makes this false and asserts stop working. Also, `__debug__`, `True` `False` and `None` are the only true constants.
