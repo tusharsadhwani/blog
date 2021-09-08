@@ -524,20 +524,111 @@ But, we already have this, of course, in the code for calling regular functions.
 
 This is an interesting one.
 
+When you import a module, the `__cached__` property stores the path of the cached file of the **compiled Python bytecode** of that module.
+
+"What?!", you might be saying, "Python? Compiled?"
+
+Yeah. Python _is_ compiled. In fact, all Python code is compiled, but not to machine code &mdash; to **bytecode**. Let me explain this point by explaining how Python runs your code.
+
+Here are the steps that the Python interpreter does to run your code:
+
+- It takes your source file, and parses it into a syntax tree. The syntax tree is a representation of your code that can be more easily understood by a program. It finds and reports any errors in the code's syntax, and ensures that there are no ambiguities.
+- The next step is to compile the source file into _bytecode_. This bytecode is a set of micro-instructions for **Python's virtual machine**. This "virtual machine" is where Python's interpreter logic resides. It essentially _emulates_ a very simple stack-based computer on your machine, in order to execute the Python code written by you.
+- This bytecode-form of your code is then run on the Python VM. The bytecode instructions are simple things like pushing and popping data off the current stack. Each of these instructions, when run one after the other, executes the entire program.
+
+> We will take a really detailed example of the steps above, in the next section. Hang tight!
+
+Now since the "compiling to bytecode" step above takes a noticeable amount of time when you import a module, Python stores _(marshalls)_ the bytecode into a `.pyc` file, and stores it in a folder called `__pycache__`. The `__cached__` parameter of the imported module then points to this `.pyc` file.
+
+When the same module is imported again at a later time, Python checks if a `.pyc` version of the module exists, and then directly imports the already-compiled version instead, saving a bunch of time and computation.
+
+If you're wondering: yes, you can directly run or import a `.pyc` file in Python code, just like a `.py` file:
+
 ```python
 >>> import test
 >>> test.__cached__
 '/usr/lib/python3.9/test/__pycache__/__init__.cpython-39.pyc'
+>>> exit()
+
+$ cp '/usr/lib/python3.9/test/__pycache__/__init__.cpython-39.pyc' cached_test.pyc
+$ python
+>>> import cached_test  # Runs!
+>>>
 ```
 
-> TODO: `.pyc` files, and python's compilation and VM interpretation steps.
+## All the builtins, one by one
+
+Now we can finally get on with builtins. And, to build upon the last section, let's start this off with some of the most interesting ones, the ones that build the basis of Python as a language.
+
+### `compile`, `exec` and `eval`
+
+... PENDING
+
+Let's take this example:
+
+```python
+x = [1, 2]
+print(x)
+```
+
+... PENDING: explaining what `ast.parse()` does, showing what `compile` does, and looking into the properties of a code object.
+
+<details>
+<summary>Extras: the "dis" module</summary>
+
+The `dis` module in Python ...
+
+```python
+>>> import dis
+>>> dis.dis('''
+... x = [1, 2]
+... print(x)
+... ''')
+  1           0 LOAD_CONST               0 (1)
+              2 LOAD_CONST               1 (2)
+              4 BUILD_LIST               2
+              6 STORE_NAME               0 (x)
+
+  2           8 LOAD_NAME                1 (print)
+             10 LOAD_NAME                0 (x)
+             12 CALL_FUNCTION            1
+             14 POP_TOP
+             16 LOAD_CONST               2 (None)
+             18 RETURN_VALUE
+>>>
+```
+
+It shows that:
+
+- Line 1 creates 4 bytecodes, to load 2 constants `1` and `2` onto the stack, build a list from the top `2` values on the stack, and store it into the variable `x`.
+- Line 2 creates 6 bytecodes, it loads `print` and `x` onto the stack, and calls the function on the stack with the `1` argument on top of it. Then it gets rid of the return value from the call by doing `POP_TOP` because we didn't use or store the return value from `print(x)`. The two lines at the end returns `None` from the end of the file's execution, which does nothing.
+
+Each of these bytecodes is 2 bytes long when stored as opcodes, that's why the numbers to the left of the opcodes are spaces 2 away from each other. It shows that this entire code is 20 bytes long. And indeed, if you do:
+
+```python
+>>> code_obj = compile('''
+... x = [1, 2]
+... print(x)
+... ''', 'test', 'exec')
+>>> code_obj.co_code
+b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'
+>>> len(code_obj.co_code)
+20
+```
+
+You can confirm that the bytecode generated is exactly 20 bytes.
+
+</details>
+
+... PENDING: running `exec` and `eval` on the code object.
+
+... PENDING: examples of the dynamic behaviour possible, with `exec` and `eval`
 
 ### Pending:
 
 - Interesting ones like `format`, `sorted`, `any` and `vars`
 - Interacting with `locals` and `globals`
 - Descriptors: `property`, `staticmethod`, etc.
-- Truly dynamic: `eval` and `exec`
 - Interesting data types: `frozenset`, `complex`, `memoryview`, etc.
 - `iter` and `next`
 - `code` type and the `compile` function
