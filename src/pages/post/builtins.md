@@ -1,6 +1,6 @@
 ---
 title: "Understanding all of Python, through its builtins"
-description: "Python has a whole lot of builtins that are unknown to most people. This guide aims to introduce you to everything that Python has to offer, through its seemingly obscute builtins."
+description: "Python has a whole lot of builtins that are unknown to most people. This guide aims to introduce you to everything that Python has to offer, through its seemingly obscure builtins."
 publishDate: "Wednesday, 18 August 2021"
 author: "Tushar Sadhwani"
 heroImage: "/images/builtins.jpg"
@@ -285,7 +285,7 @@ class MyNumber:
 ```
 
 <details>
-<summary>P.S.</summary>
+<summary>Extras: right-operators</summary>
 
 If you're wondering from the code example above why I never tried to do `3 + n`, it's because it doesn't work yet:
 
