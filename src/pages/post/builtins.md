@@ -14,6 +14,32 @@ Python as a language is comparatively simple. And I believe, that you can learn 
 
 > Just to be clear, this is not going to be a tutorial post. Covering such a vast amount of material in a single blog post, while starting from the beginning is pretty much impossible. So I'll be assuming you have a basic to intermediate understanding of Python. But other than that, we should be good to go.
 
+## Index
+
+- [Index](#index)
+- [So what's a builtin?](#so-whats-a-builtin)
+  - [Local scope](#local-scope)
+  - [Enclosing scope](#enclosing-scope)
+  - [Global scope](#global-scope)
+  - [Builtin scope](#builtin-scope)
+- [_ALL_ the builtins](#all-the-builtins)
+- [Exceptions](#exceptions)
+- [Constants](#constants)
+- [Funky globals](#funky-globals)
+  - [`__name__`](#__name__)
+  - [`__doc__`](#__doc__)
+  - [`__package__`](#__package__)
+  - [`__spec__`](#__spec__)
+  - [`__loader__`](#__loader__)
+  - [`__import__`](#__import__)
+  - [`__debug__`](#__debug__)
+  - [`__build_class__`](#__build_class__)
+  - [`__cached__`](#__cached__)
+- [All the builtins, one by one](#all-the-builtins-one-by-one)
+  - [`compile`, `exec` and `eval`](#compile-exec-and-eval)
+  - [Pending:](#pending)
+- [Where to learn more?](#where-to-learn-more)
+
 ## So what's a builtin?
 
 A builtin in a Python is everything that lives in the `builtins` module.
