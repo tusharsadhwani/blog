@@ -37,7 +37,34 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`__cached__`](#__cached__)
 - [All the builtins, one by one](#all-the-builtins-one-by-one)
   - [`compile`, `exec` and `eval`](#compile-exec-and-eval)
-  - [Pending:](#pending)
+  - [`input`, `print`](#input-print)
+  - [`bool`, `chr`, `complex`, `float`, `int`, `str`](#bool-chr-complex-float-int-str)
+  - [`object`](#object)
+  - [`type`](#type)
+  - [`bytes`, `bytearray`, `memoryview`](#bytes-bytearray-memoryview)
+  - [`dict`, `frozenset`, `list`, `set`, `tuple`](#dict-frozenset-list-set-tuple)
+  - [`ascii`, `bin`, `hex`, `oct`, `ord`](#ascii-bin-hex-oct-ord)
+  - [`format`](#format)
+  - [`all`, `any`](#all-any)
+  - [`dir`, `vars`](#dir-vars)
+  - [`hash`, `id`](#hash-id)
+  - [`abs`, `divmod`, `pow`, `round`](#abs-divmod-pow-round)
+  - [`isinstance`, `issubclass`, `callable`](#isinstance-issubclass-callable)
+  - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
+  - [`super`](#super)
+  - [`len`, `max`, `min`, `sum`](#len-max-min-sum)
+  - [`map`, `filter`](#map-filter)
+  - [`iter`, `next`](#iter-next)
+  - [`range`, `enumerate`, `zip`](#range-enumerate-zip)
+  - [`slice`](#slice)
+  - [`sorted`, `reversed`](#sorted-reversed)
+  - [`globals`, `locals`](#globals-locals)
+  - [`delattr`, `getattr`, `hasattr`, `setattr`](#delattr-getattr-hasattr-setattr)
+  - [`breakpoint`](#breakpoint)
+  - [`repr`](#repr)
+  - [`open`](#open)
+  - [`help`, `exit`, `quit`](#help-exit-quit)
+  - [`copyright`, `credits`, `license`](#copyright-credits-license)
 - [Where to learn more?](#where-to-learn-more)
 
 ## So what's a builtin?
@@ -814,15 +841,63 @@ You can also go the long, detailed route with `eval`, you just need to tell `ast
 2
 ```
 
-### Pending:
+### `input`, `print`
 
-- Interesting ones like `format`, `sorted`, `any` and `vars`
-- Interacting with `locals` and `globals`
-- Descriptors: `property`, `staticmethod`, etc.
-- Interesting data types: `frozenset`, `complex`, `memoryview`, etc.
-- `iter` and `next`
-- `code` type and the `compile` function
-- Overriding python internals by assigning to builtins, like `__import__`
+### `bool`, `chr`, `complex`, `float`, `int`, `str`
+
+### `object`
+
+### `type`
+
+### `bytes`, `bytearray`, `memoryview`
+
+### `dict`, `frozenset`, `list`, `set`, `tuple`
+
+### `ascii`, `bin`, `hex`, `oct`, `ord`
+
+### `format`
+
+### `all`, `any`
+
+### `dir`, `vars`
+
+### `hash`, `id`
+
+### `abs`, `divmod`, `pow`, `round`
+
+### `isinstance`, `issubclass`, `callable`
+
+### `property`, `classmethod`, `staticmethod`
+
+### `super`
+
+### `len`, `max`, `min`, `sum`
+
+### `map`, `filter`
+
+### `iter`, `next`
+
+### `range`, `enumerate`, `zip`
+
+### `slice`
+
+### `sorted`, `reversed`
+
+### `globals`, `locals`
+
+### `delattr`, `getattr`, `hasattr`, `setattr`
+
+### `breakpoint`
+
+### `repr`
+
+### `open`
+
+### `help`, `exit`, `quit`
+
+-- defined in site module
+
+### `copyright`, `credits`, `license`
 
 ## Where to learn more?
 
