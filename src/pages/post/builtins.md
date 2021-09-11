@@ -6,6 +6,7 @@ author: "Tushar Sadhwani"
 heroImage: "/images/builtins.jpg"
 alt: "Understanding all of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
+# TODO: convert the \\n back to \n once astro fixes it
 ---
 
 > ### This blog is currently a work in progress.
