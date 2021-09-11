@@ -855,7 +855,7 @@ print(*values, sep=' ', end='\\n', file=sys.stdout, flush=False)
 
 The `*values` simply means that you can provide any number of positional arguments to `print`, and it will properly print them out, separated with spaces by default.
 
-If you want the separator to be different, for eg. if you want each item to be printed on a different line, you can set the `sep` keyword accordingly, like `'\\n'`:
+If you want the separator to be different, for eg. if you want each item to be printed on a different line, you can set the `sep` keyword accordingly, like `'\n'`:
 
 ```python
 >>> print(1, 2, 3, 4)
