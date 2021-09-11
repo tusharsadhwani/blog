@@ -989,7 +989,7 @@ Hello!
 b'Hello!\\n'
 >>> char_count = sys.stdout.buffer.write('Hello!\\n'.encode())
 Hello!
->>> char_count
+>>> char_count  # write() returns the number of bytes written to console
 7
 ```
 
@@ -1004,6 +1004,57 @@ b'\xf0\x9f\x90\x8d'   # utf-8 encoded string of the snake emoji
 >>> _ = sys.stdout.buffer.write(b'\xf0\x9f\x90\x8d')
 🐍
 ```
+
+`int` is another widely-used, fundamental primitive data type. It's also the lowest common denominator of 2 other data types: , `float` and `complex`. `complex` is a supertype of `float`, which, in turn, is a supertype of `int`.
+
+What this means is that all `int`s are valid as a `float` as well as a `complex`, but not the other way around. Similarly, all `float`s are also valid as a `complex`.
+
+> If you don't know, `complex` is the implementation for "complex numbers" in Python. They're a really common tool for mathematics.
+
+Let's take a look at them:
+
+```python
+>>> x = 5
+>>> y = 5.0
+>>> z = 5.0+0.0j
+>>> type(x), type(y), type(z)
+(<class 'int'>, <class 'float'>, <class 'complex'>)
+>>> x == y == z  # All the same value
+True
+>>> y
+5.0
+>>> float(x)    # float(x) produces the same result as y
+5.0
+>>> z
+(5+0j)
+>>> complex(x)  # complex(x) produces the same result as z
+(5+0j)
+```
+
+Now, I mentioned for a moment that there's actually only 5 primitive data types in Python, not 6. That is because, `bool` is actually not a primitive data type &mdash; it's actually a subclass of `int`!
+
+You can check it yourself, by looking into the `mro` property of these classes.
+
+`mro` stands for "method resolution order". It defines the order in which the methods called on a class are looked for. Essentially, the method calls are first looked for in the class itself, and if it's not present there, it's searched in its parent class, and then its parent, all the way to the top: `object`. Everything in Python inherits from `object`. Yes, everything in Python is an object.
+
+Take a look:
+
+```python
+>>> int.mro()
+[<class 'int'>, <class 'object'>]
+>>> float.mro()
+[<class 'float'>, <class 'object'>]
+>>> complex.mro()
+[<class 'complex'>, <class 'object'>]
+>>> str.mro()
+[<class 'str'>, <class 'object'>]
+>>> bool.mro()
+[<class 'bool'>, <class 'int'>, <class 'object'>]
+```
+
+You can see from their "ancestry", that all the other data types are not "sub-classes" of anything (except for `object`, which will always be there). Except `bool`, which inherits from `int`.
+
+Now at this point, you might be wondering "WHY? Why does `bool` subclass `int`?" And the answer is a bit anti-climatic. It's mostly because of compatibility reasons. Historically, logical true/false operations tended to simply use `0` for false and `1` for true. In Python version 2.2, the boolean values `True` and `False` were added to Python, and they were simply wrappers around the integer values. The fact has stayed the same till date.
 
 ### `object`
 
