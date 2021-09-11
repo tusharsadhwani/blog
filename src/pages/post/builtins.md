@@ -38,12 +38,12 @@ Python as a language is comparatively simple. And I believe, that you can learn 
 - [All the builtins, one by one](#all-the-builtins-one-by-one)
   - [`compile`, `exec` and `eval`](#compile-exec-and-eval)
   - [`input` and `print`: The bread and butter](#input-and-print-the-bread-and-butter)
-  - [`bool`, `chr`, `complex`, `float`, `int`, `str`](#bool-chr-complex-float-int-str)
+  - [`str`, `bytes`, `int`, `bool`, `float` and `complex`: The five primitives](#str-bytes-int-bool-float-and-complex-the-five-primitives)
   - [`object`](#object)
   - [`type`](#type)
-  - [`bytes`, `bytearray`, `memoryview`](#bytes-bytearray-memoryview)
+  - [`bytearray`, `memoryview`](#bytearray-memoryview)
   - [`dict`, `frozenset`, `list`, `set`, `tuple`](#dict-frozenset-list-set-tuple)
-  - [`ascii`, `bin`, `hex`, `oct`, `ord`](#ascii-bin-hex-oct-ord)
+  - [`ascii`, `bin`, `hex`, `oct`, `ord`, `chr`](#ascii-bin-hex-oct-ord-chr)
   - [`format`](#format)
   - [`all`, `any`](#all-any)
   - [`dir`, `vars`](#dir-vars)
@@ -967,21 +967,53 @@ print('and regular print still works!')
 `flush` is a boolean flag to the `print` function. All it does is tell `print` to write the text immediately to the console/file instead of putting it in a buffer. This usually doesn't make much of a difference, but if you're printing a very large string to a console, you might want to set it to `True`
 to avoid lag in showing the output to the user.
 
-`input`: PENDING
-
 </details>
 
-### `bool`, `chr`, `complex`, `float`, `int`, `str`
+Now I'm sure many of you are interested in what secrets the `input` function hides, but there's none. `input` simply takes in a string to show as the prompt. Yeah, bummer, I know.
+
+### `str`, `bytes`, `int`, `bool`, `float` and `complex`: The five primitives
+
+Python has exactly 6 primitive data types (well, actually just 5, but we'll get to that). 4 of these are numerical in nature, and the other 2 are text-based. Let's talk about the text-based first, because that's going to be much simpler.
+
+`str` is one of the most familiar data types in Python. Taking user input using the `input` method gives you a string, and every other data type in Python can be converted into a string. This is necessary because all computer Input/Output is in text-form, be it user I/O or file I/O, which is probably why strings are everywhere.
+
+`bytes` on the other hand, are _actually_ the basis of all I/O in computing. If you know about computers, you would know that all data is stored and handled as bits and bytes &mdash; and that's how terminals really work as well.
+
+If you want to take a peek at the bytes underneath the `input` and `print` calls: you need to take a look at the I/O buffers in the `sys` module: `sys.stdout.buffer` and `sys.stdin.buffer`:
+
+```python
+>>> import sys
+>>> print('Hello!')
+Hello!
+>>> 'Hello!\\n'.encode()  # Produces bytes
+b'Hello!\\n'
+>>> char_count = sys.stdout.buffer.write('Hello!\\n'.encode())
+Hello!
+>>> char_count
+7
+```
+
+The buffer objects take in `bytes`, write those directly to the output buffer, and return the number of bytes returned.
+
+To prove that everything is just bytes underneath, let's look at another example:
+
+```python
+>>> import sys
+>>> '🐍'.encode()
+b'\xf0\x9f\x90\x8d'   # utf-8 encoded string of the snake emoji
+>>> _ = sys.stdout.buffer.write(b'\xf0\x9f\x90\x8d')
+🐍
+```
 
 ### `object`
 
 ### `type`
 
-### `bytes`, `bytearray`, `memoryview`
+### `bytearray`, `memoryview`
 
 ### `dict`, `frozenset`, `list`, `set`, `tuple`
 
-### `ascii`, `bin`, `hex`, `oct`, `ord`
+### `ascii`, `bin`, `hex`, `oct`, `ord`, `chr`
 
 ### `format`
 
