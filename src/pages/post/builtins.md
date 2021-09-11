@@ -907,7 +907,7 @@ with open('myfile.txt', 'w') as f:
 ```
 
 <details>
-<summary>Extras: context manager to make a print-writer</summary>
+<summary>Extras: using a context manager to make a print-writer</summary>
 
 Some languages have special objects that let you call `print` method on them, to write to a file by using the familiar "print" interface. In Python, you can go a step beyond that: you can temporarily configure the `print` function to write to a file by default!
 
