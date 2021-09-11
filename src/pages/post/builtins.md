@@ -37,7 +37,7 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`__cached__`](#__cached__)
 - [All the builtins, one by one](#all-the-builtins-one-by-one)
   - [`compile`, `exec` and `eval`](#compile-exec-and-eval)
-  - [`input`, `print`](#input-print)
+  - [`input` and `print`: The bread and butter](#input-and-print-the-bread-and-butter)
   - [`bool`, `chr`, `complex`, `float`, `int`, `str`](#bool-chr-complex-float-int-str)
   - [`object`](#object)
   - [`type`](#type)
@@ -841,7 +841,135 @@ You can also go the long, detailed route with `eval`, you just need to tell `ast
 2
 ```
 
-### `input`, `print`
+### `input` and `print`: The bread and butter
+
+`input` and `print` are probably the first two functionalities that you learn about Python. And they seem pretty straightforward, don't they? `input` takes in a line of text, and `print` prints it out, simple as that. Right?
+
+Well, `input` and `print` have a bit more functionality than what you might know about.
+
+Here's the full method signature of `print`:
+
+```python
+print(*values, sep=' ', en ='\n', file=sys.stdout, flush: boo =False)
+```
+
+The `*values` simply means that you can provide any number of positional arguments to `print`, and it will properly print them out, separated with spaces by default.
+
+If you want the separator to be different, for eg. if you want each item to be printed on a different line, you can set the `sep` keyword accordingly, like `'\n'`:
+
+```python
+>>> print(1, 2, 3, 4)
+1 2 3 4
+>>> print(1, 2, 3, 4, sep='\n')
+1
+2
+3
+4
+>>> print(1, 2, 3, 4, sep='\n\n')
+1
+
+2
+
+3
+
+4
+>>>
+```
+
+There's also an `end` parameter, if you want a different character for line ends, like, if you don't want a new line to be printed at the end of each print, you can use `end=''`:
+
+```python
+>>> for i in range(10):
+...     print(i)
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+>>> for i in range(10):
+...     print(i, end='')
+0123456789
+```
+
+Now there's two more parameters to `print`: `file` and `flush`.
+
+`file` refers to the "file" that you are printing to. By default it points to `sys.stdout`, which is a special "file" wrapper, that prints to the console. But if you want `print` to write to a file instead, all you have to do is change the `file` parameter. Something like:
+
+```python
+with open('myfile.txt', 'w') as f:
+    print('Hello!', file=f)
+```
+
+<details>
+<summary>Extras: context manager to make a print-writer</summary>
+
+Some languages have special objects that let you call `print` method on them, to write to a file by using the familiar "print" interface. In Python, you can go a step beyond that: you can temporarily configure the `print` function to write to a file by default!
+
+This is done by re-assigning `sys.stdout`. If we swap out the file that `sys.stdout` is assigned to, then all `print` statements magically start printing to that file instead. How cool is that?
+
+Let's see with an example:
+
+```python
+>>> import sys
+>>> print('a regular print statement')
+a regular print statement
+>>> file = open('myfile.txt', 'w')
+>>> sys.stdout = file
+>>> print('this will write to the file')  # Gets written to myfile.txt
+>>> file.close()
+```
+
+But, there's a problem here. We can't go back to printing to console this way. And even if we store the original `stdout`, it would be pretty easy to mess up the state of the `sys` module by accident.
+
+For example:
+
+```python
+>>> import sys
+>>> print('a regular print statement')
+a regular print statement
+>>> file = open('myfile.txt', 'w')
+>>> sys.stdout = file
+>>> file.close()
+>>> print('this will write to the file')
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ValueError: I/O operation on closed file.
+```
+
+To avoid accidentally leaving the `sys` module in a broken state, we can use a **context manager**, to ensure that `sys.stdout` is restored when we are done.
+
+```python
+import sys
+from contextlib import contextmanager
+
+@contextmanager
+def print_writer(file_path):
+    original_stdout = sys.stdout
+
+    with open(file_path, 'w') as f:
+        sys.stdout = f
+        yield  # this is where everything inside the `with` statement happens
+        sys.stdout = original_stdout
+
+with print_writer('myfile.txt'):
+    print('Printing straight to the file!')
+    for i in range(5):
+        print(i)
+
+print('and regular print still works!')
+```
+
+`flush` is a boolean flag to the `print` function. All it does is tell `print` to write the text immediately to the console/file instead of putting it in a buffer. This usually doesn't make much of a difference, but if you're printing a very large string to a console, you might want to set it to `True`
+to avoid lag in showing the output to the user.
+
+`input`: PENDING
+
+</details>
 
 ### `bool`, `chr`, `complex`, `float`, `int`, `str`
 
