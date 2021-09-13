@@ -18,16 +18,17 @@ const Newsletter = () => {
       return;
     }
 
-    fetch("https://newsletter.sadh.life/api/subscribers", {
+    fetch("https://newsletter.sadh.life/subscribe", {
       method: "post",
-      body: {
+      body: JSON.stringify({
         email: email,
-        name: "",
+        name: "User",
         status: "enabled",
-      },
+      }),
     });
 
-    btn.disabled = false;
+    btn.style.backgroundColor = "#007766";
+    btn.textContent = "Success!";
   };
 
   return (
