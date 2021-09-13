@@ -1,0 +1,10 @@
+.Newsletter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.Newsletter * {
+  width: 400px;
+}

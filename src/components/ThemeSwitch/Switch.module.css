@@ -1,9 +1,9 @@
-input {
+.themeSwitch input {
   width: 0;
   height: 0;
   visibility: hidden;
 }
-label {
+.themeSwitch label {
   margin-left: 1rem;
   width: 3rem;
   height: 1.5rem;
@@ -15,7 +15,7 @@ label {
   box-shadow: 0 0 0.125rem var(--shadow-color);
   -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 }
-label::after {
+.themeSwitch label::after {
   content: "";
   width: 1.25rem;
   height: 1.25rem;
@@ -26,14 +26,15 @@ label::after {
   left: 0.125rem;
   transition: 200ms linear;
 }
-:global(body) {
-  transition: 200ms linear;
-}
 
-input:checked + label::after {
+.themeSwitch input:checked + label::after {
   left: calc(100% - 1.375rem);
 }
 
-input:checked + label {
+.themeSwitch input:checked + label {
   background-color: var(--shadow-color);
+}
+
+:global(body) {
+  transition: 200ms linear;
 }

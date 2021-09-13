@@ -1,4 +1,4 @@
-import "./Switch.module.css";
+import classes from "./Switch.module.css";
 
 const cssVariables = [
   "--background-color",
@@ -26,7 +26,7 @@ const Switch = () => {
     }
   };
   return (
-    <div style={{ display: "flex" }}>
+    <div className={classes.themeSwitch} style={{ display: "flex" }}>
       <input id={switchId} type="checkbox" onClick={toggleTheme} />
       <label for={switchId}></label>
     </div>

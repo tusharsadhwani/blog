@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
 import BlogPostPreview from '../components/BlogPostPreview.astro';
-import Pagination from '../components/Pagination.astro';
+import Newsletter from '../components/Newsletter/Newsletter.jsx'
 
 let title = 'Tushar&#39;s Blog';
 let description = 'My thoughts and learnings.';
@@ -80,6 +80,7 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
       <section>
         {latestPosts.map(p => <BlogPostPreview post={p} />)}
       </section>
+      <Newsletter client:only />
       <footer>
         <a class="next" href='/posts/2' aria-label="Next Page">Next</a>
       </footer>
