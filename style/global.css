@@ -78,6 +78,7 @@ button:active {
   background-color: var(--highlight-color);
 }
 button:disabled {
+  cursor: unset;
   background-color: var(--shadow-color);
 }
 body::-webkit-scrollbar {
