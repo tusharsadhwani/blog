@@ -25,10 +25,15 @@ const Newsletter = () => {
         name: "User",
         status: "enabled",
       }),
+    }).then((response) => {
+      if (response.ok) {
+        btn.style.backgroundColor = "#007766";
+        btn.textContent = "Success!";
+      } else {
+        btn.style.backgroundColor = "red";
+        btn.textContent = "Some error occured.";
+      }
     });
-
-    btn.style.backgroundColor = "#007766";
-    btn.textContent = "Success!";
   };
 
   return (
