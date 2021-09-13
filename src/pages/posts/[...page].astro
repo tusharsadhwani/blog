@@ -9,7 +9,7 @@ let description = 'My thoughts and learnings.';
 
 export async function getStaticPaths({paginate, rss}) {
   const allPosts = Astro.fetchContent('../post/*.md');
-  const sortedPosts = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
 
   // Generate an RSS feed from this collection of posts.
   rss({
