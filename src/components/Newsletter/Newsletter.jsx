@@ -24,6 +24,7 @@ const Newsletter = () => {
         email: email,
         name: "User",
         status: "enabled",
+        lists: [3],
       }),
     }).then((response) => {
       if (response.ok) {
