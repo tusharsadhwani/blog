@@ -190,3 +190,10 @@ details {
 summary {
   cursor: pointer;
 }
+
+hr {
+  margin: 2rem auto;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--primary-color);
+}
