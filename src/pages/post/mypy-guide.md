@@ -1836,7 +1836,3 @@ And that's it!
 I've worked pretty hard on this article, distilling down everything I've learned about mypy in the past year, into a single source of knowledge. If you have any doubts, thoughts, or suggestions, be sure to comment below and I'll get back to you.
 
 Also, if you read the whole article till here, Thank you! And congratulations, you now know almost everything you'll need to be able to write fully typed Python code in the future. I hope you liked it ✨
-
-```
-
-```
