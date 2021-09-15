@@ -1,6 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
+import Footer from '../components/Footer.astro';
 import BlogPostPreview from '../components/BlogPostPreview.astro';
 import Newsletter from '../components/Newsletter/Newsletter.jsx'
 
@@ -58,13 +59,13 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
         border-radius: 0.5rem;
       }
 
-      footer {
+      .pagination {
         display: flex;
+        justify-content: flex-end;
       }
       .next {
         text-transform: uppercase;
         font-size: 0.8em;
-        margin-left: auto;
       }
     </style>
   </head>
@@ -80,11 +81,12 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
       <section>
         {latestPosts.map(p => <BlogPostPreview post={p} />)}
       </section>
-      <Newsletter client:only />
-      <footer>
+      <div class="pagination">
         <a class="next" href='/posts/2' aria-label="Next Page">Next</a>
-      </footer>
+      </div>
+      <Newsletter client:only />
     </main>
+    <Footer />
   </body>
   <noscript>
     <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
