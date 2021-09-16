@@ -1,7 +1,7 @@
 ---
 title: "Understanding all of Python, through its builtins"
 description: "Python has a whole lot of builtins that are unknown to most people. This guide aims to introduce you to everything that Python has to offer, through its seemingly obscure builtins."
-publishDate: "Wednesday, 18 August 2021"
+publishDate: "Wednesday, 18 August 2001"
 author: "Tushar Sadhwani"
 heroImage: "/images/builtins.jpg"
 alt: "Understanding all of Python, through its builtins"
