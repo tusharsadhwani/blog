@@ -22,8 +22,6 @@ pre[class*="language-"] {
   font-size: 1.15rem;
   font-weight: 400;
   line-height: 1.4;
-  letter-spacing: 0.04rem;
-  text-shadow: 0 0.06rem #222245;
 }
 
 pre[class*="language-"]::-moz-selection,
