@@ -744,6 +744,42 @@ The module's body has two children (two statements):
 
 Doesn't seem that bad now, right?
 
+<summary>
+<details>Extras: the Tokenizer</details>
+
+There's actually one step that occurs before parsing the code into an AST: **Lexing**.
+
+This refers to converting the source code into tokens, based on Python's _grammar_. You can take a look at how Python tokenizes your files, you can use the `tokenize` module:
+
+```python
+$ cat code.py
+x = [1, 2]
+print(x)
+
+$ py -m tokenize code.py
+0,0-0,0:            ENCODING       'utf-8'
+1,0-1,1:            NAME           'x'
+1,2-1,3:            OP             '='
+1,4-1,5:            OP             '['
+1,5-1,6:            NUMBER         '1'
+1,6-1,7:            OP             ','
+1,8-1,9:            NUMBER         '2'
+1,9-1,10:           OP             ']'
+1,10-1,11:          NEWLINE        '\n'
+2,0-2,5:            NAME           'print'
+2,5-2,6:            OP             '('
+2,6-2,7:            NAME           'x'
+2,7-2,8:            OP             ')'
+2,8-2,9:            NEWLINE        '\n'
+3,0-3,0:            ENDMARKER      ''
+```
+
+It has converted our file into its bare tokens, things like variable names, brackets, strings and numbers. It also keeps track of the line numbers and locations of each token, which helps in pointing at the exact location of an error message, for example.
+
+This "token stream" is what's parsed into an AST.
+
+</summary>
+
 So now we have an AST object. We can _compile_ it into a code object using `compile`. Running `exec` on the code object will do the same thing:
 
 ```python
