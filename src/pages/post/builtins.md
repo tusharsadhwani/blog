@@ -1269,6 +1269,19 @@ Python has 5 fundamental container types:
   AttributeError: ...
   ```
 
+The builtins `list`, `tuple` and `dict` can be used to create empty instances of these data structures too:
+
+```python
+>>> x = list()
+>>> x
+[]
+>>> y = dict()
+>>> y
+{}
+```
+
+But the short-form `{...}` and `[...]` is more readable and should be preferred. It's also a tiny-bit faster to use the short-form syntax, as `list`, `dict` etc. are defined inside builtins, and looking up these names inside the variable scopes takes some time, whereas `[]` is understood as a list without any lookup.
+
 ### `hash` and `id`: The equality fundamentals
 
 > PENDING
