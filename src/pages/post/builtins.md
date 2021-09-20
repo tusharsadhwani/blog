@@ -1196,7 +1196,78 @@ If `object` is the father of all classes, `type` is the grandfather.
 
 ### `list`, `tuple`, `dict`, `set` and `frozenset`: The containers
 
-A "container" Python has 5 fundamental container types.
+A "container" in Python refers to a data structure that can hold any number of items inside it.
+
+Python has 5 fundamental container types:
+
+- `list`: Ordered, indexed container. Every element is present at a specific index. Lists are mutable, i.e. items can be added or removed at any time.
+
+  ```python
+  >>> my_list = [10, 20, 30]  # Creates a list with 3 items
+  >>> my_list[0]              # Indexes start with zero
+  10
+  >>> my_list[1]              # Indexes increase one by one
+  20
+  >>> my_list.append(40)      # Mutable: can add values
+  >>> my_list
+  [10, 20, 30, 40]
+  >>> my_list[0] = 50         # Can also reassign indexes
+  >>> my_list
+  [50, 20, 30, 40]
+  ```
+
+- `tuple`: Ordered and indexed just like lists, but with one key difference: They are _immutable_, which means items cannot be added or deleted once the tuple is created.
+
+  ```python
+  >>> some_tuple = (1, 2, 3)
+  >>> some_tuple[0]              # Indexable
+  1
+  >>> some_tuple.append(4)       # But NOT mutable
+  AttributeError: ...
+  >>> some_tuple[0] = 5          # Cannot reassign an index as well
+  TypeError: ...
+  ```
+
+- `dict`: Unordered key-value pairs. The key is used to access the value. Only one value can correspond to a given key.
+
+  ```python
+  >>> flower_colors = {'roses': 'red', 'violets': 'blue'}
+  >>> flower_colors['violets']               # Use keys to access value
+  'blue'
+  >>> flower_colors['violets'] = 'purple'    # Mutable
+  >>> flower_colors
+  {'roses': 'red', 'violets': 'purple'}
+  >>> flower_colors['daffodil'] = 'yellow'   # Can also add new values
+  >>> flower_colors
+  {'roses': 'red', 'violets': 'purple', 'daffodil': 'yellow'}
+  ```
+
+- `set`: Unordered, unique collection of data. Items in a set simply represent their presence or absence. You could use a set to find for example, the kinds of trees in a forest. Their order doesn't matter, only their existance.
+
+  ```python
+  >>> forest = ['cedar', 'bamboo', 'cedar', 'cedar', 'cedar', 'oak', 'bamboo']
+  >>> tree_types = set(forest)
+  >>> tree_types
+  {'bamboo', 'oak', 'cedar'}      # Only unique items
+  >>> 'oak' in tree_types
+  True
+  >>> tree_types.remove('oak')    # Sets are also mutable
+  >>> tree_types
+  {'bamboo', 'cedar'}
+  ```
+
+- A `frozenset` is identical to a set, but just like `tuple`s, is immutable.
+
+  ```python
+  >>> forest = ['cedar', 'bamboo', 'cedar', 'cedar', 'cedar', 'oak', 'bamboo']
+  >>> tree_types = frozenset(forest)
+  >>> tree_types
+  frozenset({'bamboo', 'oak', 'cedar'})
+  >>> 'cedar' in tree_types
+  True
+  >>> tree_types.add('mahogany')           # CANNOT modify
+  AttributeError: ...
+  ```
 
 ### `hash` and `id`: The equality fundamentals
 
