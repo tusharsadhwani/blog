@@ -7,18 +7,18 @@ setup("N", {}, async () => {
   return (el, children) => hydrate(el)(Component, {}, children);
 
 });
-</script></div></header><div class="layout astro-eZ0V7RoP"><header class="astro-eZ0V7RoP"><p class="publish-date astro-eZ0V7RoP">Saturday, 26 September 2020</p><h1 class="title astro-eZ0V7RoP">How to setup PostgreSQL on Manjaro linux / Arch</h1><img src="/images/postgres.jpg" alt="How to setup PostgreSQL on Manjaro linux / Arch" class="astro-eZ0V7RoP"><div class="author astro-vgbcRyj4"><p class="astro-vgbcRyj4"><a href="https://tusharsadhwani.dev" class="astro-vgbcRyj4">@tusharsadhwani</a></p></div></header><article class="content astro-eZ0V7RoP"><main class="astro-eZ0V7RoP"><p>This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.</p><h2 id="step-1---install-the-dependencies"><a aria-hidden="true" tabindex="-1" href="#step-1---install-the-dependencies"><span class="icon icon-link"></span></a>Step 1 - Install the dependencies</h2><pre class=""><code class="language-html">sudo pacman -S yay
+</script></div></header><div class="layout astro-eZ0V7RoP"><header class="astro-eZ0V7RoP"><p class="publish-date astro-eZ0V7RoP">Saturday, 26 September 2020</p><h1 class="title astro-eZ0V7RoP">How to setup PostgreSQL on Manjaro linux / Arch</h1><img src="/images/postgres.jpg" alt="How to setup PostgreSQL on Manjaro linux / Arch" class="astro-eZ0V7RoP"><div class="author astro-vgbcRyj4"><p class="astro-vgbcRyj4"><a href="https://tusharsadhwani.dev" class="astro-vgbcRyj4">@tusharsadhwani</a></p></div></header><article class="content astro-eZ0V7RoP"><main class="astro-eZ0V7RoP"><p>This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.</p><h2 id="step-1---install-the-dependencies"><a aria-hidden="true" tabindex="-1" href="#step-1---install-the-dependencies"><span class="icon icon-link"></span></a>Step 1 - Install the dependencies</h2><pre class=""><code class="language-plaintext">sudo pacman -S yay
 yay postgresql pgadmin4
-</code></pre><p>This should automatically setup your postgres user and group.</p><h2 id="step-2---setup-postgres-service"><a aria-hidden="true" tabindex="-1" href="#step-2---setup-postgres-service"><span class="icon icon-link"></span></a>Step 2 - Setup postgres service</h2><pre class=""><code class="language-html">sudo -u postgres -i # login as postgres
+</code></pre><p>This should automatically setup your postgres user and group.</p><h2 id="step-2---setup-postgres-service"><a aria-hidden="true" tabindex="-1" href="#step-2---setup-postgres-service"><span class="icon icon-link"></span></a>Step 2 - Setup postgres service</h2><pre class=""><code class="language-plaintext">sudo -u postgres -i # login as postgres
 initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data/'
 exit
 
 sudo systemctl enable --now postgresql
 sudo systemctl status postgresql # to check for any errors
-</code></pre><h2 id="step-3---setup-password"><a aria-hidden="true" tabindex="-1" href="#step-3---setup-password"><span class="icon icon-link"></span></a>Step 3 - Setup password</h2><pre class=""><code class="language-html">psql -U postgres
+</code></pre><h2 id="step-3---setup-password"><a aria-hidden="true" tabindex="-1" href="#step-3---setup-password"><span class="icon icon-link"></span></a>Step 3 - Setup password</h2><pre class=""><code class="language-plaintext">psql -U postgres
 
 postgres=# password # to set password
-</code></pre><h2 id="step-4---setup-connection-security"><a aria-hidden="true" tabindex="-1" href="#step-4---setup-connection-security"><span class="icon icon-link"></span></a>Step 4 - Setup connection security</h2><pre class=""><code class="language-html">$ su
+</code></pre><h2 id="step-4---setup-connection-security"><a aria-hidden="true" tabindex="-1" href="#step-4---setup-connection-security"><span class="icon icon-link"></span></a>Step 4 - Setup connection security</h2><pre class=""><code class="language-plaintext">$ su
 
 # cd /var/lib/postgres/data
 # cp pg_hba.conf pg_hba.conf.backup # in case you mess up
@@ -36,7 +36,7 @@ host    all             all             ::1/128                 trust
 local   replication     all                                     trust
 host    replication     all             127.0.0.1/32            trust
 host    replication     all             ::1/128                 trust
-</code></pre><p>“Method” is set to trust, meaning it won’t ask for the password to anyone. To fix that, change the method from <code>trust</code> to <code>md5</code> everywhere.</p><p>And that should be it for postgres!</p><h2 id="bonus-shortcuts"><a aria-hidden="true" tabindex="-1" href="#bonus-shortcuts"><span class="icon icon-link"></span></a>Bonus: shortcuts</h2><pre class=""><code class="language-html">&gt; psql dbname postgres # to directly open a database
+</code></pre><p>“Method” is set to trust, meaning it won’t ask for the password to anyone. To fix that, change the method from <code>trust</code> to <code>md5</code> everywhere.</p><p>And that should be it for postgres!</p><h2 id="bonus-shortcuts"><a aria-hidden="true" tabindex="-1" href="#bonus-shortcuts"><span class="icon icon-link"></span></a>Bonus: shortcuts</h2><pre class=""><code class="language-plaintext">&gt; psql dbname postgres # to directly open a database
 
 postgres=# c                       # see current database
 postgres=# l                       # see list of databases
