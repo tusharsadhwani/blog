@@ -191,7 +191,7 @@ None
 
 ### Builtin scope
 
-Now we get to the topic of this blog &mdash; the builtin scope.
+Now we get to the topic of this blog -- the builtin scope.
 
 So there's two things to know about the builtin scope in Python:
 
@@ -478,7 +478,7 @@ The `__loader__` is set to the loader object that the import machinery used when
 
 Looking slightly more closely at the example before this, you might notice that the `loader` attributes of the module spec are `Loader` classes that come from the slightly different `_frozen_importlib_external` module.
 
-So you might ask, what are these weird `_frozen` modules? Well, my friend, it's exactly as they say &mdash; they're _frozen modules_.
+So you might ask, what are these weird `_frozen` modules? Well, my friend, it's exactly as they say -- they're _frozen modules_.
 
 The _actual_ source code of these two modules is actually inside the `importlib.machinery` module. These `_frozen` aliases are frozen versions of the source code of these loaders. To create a frozen module, the Python code is compiled to a code object, marshalled into a file, and then added to the Python executable.
 
@@ -582,7 +582,7 @@ When you import a module, the `__cached__` property stores the path of the cache
 
 "What?!", you might be saying, "Python? Compiled?"
 
-Yeah. Python _is_ compiled. In fact, all Python code is compiled, but not to machine code &mdash; to **bytecode**. Let me explain this point by explaining how Python runs your code.
+Yeah. Python _is_ compiled. In fact, all Python code is compiled, but not to machine code -- to **bytecode**. Let me explain this point by explaining how Python runs your code.
 
 Here are the steps that the Python interpreter does to run your code:
 
@@ -859,7 +859,7 @@ You can confirm that the bytecode generated is exactly 20 bytes.
 
 </details>
 
-`eval` is pretty similar to exec, except it only accepts expressions (not statements or a set of statements like `exec`), and unlike `exec`, it returns a value &mdash; the result of said expression.
+`eval` is pretty similar to exec, except it only accepts expressions (not statements or a set of statements like `exec`), and unlike `exec`, it returns a value -- the result of said expression.
 
 Here's an example:
 
@@ -1014,7 +1014,7 @@ Python has exactly 6 primitive data types (well, actually just 5, but we'll get 
 
 `str` is one of the most familiar data types in Python. Taking user input using the `input` method gives you a string, and every other data type in Python can be converted into a string. This is necessary because all computer Input/Output is in text-form, be it user I/O or file I/O, which is probably why strings are everywhere.
 
-`bytes` on the other hand, are _actually_ the basis of all I/O in computing. If you know about computers, you would know that all data is stored and handled as bits and bytes &mdash; and that's how terminals really work as well.
+`bytes` on the other hand, are _actually_ the basis of all I/O in computing. If you know about computers, you would know that all data is stored and handled as bits and bytes -- and that's how terminals really work as well.
 
 If you want to take a peek at the bytes underneath the `input` and `print` calls: you need to take a look at the I/O buffers in the `sys` module: `sys.stdout.buffer` and `sys.stdin.buffer`:
 
@@ -1068,7 +1068,7 @@ True
 (5+0j)
 ```
 
-Now, I mentioned for a moment that there's actually only 5 primitive data types in Python, not 6. That is because, `bool` is actually not a primitive data type &mdash; it's actually a subclass of `int`!
+Now, I mentioned for a moment that there's actually only 5 primitive data types in Python, not 6. That is because, `bool` is actually not a primitive data type -- it's actually a subclass of `int`!
 
 You can check it yourself, by looking into the `mro` property of these classes.
 
