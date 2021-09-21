@@ -12,7 +12,7 @@ This guide is here just because I've messed up the installs on arch before, and 
 
 ## Step 1 - Install the dependencies
 
-```
+```plaintext
 sudo pacman -S yay
 yay postgresql pgadmin4
 ```
@@ -21,7 +21,7 @@ This should automatically setup your postgres user and group.
 
 ## Step 2 - Setup postgres service
 
-```
+```plaintext
 sudo -u postgres -i # login as postgres
 initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data/'
 exit
@@ -32,7 +32,7 @@ sudo systemctl status postgresql # to check for any errors
 
 ## Step 3 - Setup password
 
-```
+```plaintext
 psql -U postgres
 
 postgres=# \password # to set password
@@ -40,7 +40,7 @@ postgres=# \password # to set password
 
 ## Step 4 - Setup connection security
 
-```
+```plaintext
 $ su
 
 # cd /var/lib/postgres/data
@@ -72,7 +72,7 @@ And that should be it for postgres!
 
 ## Bonus: shortcuts
 
-```
+```plaintext
 > psql dbname postgres # to directly open a database
 
 postgres=# \c                       # see current database

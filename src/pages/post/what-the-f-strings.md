@@ -298,7 +298,7 @@ print(f'{pi:{padding_char}{alignment}{length}.{digits}}')
 
 Output:
 
-```
+```plaintext
 Enter number of digits of pi: 8
 Enter string length: 30
 Enter alignment (<, > or ^): ^
