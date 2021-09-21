@@ -20,7 +20,7 @@ This article is going to be a deep dive for anyone who wants to learn about mypy
 
 > _If you haven't noticed the article length, this is going to be long. So grab a cup of your favorite beverage, and let's get straight into it._
 
-# Index
+## Index
 
 - [Index](#index)
 - [Setting up mypy](#setting-up-mypy)
@@ -56,11 +56,11 @@ This article is going to be a deep dive for anyone who wants to learn about mypy
 - [Advanced/Recursive type checking with `Protocol`](#advancedrecursive-type-checking-with-protocol)
 - [Further learning](#further-learning)
 
-# Setting up mypy
+## Setting up mypy
 
 All you really need to do to set it up is `pip install mypy`.
 
-## Using mypy in the terminal
+### Using mypy in the terminal
 
 Let's create a regular python file, and call it `test.py`:
 
@@ -111,7 +111,7 @@ This gave us even more information: the fact that we're using `give_number` in o
 
 > **TL;DR**: for starters, use `mypy --strict filename.py`
 
-## Using mypy in VSCode
+### Using mypy in VSCode
 
 VSCode has pretty good integration with mypy. All you need to get mypy working with it is to add this to your `settings.json`:
 
@@ -135,7 +135,7 @@ Now opening your code folder in python should show you the exact same errors in 
 
 Okay, now on to actually fixing these issues.
 
-# Primitive types
+## Primitive types
 
 The most fundamental types that exist in mypy are the primitive types. To name a few:
 
@@ -209,7 +209,7 @@ And mypy would be equally happy with this as well. But we don't have to provide 
 
 And _inference is cool_. For 80% of the cases, you'll only be writing types for function and method definitions, as we did in the first example. One notable exception to this is "empty collection types", which we will discuss now.
 
-# Collection types
+## Collection types
 
 Collection types are how you're able to add types to collections, such as "a list of strings", or "a dictionary with string keys and boolean values", and so on.
 
@@ -297,7 +297,7 @@ print(unique_count([1, 2, 1, 3, 1, 2, 4, 3, 1]))  # 4
 
 > **Note**: Starting from Python 3.7, you can add a future import, `from __future__ import annotations` at the top of your files, which will allow you to use the builtin types as generics, i.e. you can use `list[int]` instead of `List[int]`. If you're using Python 3.9 or above, you can use this syntax without needing the `__future__` import at all. However, there are some edge cases where it might not work, so in the meantime I'll suggest using the `typing.List` variants. This is detailed in [PEP 585](https://www.python.org/dev/peps/pep-0585/).
 
-# Type debugging - Part 1
+## Type debugging - Part 1
 
 Let's say you're reading someone else's — or your own past self's — code, and it's not really apparent what the type of a variable is. The code is using a lot of inference, and it's using some builtin methods that you don't exactly remember how they work, bla bla.
 
@@ -346,7 +346,7 @@ NameError: name 'reveal_type' is not defined
 
 All this means, is that **you should only use `reveal_type` to debug your code, and remove it when you're done debugging**.
 
-# Union and Optional
+## Union and Optional
 
 So far, we have only seen variables and collections that can hold only one type of value. But what about this piece of code?
 
@@ -476,7 +476,7 @@ And that's everything you need to know about Union.
 
 Well, `Union[X, None]` seemed to occur so commonly in Python, that they decided it needs a shorthand. `Optional[str]` is just a shorter way to write `Union[str, None]`.
 
-# Any type
+## Any type
 
 If you ever try to run `reveal_type` inside an untyped function, this is what happens:
 
@@ -523,9 +523,9 @@ post_data_to_api(data)
 
 You can also use `Any` as a placeholder value for something while you figure out what it should be, to make mypy happy in the meanwhile. But make sure to get rid of the `Any` if you can .
 
-# Miscellaneous types
+## Miscellaneous types
 
-## Tuple
+### Tuple
 
 You might think of tuples as an immutable list, but Python thinks of it in a very different way.
 
@@ -581,7 +581,7 @@ veggies = ('Potato', 'Tomato', 'Onion')
 print_veggies(veggies)
 ```
 
-## TypedDict
+### TypedDict
 
 A `TypedDict` is a dictionary whose keys are always string, and values are of the specified type. At runtime, it behaves exactly like a normal dictionary.
 
@@ -602,7 +602,7 @@ print(Vector(x=1, y=2, label='first') == dict(x=1, y=2, label='first')) # True
 
 By default, all keys must be present in a `TypedDict`. It is possible to override this by specifying `total=False`.
 
-## Literal
+### Literal
 
 A `Literal` represents the type of a literal value. You can use it to constrain already existing types like `str` and `int`, to just some specific values of them. Like so:
 
@@ -641,7 +641,7 @@ test.py:8: error: Argument 1 to "make_request" has incompatible type "Literal['D
 
 Oops, you made a typo in `'DELETE'`! Don't worry, mypy saved you an hour of debugging.
 
-## Final
+### Final
 
 `Final` is an annotation that declares a variable as final. What that means that the variable cannot be re-assigned to. This is similar to `final` in Java and `const` in JavaScript.
 
@@ -655,7 +655,7 @@ api_url : Final = 'https://example.com/m_api'
 api_url = 'something else'  # Error: Cannot assign to final name "api_url"
 ```
 
-## NoReturn
+### NoReturn
 
 `NoReturn` is an interesting type. It's rarely ever used, but it still needs to exist, for that one time where you might have to use it.
 
@@ -688,7 +688,7 @@ $ mypy test.py
 test.py:6: error: Implicit return in function which does not return
 ```
 
-# Typing classes
+## Typing classes
 
 All class methods are essentially typed just like regular functions, except for `self`, which is left untyped. Here's a simple Stack class:
 
@@ -781,7 +781,7 @@ class MyClass:
 
 > Starting with Python 3.11, the Postponed evaluation behaviour will become default, and you won't need to have the `__future__` import anymore.
 
-# Typing namedtuples
+## Typing namedtuples
 
 `namedtuple`s are a lot like tuples, except every index of their fields is named, and they have some syntactic sugar which allow you to access its properties like attributes on an object:
 
@@ -830,7 +830,7 @@ Doing `print(ishan.__annotations__)` in the code above gives us `{'name': <class
 
 </details>
 
-# Typing decorators
+## Typing decorators
 
 Decorators are a fairly advanced, but really powerful feature of Python. If you don't know anything about decorators, I'd recommend you to watch [Anthony explains decorators](https://www.youtube.com/watch?v=WDMr6WolKUM), but I'll explain it in brief here as well.
 
@@ -910,7 +910,7 @@ long_computation()
 
 > Note: `Callable` is what's called a [Duck Type](https://devopedia.org/duck-typing). What it means, is that you can create your own custom object, and make it a valid `Callable`, by implementing the magic method called `__call__`. I have a dedicated section where I go in-depth about duck types ahead.
 
-# Typing generators
+## Typing generators
 
 Generators are also a fairly advanced topic to completely cover in this article, and you can watch
 [Anthony explains generators](https://www.youtube.com/watch?v=LjBa9sfJh7U) if you've never heard of them. A brief explanation is this:
@@ -966,7 +966,7 @@ for string in generator(3):
 
 Since we're not raising any errors in the generator, `throw_type` is `None`. And although the return type is `int` which is correct, we're not really using the returned value anyway, so you could use `Generator[str, None, None]` as well, and skip the `return` part altogether.
 
-# Typing `*args` and `**kwargs`
+## Typing `*args` and `**kwargs`
 
 `*args` and `**kwargs` is a feature of python that lets you pass any number of arguments and keyword arguments to a function _(that's what the name `args` and `kwargs` stands for, but these names are just convention, you can name the variables anything)_. [Anthony explains args and kwargs](https://www.youtube.com/watch?v=CqafM-bsnW0)
 
@@ -1007,7 +1007,7 @@ marks = {'english': 55, 'physics': 84}
 print(build_scorecard(**marks))  # Scorecard(english=55, maths=None, physics=84)
 ```
 
-# Duck types
+## Duck types
 
 **Duck types** are a pretty fundamental concept of python: the entirety of the [Python object model](https://docs.python.org/3/reference/datamodel.html) is built around the idea of duck types.
 
@@ -1108,7 +1108,7 @@ There are many, _many_ of these duck types that ship within Python's `typing` mo
 
 > If you haven't already at this point, you should really look into how python's syntax and top level functions hook into Python's object model via `__magic_methods__`, for essentially all of Python's behaviour. The documentation for it is [right here](https://docs.python.org/3/reference/datamodel.html), and there's an excellent [talk by James Powell](https://www.youtube.com/watch?v=7lmCu8wz8ro) that really dives deep into this concept in the beginning.
 
-# Function overloading with `@overload`
+## Function overloading with `@overload`
 
 Let's write a simple `add` function that supports `int`'s and `float`'s:
 
@@ -1205,7 +1205,6 @@ print(joined_list[last_index])
 And now mypy knows that `add(3, 4)` returns an `int`.
 
 > Note that Python has no way to ensure that the code actually always returns an `int` when it gets `int` values. It's your job as the programmer providing these overloads, to verify that they are correct. This is why in some cases, using `assert isinstance(...)` could be better than doing this, but for most cases `@overload` works fine.
-
 > Also, in the overload definitions `-> int: ...`, the `...` at the end is a convention for when you provide [type stubs](https://mypy.readthedocs.io/en/stable/stubs.html) for functions and classes, but you could technically write anything as the function body: `pass`, `42`, etc. It'll be ignored either way.
 
 Another good overload example is this:
@@ -1224,7 +1223,7 @@ def read_file(file: Union[TextIO, BinaryIO]) -> Union[str, bytes]:
     return data
 ```
 
-# `Type` type
+## `Type` type
 
 `Type` is a type used to type classes. It derives from python's way of determining the type of an object at runtime:
 
@@ -1268,7 +1267,7 @@ print(c.x)  # 42
 
 > We had to use `Any` in 3 places here, and 2 of them can be eliminated by using [generics](#generics), and we'll talk about it later on.
 
-# Typing pre-existing projects
+## Typing pre-existing projects
 
 If you need it, mypy gives you the ability to add types to your project without ever modifying the original source code. It's done using what's called "stub files".
 
@@ -1315,7 +1314,7 @@ $ mypy --strict .
 Success: no issues found in 2 source files
 ```
 
-# Type debugging - Part 2
+## Type debugging - Part 2
 
 Since we are on the topic of projects and folders, let's discuss another one of pitfalls that you can find yourselves in when using mypy.
 
@@ -1458,7 +1457,7 @@ There's yet another third pitfall that you might encounter sometimes, which is i
 
 This creates an import cycle, and Python gives you an `ImportError`. To avoid this, simple add an `if typing.TYPE_CHECKING:` block to the import statement in `b.py`, since it only needs `MyClass` for type checking. Also, everywhere you use `MyClass`, add quotes: `'MyClass'` so that Python is happy.
 
-# Typing Context managers
+## Typing Context managers
 
 Context managers are a way of adding common setup and teardown logic to parts of your code, things like opening and closing database connections, establishing a websocket, and so on. On the surface it might seem simple but it's a pretty extensive topic, and if you've never heard of it before, [Anthony covers it here](https://www.youtube.com/watch?v=ExdtNMnP24I).
 
@@ -1496,7 +1495,7 @@ with Open('test.txt') as f:
     print(f.read())  # Output: Test
 ```
 
-# Typing async functions
+## Typing async functions
 
 The `typing` module has a duck type for all types that can be awaited: `Awaitable`.
 
@@ -1522,7 +1521,7 @@ reveal_type(my_async_function)  # Callable[[], Awaitable[int]]
 run_async(my_async_function())
 ```
 
-# Generics
+## Generics
 
 Generics (or generic types) is a language feature that lets you "pass types inside other types".
 
@@ -1534,7 +1533,7 @@ Let's say you have a function that returns the first item in an array. To define
 
 And that's exactly what generic types are: **defining your return type based on the input type**.
 
-## Generic functions
+### Generic functions
 
 We've seen `make_object` from the [Type type](#type-type) section before, but we had to use `Any` to be able to support returning any kind of object that got created by calling `cls(*args)`. But, we don't actually have to do that, because we can use generics. Here's how you'd do that:
 
@@ -1641,7 +1640,7 @@ Note that `_typeshed` is **not an actual module** in Python, so you'll have to i
 
 > At this point you might be interested in how you could implement one of your own such `SupportsX` types. For that, we have another section below: [Protocols](#protocol).
 
-## Generic classes
+### Generic classes
 
 we implemented a simple Stack class in [typing classes](#typing-classes), but it only worked for integers. But we can very simply make it work for any type.
 
@@ -1681,7 +1680,7 @@ print(stack)        # Stack[2]
 
 You can pass as many `TypeVar`s to `Generic[...]` as you need, for eg. to make a generic dictionary, you might use `class Dict(Generic[KT, VT]): ...`
 
-## Generic types
+### Generic types
 
 Generic types (a.k.a. **Type Aliases**) allow you to put a commonly used type in a variable -- and then use that variable as if it were that type.
 
@@ -1725,7 +1724,7 @@ concat('string', b'bytes')   # Error - different object types: str and bytes
 
 This is different from `Union[str, bytes]`, because `AnyStr` represents **Any one of those two types at a time**, and thus doesn't `concat` doesn't accept the first arg as `str` and the second as `bytes`.
 
-# Advanced/Recursive type checking with `Protocol`
+## Advanced/Recursive type checking with `Protocol`
 
 We implemented `FakeFuncs` in the [duck types](#duck-types) section above, and we used `isinstance(FakeFuncs, Callable)` to verify that the object indeed, was recognized as a callable.
 
@@ -1812,10 +1811,9 @@ for value in traverse_inorder(tree):
 ```
 
 > _Note that for this simple example, using Protocol wasn't necessary, as mypy is able to understand simple recursive structures. But for anything more complex than this, like an N-ary tree, you'll need to use Protocol._
-
 > Structural subtyping and all of its features are defined extremely well in [PEP 544](https://www.python.org/dev/peps/pep-0544/).
 
-# Further learning
+## Further learning
 
 If you're interested in reading even more about types, mypy has excellent [documentation](https://mypy.readthedocs.io/en/stable), and you should definitely read it for further learning, especially the section on [Generics](https://mypy.readthedocs.io/en/stable/generics.html).
 
