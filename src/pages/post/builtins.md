@@ -1284,6 +1284,89 @@ But the short-form `{...}` and `[...]` is more readable and should be preferred.
 
 ### `hash` and `id`: The equality fundamentals
 
+The builtin functions `hash` and `id` make up the backbone of object equality in Python.
+
+Python objects by default aren't comparable, unless they are identical. If you try to create two `object()` items and check if they're equal...
+
+```python
+>>> x = object()
+>>> y = object()
+>>> x == x
+True
+>>> y == y
+True
+>>> x == y  # Comparing two objects
+False
+```
+
+The result will always be `False`. This comes from the fact that `object`s compare themselves by identity: They are only equal to themselves, nothing else.
+
+<summary>
+<details>Extras: Sentinels</details>
+
+For this reason, `object` instances are also sometimes called a "sentinel", because they can be used to check for a value exactly, that can't be replicated.
+
+A nice use-case of sentinel values comes in a case where you need to provide a default value to a function where every possible value is a valid input. A really silly example would be this behaviour:
+
+```python
+>>> what_was_passed(42)
+You passed a 42.
+>>> what_was_passed('abc')
+You passed a 'abc'.
+>>> what_was_passed()
+Nothing was passed.
+```
+
+And at first glance, being able to write this code out would be pretty simple:
+
+```python
+def what_was_passed(value=None):
+    if value is None:
+        print('Nothing was passed.')
+    else:
+        print(f'You passed a {value!r}.')
+```
+
+But, this doesn't work. What about this:
+
+```python
+>>> what_was_passed(None)
+Nothing was passed.
+```
+
+Uh oh. We can't explicitly pass a `None` to the function, because that's the default value. We can't really use any other literal or even `...` Ellipsis, because those won't be able to be passed then.
+
+This is where a sentinel comes in:
+
+```python
+__my_sentinel = object()
+
+def what_was_passed(value=__my_sentinel):
+    if value is __my_sentinel:
+        print('Nothing was passed.')
+    else:
+        print(f'You passed a {value!r}.')
+```
+
+And now, this will work for every possible value passed to it.
+
+```python
+>>> what_was_passed(42)
+You passed a 42.
+>>> what_was_passed('abc')
+You passed a 'abc'.
+>>> what_was_passed(None)
+You passed a None.
+>>> what_was_passed(object())
+You passed a <object object at 0x7fdf02f3f220>.
+>>> what_was_passed()
+Nothing was passed.
+```
+
+</summary>
+
+To understand why objects only compare to themselves, we will have to understand the `is` keyword.
+
 > PENDING
 
 id is used by default to compare two objects as equal
