@@ -1367,17 +1367,168 @@ Nothing was passed.
 
 To understand why objects only compare to themselves, we will have to understand the `is` keyword.
 
-> PENDING
+Python's `is` operator is used to check if two values reference the same exact object in memory. Think of Python objects like boxes floating around in space, and variables, array indexes, and so on being named arrows pointing to the objects.
 
-id is used by default to compare two objects as equal
+Let's take a quick example:
 
-hash is used to identify equivalent objects.
+```python
+>>> x = object()
+>>> y = object()
+>>> z = y
+>>> x is y
+True
+>>> y is z
+True
+```
 
-the hash of the same number in different formats must be the same. eg. d[2] and d[2.0]
+In the code above, there are two separate objects, and three labels `x` `y` and `z` pointing to these two objects: `x` pointing to the first one, and `y` and `z` both pointing to the other one.
 
-objects that have the same hash value must also compare equal.
+```python
+>>> del x
+```
 
-immutable container objects, i.e. tuples and frozensets, create their hash by combining the hashes of their items, so equivalent immutable containers can be compared by comparing their hash.
+This deletes the arrow `x`. The objects themselves aren't affected by assignment, or deletion, only the arrows are. But now that there are no arrows pointing to the first object, it is meaningless to keep it alive. So Python's "garbage collector" gets rid of it. Now we are left with a single `object`.
+
+```python
+>>> y = 5
+```
+
+Now `y` arrow has been changed to point to an integer object `5` instead. `z` still points to the second `object` though, so it's still alive.
+
+```python
+>>> z = y * 2
+```
+
+Now z points to yet another new object `10`, which is stored somewhere in memory. Now the second `object` also has nothing pointing to it, so that is subsequently garbage collected.
+
+To be able to verify all of this, we can use the `id` builtin function. `id` spells out the exact location of the object in memory, represented as a number.
+
+```python
+>>> x = object()
+>>> y = object()
+>>> z = y
+>>> id(x)
+139737240793600
+>>> id(y)
+139737240793616
+>>> id(z)
+139737240793616  # Notice the numbers!
+>>> x is y
+False
+>>> id(x) == id(y)
+False
+>>> y is z
+True
+>>> id(y) == id(z)
+True
+```
+
+Same object, same `id`. Different objects, different `id`. Simple as that.
+
+With `object`s, `==` and `is` behaves the same way:
+
+```python
+>>> x = object()
+>>> y = object()
+>>> z = y
+>>> x is y
+False
+>>> x == y
+False
+>>> y is z
+True
+>>> y == z
+True
+```
+
+This is because `object`'s behaviour for `==` is defined to compare the `id`. Something like this:
+
+```python
+class object:
+    def __eq__(self, other):
+        return self is other
+```
+
+The actual implementation of `object` is written in C.
+
+> Unlike `==`, there's no way to override the behavior of the `is` operator.
+
+Container types, on the other hand, are equal if they can be replaced with each other. Good examples would be lists with have the same items at the same indices, or sets containing the exact same values.
+
+```python
+>>> x = [1, 2, 3]
+>>> y = [1, 2, 3]
+>>> x is y
+False       # Different objects,
+>>> x == y
+True        # Yet, equal.
+```
+
+These can be defined in this way:
+
+```python
+class list:
+    def __eq__(self, other):
+        return all(x == y for x, y in zip(self, other))
+
+        # Can also be written as:
+        return all(self[i] == other[i] for i in range(len(self)))
+```
+
+> We haven't looked at `all` or `zip` yet, but all this does is make sure all of the given list indices are equal.
+
+Similarly, sets are unordered so even their location doesn't matter, only their "presence":
+
+```python
+class list:
+    def __eq__(self, other):
+        return all(item in other for item in self)
+```
+
+Now, related to the idea of "equivalence", Python has the idea of **hashes**. A "hash" of any piece of data refers to a pre-computed value that looks pretty much random, but it can be used to identify that piece of data (to some extent).
+
+Hashes have two specific properties:
+
+- The same piece of data will always have the same hash value.
+- Changing the data even very slightly, returns in a drastically different hash.
+
+What this means is that if two values have the same hash, it's very \*likely\* that they have the same value as well.
+
+Comparing hashes is a really fast way to check for "presence". This is what dictionaries and sets use to find values inside them pretty much instantly:
+
+```python
+>>> import timeit
+>>> timeit.timeit('999 in l', setup='l = list(range(1000))')
+12.224023487000522
+>>> timeit.timeit('999 in s', setup='s = set(range(1000))')
+0.06099735599855194
+```
+
+Notice that the set solution is running hunderds of times faster than the list solution! This is because they use the hash values as their replacement for "indices", and if a value _at the same hash_ is already stored in the set/dictionary, Python can quickly check if it's the same item or not. This process makes checking for presence pretty much instant.
+
+<details>
+<summary>Extras: hash factoids</summary>
+
+Another little-known fact about hashes is that in Python, all numeric values that compare equal have the same hash:
+
+```python
+>>> hash(42) == hash(42.0) == hash(42+0j)
+True
+```
+
+Another factoid is that immutable container objects such as strings (strings are a sequence of strings), tuples and frozensets, generate their hash by combining the hashes of their items. This allows you to create custom hash functions for your classes simply by composing the `hash` function:
+
+```python
+class Car:
+    def __init__(self, color, wheels=4):
+        self.color = color
+        self.wheels = wheels
+
+    def __hash__(self):
+        return hash((self.color, self.wheels))
+```
+
+</details>
 
 ### `bytearray` and `memoryview`: Better byte interfaces
 
