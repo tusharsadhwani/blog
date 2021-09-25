@@ -1631,6 +1631,123 @@ bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified in-place.
 
 ### `dir` and `vars`: Everything is a dictionary
 
+Have you ever wondered how Python stores objects, their variables, their methods and such? We know that all objects have their own properties and methods attached to them, but hoe exactly does Python keep track of them?
+
+The simple answer is that everything is stored in a dictionary. And the `vars` method exposes the variables stored inside objects and classes.
+
+```python
+>>> class C:
+...     some_constant = 42
+...     def __init__(self, x, y):
+...         self.x = x
+...         self.y = y
+...     def some_method(self):
+...         pass
+...
+>>> c = C(x=3, y=5)
+>>> vars(c)
+{'x': 3, 'y': 5}
+>>> vars(C)
+mappingproxy({'__module__': '__main__', 'some_constant': 42, '__init__': <function C.__init__ at 0x7fd27fc66d30>, 'some_method': <function C.some_method at 0x7fd27f350ca0>, '__dict__': <attribute '__dict__' of 'C' objects>, '__weakref__': <attribute '__weakref__' of 'C' objects>, '__doc__': None})
+```
+
+As you can see, the attributes `x` and `y` related to the object `c` are stored in its own dictionary, and the methods (`some_function` and `__init__`) are actually stored as functions in the class's dictionary. Which makes sense, as the code of the function itself doesn't change for every object, only the variables passed to it change.
+
+This can be demonstrated with the fact that `c.some_method(x)` is the same as `C.some_method(c, x)`:
+
+```python
+>>> class C:
+...     def function(self, x):
+...         print(f'self={self}, x={x}')
+
+>>> c = C()
+>>> C.function(c, 5)
+self=<__main__.C object at 0x7f90762461f0>, x=5
+>>> c.function(5)
+self=<__main__.C object at 0x7f90762461f0>, x=5
+```
+
+It shows that a function defined inside a class really is just a function, with `self` just being an object being passed. The object syntax `c.method(x)` is just cleaner syntax to write `C.method(c, x)`.
+
+Now here's a slightly different question. If `vars` shows all methods inside a class, then why does this work?
+
+```python
+>>> class C:
+...     def function(self, x): pass
+...
+>>> vars(C)
+mappingproxy({'__module__': '__main__', 'function': <function C.function at 0x7f607ddedb80>, '__dict__': <attribute '__dict__' of 'C' objects>, '__weakref__': <attribute '__weakref__' of 'C' objects>, '__doc__': None})
+>>> c = C()
+>>> vars(c)
+{}
+>>> c.__class__
+<class '__main__.C'>
+```
+
+🤔 `__class__` is defined in neither `c`'s dict, nor in `C`... then where is it coming from?
+
+If you want a definitive answer of which properties can be accessed on an object, you can use `dir`:
+
+```python
+>>> dir(c)
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'function']
+```
+
+So where are the rest of the properties? Well, the story is slightly more complicated, for one simple reason: Python supports inheritance.
+
+All objects in python inherit by default from the `object` class, and indeed, `__class__` is defined on `object`:
+
+```python
+>>> '__class__' in vars(object)
+True
+>>> vars(object).keys()
+dict_keys(['__repr__', '__hash__', '__str__', '__getattribute__', '__setattr__', '__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__', '__init__', '__new__', '__reduce_ex__', '__reduce__', '__subclasshook__', '__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__', '__doc__'])
+```
+
+And that does cover everything that we see in the output of `dir(c)`.
+
+Now that I've mentioned inheritence, I think I should also mention the "method resolution order". MRO for short, this is the list of classes that an object inherits properties and methods from. Here's a quick example:
+
+```python
+>>> class A:
+...     def __init__(self):
+...         self.x = 'x'
+...         self.y = 'y'
+...
+>>> class B(A):
+...     def __init__(self):
+...         self.z = 'z'
+...
+>>> a = A()
+>>> b = B()
+>>> B.mro()
+[<class '__main__.B'>, <class '__main__.A'>, <class 'object'>]
+>>> dir(b)
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'x', 'y', 'z']
+>>> set(dir(b)) - set(dir(a))
+{'z'}
+>>> vars(b).keys()
+dict_keys(['z'])
+>>> set(dir(a)) - set(dir(object))
+{'x', 'y'}
+>>> vars(a).keys()
+dict_keys(['x', 'y'])
+```
+
+So every level of inheritence adds the newer methods into the `dir` list, and `dir` on a subclass shows all methods found in its method resolution order. And that's how Python suggests method completion in the REPL:
+
+```python
+>>> class A:
+...     x = 'x'
+...
+>>> class B(A):
+...     y = 'y'
+...
+>>> b = B()
+>>> b.    # Press <tab> twice here
+b.x  b.y  # autocompletion!
+```
+
 ### `ascii`, `bin`, `hex`, `oct`, `ord`, `chr`
 
 ### `format`
