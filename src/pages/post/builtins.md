@@ -744,8 +744,8 @@ The module's body has two children (two statements):
 
 Doesn't seem that bad now, right?
 
-<summary>
-<details>Extras: the Tokenizer</details>
+<details>
+<summary>Extras: the Tokenizer</summary>
 
 There's actually one step that occurs before parsing the code into an AST: **Lexing**.
 
@@ -778,7 +778,7 @@ It has converted our file into its bare tokens, things like variable names, brac
 
 This "token stream" is what's parsed into an AST.
 
-</summary>
+</details>
 
 So now we have an AST object. We can _compile_ it into a code object using `compile`. Running `exec` on the code object will do the same thing:
 
@@ -1301,8 +1301,8 @@ False
 
 The result will always be `False`. This comes from the fact that `object`s compare themselves by identity: They are only equal to themselves, nothing else.
 
-<summary>
-<details>Extras: Sentinels</details>
+<details>
+<summary>Extras: Sentinels</summary>
 
 For this reason, `object` instances are also sometimes called a "sentinel", because they can be used to check for a value exactly, that can't be replicated.
 
@@ -1363,7 +1363,7 @@ You passed a <object object at 0x7fdf02f3f220>.
 Nothing was passed.
 ```
 
-</summary>
+</details>
 
 To understand why objects only compare to themselves, we will have to understand the `is` keyword.
 
