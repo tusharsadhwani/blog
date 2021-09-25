@@ -44,7 +44,7 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
       }
 
       .intro {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         border-bottom: 4px solid var(--theme-divider);
       }
 
@@ -77,6 +77,7 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
         <h1 class="latest">{title}</h1>
         <p>{description}</p>
         <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop />
+        <Newsletter client:only />
       </section>
       <section>
         {latestPosts.map(p => <BlogPostPreview post={p} />)}
@@ -84,7 +85,6 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
       <div class="pagination">
         <a class="next" href='/posts/2' aria-label="Next Page">Next</a>
       </div>
-      <Newsletter client:only />
     </main>
     <Footer />
   </body>

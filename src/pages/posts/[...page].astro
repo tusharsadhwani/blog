@@ -56,7 +56,9 @@ const { page } = Astro.props;
         {page.data.map((p) => <BlogPostPreview post={p} />)}
       </section>
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-      <Newsletter client:only />
+      <div class="centered">
+        <Newsletter client:only />
+      </div>
     </main>
     <Footer />
   </body>

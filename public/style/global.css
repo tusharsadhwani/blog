@@ -197,3 +197,9 @@ hr {
   max-width: 400px;
   border: 1px solid var(--primary-color);
 }
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

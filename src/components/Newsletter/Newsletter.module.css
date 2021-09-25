@@ -1,11 +1,9 @@
 .Newsletter {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
+  padding: 1rem 0;
+  width: 100%;
+  max-width: 400px;
 }
 
 .Newsletter * {
   width: 100%;
-  max-width: 400px;
 }
