@@ -76,7 +76,7 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
       <section class="intro">
         <h1 class="latest">{title}</h1>
         <p>{description}</p>
-        <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop>
+        <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop />
       </section>
       <section>
         {latestPosts.map(p => <BlogPostPreview post={p} />)}
