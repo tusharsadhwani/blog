@@ -1532,6 +1532,102 @@ class Car:
 
 ### `bytearray` and `memoryview`: Better byte interfaces
 
+A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to how lists are essentially mutable tuples.
+
+`bytearray` makes a lot of sense, as:
+
+- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficien
+- Bytes have a fixed size (which is... 1 byte). On the other hand, string characters can have various sizes thanks to the unicode encoding standard, "utf-8":
+
+  ```python
+  >>> x = 'I♥🐍'
+  >>> len(x)
+  3
+  >>> x.encode()
+  b'I\xe2\x99\xa5\xf0\x9f\x90\x8d'
+  >>> len(x.encode())
+  8
+  >>> x[2]
+  '🐍'
+  >>> x[2].encode()
+  b'\xf0\x9f\x90\x8d'
+  >>> len(x[2].encode())
+  4
+  ```
+
+  So it turns out, that the three-character string 'I♥🐍' is actually eight bytes, with the snake emoji being 4 bytes long. But, in the encoded version of it, we can access each individual byte. And because it's a byte, its "value" will always be between 0 and 255:
+
+  ```python
+  >>> x[2]
+  '🐍'
+  >>> b = x[2].encode()
+  >>> b
+  b'\xf0\x9f\x90\x8d'  # 4 bytes
+  >>> b[:1]
+  b'\xf0'
+  >>> b[1:2]
+  b'\x9f'
+  >>> b[2:3]
+  b'\x90'
+  >>> b[3:4]
+  b'\x8d'
+  >>> b[0]  # indexing a bytes object gives an integer
+  240
+  >>> b[3]
+  141
+  ```
+
+So let's take a look at some byte/bit manipulation examples:
+
+```python
+def alternate_case(string):
+    """Turns a string into alternating uppercase and lowercase characters."""
+    array = bytearray(string.encode())
+    for index, byte in enumerate(array):
+        if not ((65 <= byte <= 90) or (97 <= byte <= 126)):
+            continue
+
+        if index % 2 == 0:
+            array[index] = byte | 32
+        else:
+            array[index] = byte & ~32
+
+    return array.decode()
+
+>>> alternate_case('Hello WORLD?')
+'hElLo wOrLd?'
+```
+
+This is not a good example, and I'm not going to bother explaining it, but it works, and it is much more efficient than creating a new `bytes` object for every character change.
+
+Meanwhile, a `memoryview` takes this idea a step further: It's pretty much just like a bytearray, but it can refer to an object or a slice _by reference_, instead of creating a new copy for itself. It allows you to pass references to sections of bytes in memory around, and edit it in-place:
+
+```python
+>>> array = bytearray(range(256))
+>>> array
+bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08...
+>>> len(array)
+256
+>>> array_slice = array[65:91]  # Bytes 65 to 90 are uppercase english characters
+>>> array_slice
+bytearray(b'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+>>> view = memoryview(array)[65:91]  # Does the same thing,
+>>> view
+<memory at 0x7f438cefe040>  # but doesn't generate a new new bytearray by default
+>>> bytearray(view)
+bytearray(b'ABCDEFGHIJKLMNOPQRSTUVWXYZ')  # It can still be converted, though.
+>>> view[0]  # 'A'
+65
+>>> view[0] += 32  # Turns it lowercase
+>>> bytearray(view)
+bytearray(b'aBCDEFGHIJKLMNOPQRSTUVWXYZ')  # 'A' is now lowercase.
+>>> bytearray(view[10:15])
+bytearray(b'KLMNO')
+>>> view[10:15] = bytearray(view[10:15]).lower()
+>>> bytearray(view)
+bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified in-place.
+```
+
 ### `dir` and `vars`: Everything is a dictionary
 
 ### `ascii`, `bin`, `hex`, `oct`, `ord`, `chr`
