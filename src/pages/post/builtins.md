@@ -46,7 +46,7 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`hash` and `id`: The equality fundamentals](#hash-and-id-the-equality-fundamentals)
   - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
-  - [`ascii`, `bin`, `hex`, `oct`, `ord`, `chr`](#ascii-bin-hex-oct-ord-chr)
+  - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
   - [`format`](#format)
   - [`all`, `any`](#all-any)
   - [`abs`, `divmod`, `pow`, `round`](#abs-divmod-pow-round)
@@ -1748,9 +1748,105 @@ So every level of inheritence adds the newer methods into the `dir` list, and `d
 b.x  b.y  # autocompletion!
 ```
 
-### `ascii`, `bin`, `hex`, `oct`, `ord`, `chr`
+### `bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions
+
+The `bin`, `hex` and `oct` triplet is used to convert between bases in Python. You give them a number, and they will spit out how you can write that number in that base in your code:
+
+```python
+>>> bin(42)
+'0b101010'
+>>> hex(42)
+'0x2a'
+>>> oct(42)
+'0o52'
+>>> 0b101010
+42
+>>> 0x2a
+42
+>>> 0o52
+42
+```
+
+Yeah, you can write numbers in base 2, base 8 or base 16 in your code if you really want to. In the end, they are all completely identical to the integers wriiten in regular decimal:
+
+```python
+>>> type(0x20)
+<class 'int'>
+>>> type(0b101010)
+<class 'int'>
+>>> 0o100 == 64
+True
+```
+
+But there are times where it makes sense to use other bases instead, like when writing bytes:
+
+```python
+>>> bytes([255, 254])
+b'\xff\xfe'              # Not very easy to comprehend
+>>> # This can be written as:
+>>> bytes([0xff, 0xfe])
+b'\xff\xfe'              # An exact one-to-one translation
+```
+
+Or when writing OS-specific codes that are implemented in octal, for example:
+
+```python
+import os
+>>> os.open('file.txt', os.O_RDWR, mode=384)    # ???
+>>> # This can be written as:
+>>> os.open('file.txt', os.O_RDWR, mode=0o600)  # mode is 600 -> read-write
+```
+
+Note that `bin` for example is only supposed to be used when you want to create a binary-representation of a Python integer: If you want a binary string it's better to use Python's string formatting:
+
+```python
+>>> f'{42:b}'
+101010
+```
+
+`ord` and `chr` are used to convert ascii as well as unicode characters and their character codes:
+
+```python
+>>> ord('x')
+120
+>>> chr(120)
+'x'
+>>> ord('🐍')
+128013
+>>> hex(ord('🐍'))
+'0x1f40d'
+>>> chr(0x1f40d)
+'🐍'
+>>> '\U0001f40d'  # The same value, as a unicode escape inside a string
+'🐍'
+```
+
+It's pretty simple.
 
 ### `format`
+
+`format(string, spec)` is just another way to do `string.format(spec)`.
+
+Python's string formatting can do a lot of interesting things, like:
+
+```python
+>>> format(42, 'c')             # int to ascii
+'*'
+>>> format(604, 'f')            # int to float
+'604.000000'
+>>> format(357/18, '.2f')       # specify decimal precision
+'19.83%'
+>>> format(604, 'x')            # int to hex
+'25c'
+>>> format(604, 'b')            # int to binary
+'1001011100'
+>>> format(604, '0>16b')        # binary with zero-padding
+'0000001001011100'
+>>> format('Python!', '🐍^15')  # centered aligned text
+'🐍🐍🐍🐍Python!🐍🐍🐍🐍'
+```
+
+I have an entire article on string formatting [right here](what-the-f-strings), so check that out for more.
 
 ### `all`, `any`
 
