@@ -48,8 +48,8 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
   - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
   - [`format`](#format)
-  - [`all`, `any`](#all-any)
-  - [`abs`, `divmod`, `pow`, `round`](#abs-divmod-pow-round)
+  - [`any` and `all`](#any-and-all)
+  - [`abs`, `divmod`, `pow` and `round`: Math basics](#abs-divmod-pow-and-round-math-basics)
   - [`isinstance`, `issubclass`, `callable`](#isinstance-issubclass-callable)
   - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
   - [`super`](#super)
@@ -1848,9 +1848,152 @@ Python's string formatting can do a lot of interesting things, like:
 
 I have an entire article on string formatting [right here](what-the-f-strings), so check that out for more.
 
-### `all`, `any`
+### `any` and `all`
 
-### `abs`, `divmod`, `pow`, `round`
+These two are some of my favorite builtins. Not because they are incredibly helpful or powerful, but just because how _Pythonic_ they are. There's certain pieces of logic that can be re-written using `any` or `all`, which will instantly make it much shorter and much more readable, which is what Python is all about. Here's an example of one such case:
+
+Let's say you have a bunch of JSON responses from an API, and you want to make sure that all of them contain an ID field, which is exactly 20 characters long. You could write your code in this way:
+
+```python
+def validate_responses(responses):
+    for response in responses:
+        # Make sure that `id` exists
+        if 'id' not in response:
+            return False
+        # Make sure it is an integer
+        if not isinstance(response['id'], str):
+            return False
+        # Make sure it is 20 characters
+        if len(response['id']) != 20:
+            return False
+
+    # If everything was True so far for every
+    # response, then we can return True.
+    return True
+```
+
+Or, we can write it in this way:
+
+```python
+def validate_responses(responses):
+    return all(
+        'id' in response
+        and isinstance(response['id'], str)
+        and len(response['id']) == 20
+        for response in responses
+    )
+```
+
+What `all` does is it takes in an iterator of boolean values, and it returns `False` if it encounters even a single `False` value in the iterator. Otherwise it returns `True`.
+
+And I love the way to do it using `all`, because it reads exactly like english: "Return if id's exist, are integers and are 20 in length, in all responses."
+
+Here's another example: Trying to see if there's any palindromes in the list:
+
+```python
+def contains_palindrome(words):
+    for word in words:
+        if word == ''.join(reversed(word)):
+            return True
+
+    # Found no palindromes in the end
+    return False
+```
+
+vs.
+
+```python
+def contains_palindrome(words):
+    return any(word == ''.join(reversed(word)) for word in words)
+```
+
+And with the wording I believe it should be obvious, that `any` does the opposite of all: it returns `True` if even one value is `True`, otherwise it returns `False`.
+
+<details>
+<summary>Extras: listcomps inside any / all</summary>
+
+Note that the code using `any` or `call` could've also been written as a list comprehension:
+
+```python
+>>> any([num == 0 for num in nums])
+```
+
+Instead of a generator expression:
+
+```python
+>>> any(num == 0 for num in nums)
+```
+
+Notice the lack of `[]` square brackets in the second one. And you should always prefer using a generator expression in this case, because of how generators work in Python.
+
+Generators are constructs that generate new values _lazily_. What this means is that instead of computing and storing all the values inside a list, it generates one value, provides it to the program, and only generates the next value when it is required.
+
+This means that there's a **huge** difference between these two lines of code:
+
+```python
+>>> any(num == 10 for num in range(100_000_000))
+True
+>>> any([num == 10 for num in range(100_000_000)])
+True
+```
+
+Not only does the second one store 100 million values in a list for no reason before running `all` over it, it also takes more than 10 seconds on my machine. Meanwhile, because the first one is a generator expression, it generates numbers from 0 to 10 one by one, gives them to `any`, and as soon as the count reaches 10, `any` breaks the iteration and returns `True` almost instantly. Which also means, that it practically runs 10 million times faster in this case.
+
+So, yeah. Never pass list comprehensions inside `any` or `all` when you can pass a generator instead.
+
+</details>
+
+### `abs`, `divmod`, `pow` and `round`: Math basics
+
+These four number functions are so common in programming that they have been thrown straight into the builtins where they are always available, rather than putting them in the `math` module.
+
+They're pretty straightforward:
+
+- `abs` returns the absolute value of a number, eg:
+
+  ```python
+  >>> abs(42)
+  42
+  >>> abs(-3.14)
+  3.14
+  >>> abs(3-4j)
+  5.0
+  ```
+
+- `divmod` returns the quotient and remainder after a divide operation:
+
+  ```python
+  >>> divmod(7, 2)
+  (3, 1)
+  >>> quotient, remainder = divmod(5327, 100)
+  >>> quotient
+  53
+  >>> remainder
+  27
+  ```
+
+- `pow` returns the exponent (power) of a value:
+
+  ```python
+  >>> pow(100, 3)
+  1000000
+  >>> pow(2, 10)
+  1024
+  ```
+
+- `round` returns a number rounded to the given decimal precision
+
+  ```python
+  >>> import math
+  >>> math.pi
+  3.141592653589793
+  >>> round(math.pi)
+  3
+  >>> round(math.pi, 4)
+  3.1416
+  >>> round(1728, -2)
+  1700
+  ```
 
 ### `isinstance`, `issubclass`, `callable`
 
