@@ -2011,6 +2011,32 @@ They're pretty straightforward:
 
 ### `slice`
 
+A `slice` object is what's used under the hood when you try to slice a Python iterable.
+
+In `my_list[1:]` for example, `[1:3]` is not the special part, only `1:3` is. The square brackets are still trying to index the list! But `1:3` _inside_ these square brackets here actually creates a `slice` object.
+
+This is why, `my_list[1:3]` is actually equivalent to `my_list[slice(1, 3)]`:
+
+```python
+>>> my_list = [10, 20, 30, 40]
+>>> my_list[1:3]
+[20, 30]
+>>> my_list[slice(1, 3)]
+[20, 30]
+>>> nums = list(range(10))
+>>> nums
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> nums[1::2]
+[1, 3, 5, 7, 9]
+>>> s = slice(1, None, 2)  # Equivalent to `[1::2]`
+>>> s
+slice(1, None, 2)
+>>> nums[s]
+[1, 3, 5, 7, 9]
+```
+
+If you want to learn a bit more about slices, how they work and what all can be done with them, I cover that in a separate article [here](slices).
+
 ### `sorted`, `reversed`
 
 ### `globals`, `locals`
