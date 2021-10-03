@@ -50,7 +50,9 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`format`](#format)
   - [`any` and `all`](#any-and-all)
   - [`abs`, `divmod`, `pow` and `round`: Math basics](#abs-divmod-pow-and-round-math-basics)
-  - [`isinstance`, `issubclass`, `callable`](#isinstance-issubclass-callable)
+  - [`delattr`, `getattr`, `hasattr`, `setattr`](#delattr-getattr-hasattr-setattr)
+  - [`isinstance` and `issubclass`: Runtime type checking](#isinstance-and-issubclass-runtime-type-checking)
+  - [`callable` and duck typing basics](#callable-and-duck-typing-basics)
   - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
   - [`super`](#super)
   - [`len`, `max`, `min`, `sum`](#len-max-min-sum)
@@ -60,7 +62,6 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`slice`](#slice)
   - [`sorted`, `reversed`](#sorted-reversed)
   - [`globals`, `locals`](#globals-locals)
-  - [`delattr`, `getattr`, `hasattr`, `setattr`](#delattr-getattr-hasattr-setattr)
   - [`breakpoint`](#breakpoint)
   - [`repr`](#repr)
   - [`open`](#open)
@@ -1995,7 +1996,202 @@ They're pretty straightforward:
   1700
   ```
 
-### `isinstance`, `issubclass`, `callable`
+### `delattr`, `getattr`, `hasattr`, `setattr`
+
+> PENDING
+
+### `isinstance` and `issubclass`: Runtime type checking
+
+You've already seen the `type` builtin, and using that knowledge you can already implement runtime type-checking if you need to, like this:
+
+```python
+def print_stuff(stuff):
+    if type(stuff) is list:
+        for item in stuff:
+            print(item)
+    else:
+        print(stuff)
+```
+
+Here, we are trying to check if the item is a `list`, and if it is, we print each item inside it individually. Otherwise, we just print the item. And this is what the code does:
+
+```python
+>>> print_stuff('foo')
+foo
+>>> print_stuff(123)
+123
+>>> print_stuff(['spam', 'eggs', 'steak'])
+spam
+eggs
+steak
+```
+
+It does work! So yeah, you can check, at runtime, the type of a variable and change the behaviour of your code. But, there's actually quite a few issues with the code above. Here's one example:
+
+```python
+>>> class MyList(list):
+...     pass
+...
+>>> items = MyList(['spam', 'eggs', 'steak'])
+>>> items
+['spam', 'eggs', 'steak']
+>>> print_stuff(items)
+['spam', 'eggs', 'steak']
+```
+
+Welp, `items` is very clearly still a list, but `print_stuff` doesn't recognize it anymore. And the reason is simple, because `type(items)` is now `MyList`, not `list`.
+
+> This code seems to be violating one of the five SOLID principles, called "Liskov Substitution Principle". The principle says that "objects of a superclass shall be replaceable with objects of its subclasses without breaking the application". This is important for inheritance to be a useful programming paradigm.
+
+The underlying issue of our function is that it doesn't account for inheritence. And that's exactly what `isinstance` is for: It doesn't only check if an object is an instance of a class, it also checks if that object is an instance of a sub-class:
+
+```python
+>>> class MyList(list):
+...     pass
+...
+>>> items = ['spam', 'eggs', 'steak']
+>>> type(items) is list
+True
+>>> isinstance(items, list)
+True   # Both of these do the same thing
+>>> items = MyList(['spam', 'eggs', 'steak'])
+>>> type(items) is list
+False  # And while `type` doesn't work,
+>>> isinstance(items, list)
+True   # `isinstance` works with subclasses too.
+```
+
+Similarly, `issubclass` checks if a class is a subclass of another class. The first argument for `isinstance` is an object, but for `issubclass` it's another class:
+
+```python
+>>> issubclass(MyList, list)
+True
+```
+
+Replacing the `type` check with `isinstance`, the code above will follow Liskov Substitution Principle. But, it can still be improved. Take this for example:
+
+```python
+>>> items = ('spam', 'eggs', 'steak')
+>>> print_stuff(items)
+('spam', 'eggs', 'steak')
+```
+
+Obviously it doesn't handle other container types other than `list` as of now. You could try to work around this by checking for `isinstance` of list, tuple, dictionary, and so on. But how far? How many objects are you going to add support for?
+
+For this case, Python gives you a bunch of "base classes", that you can use to test for certain "behaviours" of your class, instead of testing for the class itself. In our case, the behaviour is being a container of other objects, so aptly the base class is called `Container`:
+
+```python
+>>> from collections.abc import Container
+>>> items = ('spam', 'eggs', 'steak')
+>>> isinstance(items, tuple)
+True
+>>> isinstance(items, list)
+False
+>>> isinstance(items, Container)
+True  # This works!
+```
+
+> We could've also used the `Iterable` base class, but that would behave differently for strings as strings are iterable, but aren't a container. That's why `Container` was chosen here.
+
+Every container object type will return `True` in the check against the `Container` base class. `issubclass` works too:
+
+```python
+>>> from collections.abc import Container
+>>> issubclass(list, Container)
+True
+>>> issubclass(tuple, Container)
+True
+>>> issubclass(set, Container)
+True
+>>> issubclass(dict, Container)
+True
+```
+
+So adding that to our code, it becomes:
+
+```python
+from collections.abc import Container
+
+def print_stuff(stuff):
+    if isinstance(stuff, Container):
+        for item in stuff:
+            print(item)
+    else:
+        print(stuff)
+```
+
+This style of checking for types actually has a name: it's called "duck typing".
+
+### `callable` and duck typing basics
+
+Famously, Python is referred to as a "duck-typed" language. What it means is that instead of caring about the exact class an object comes from, Python code generally tends to check instead if the object can satisfy certain _behaviours_ that we are looking for.
+
+In the words of Alex Martelli:
+
+> "You don't really care for IS-A -- you really only care for BEHAVES-LIKE-A-(in-this-specific-context), so, if you do test, this behaviour is what you should be testing for.
+>
+> In other words, don't check whether it IS-a duck: check whether it QUACKS-like-a duck, WALKS-like-a duck, etc, etc, depending on exactly what subset of duck-like behaviour you need to play your language-games with."
+
+To explain this, I'll give you a quick example:
+
+Some items in Python can be "called" to return a value, like functions and classes, while others can't, and will raise a `TypeError` if you try:
+
+```python
+>>> def magic():
+...     return 42
+...
+>>> magic()  # Works fine
+42
+>>> class MyClass:
+...     pass
+...
+>>> MyClass()  # Also works
+<__main__.MyClass object at 0x7f2b7b91f0a0>
+>>> x = 42
+>>> x()  # Doesn't work
+TypeError: 'int' object is not callable
+```
+
+How do you even begin to check if you can try and "call" a function, class, and whatnot? The answer is actually quite simple: You just see if the object implements a `__call__` special method.
+
+```python
+>>> def is_callable(item):
+...     return hasattr(item, '__call__')
+...
+>>> is_callable(list)
+True
+>>> def function():
+...     pass
+...
+>>> is_callable(function)
+True
+>>> class MyClass:
+...     pass
+...
+>>> is_callable(MyClass)
+True
+>>> is_callable('abcd')
+False
+```
+
+And that's pretty much what the `callable` builtin does:
+
+```python
+>>> callable(list)
+True
+>>> callable(42)
+False
+```
+
+By the way, these "special methods" is how most of Python's syntax and functionality works:
+
+- `x()` is the same as doing `x.__call__()`
+- `items[10]` is the same as doing `items.__getitem__(10)`
+- `a + b` is the same as doing `a.__add__(b)`
+
+Nearly every python behavior has an underlying "special method", or what they're sometimes called as, "dunder method" defined underneath.
+
+If you want to read more into these dunder methods, you can read the documentation page about [Python's data model](https://docs.python.org/3/reference/datamodel.html).
 
 ### `property`, `classmethod`, `staticmethod`
 
@@ -2040,8 +2236,6 @@ If you want to learn a bit more about slices, how they work and what all can be 
 ### `sorted`, `reversed`
 
 ### `globals`, `locals`
-
-### `delattr`, `getattr`, `hasattr`, `setattr`
 
 ### `breakpoint`
 
