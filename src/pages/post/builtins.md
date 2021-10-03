@@ -1981,7 +1981,7 @@ They're pretty straightforward:
   1024
   ```
 
-- `round` returns a number rounded to the given decimal precision
+- `round` returns a number rounded to the given decimal precision:
 
   ```python
   >>> import math
