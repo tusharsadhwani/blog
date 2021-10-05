@@ -46,11 +46,11 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`hash` and `id`: The equality fundamentals](#hash-and-id-the-equality-fundamentals)
   - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
+  - [`hasattr`, `getattr`, `setattr` and `delattr`: Attribute helpers](#hasattr-getattr-setattr-and-delattr-attribute-helpers)
   - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
   - [`format`](#format)
   - [`any` and `all`](#any-and-all)
   - [`abs`, `divmod`, `pow` and `round`: Math basics](#abs-divmod-pow-and-round-math-basics)
-  - [`delattr`, `getattr`, `hasattr`, `setattr`](#delattr-getattr-hasattr-setattr)
   - [`isinstance` and `issubclass`: Runtime type checking](#isinstance-and-issubclass-runtime-type-checking)
   - [`callable` and duck typing basics](#callable-and-duck-typing-basics)
   - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
@@ -1749,6 +1749,165 @@ So every level of inheritence adds the newer methods into the `dir` list, and `d
 b.x  b.y  # autocompletion!
 ```
 
+<details>
+<summary>Extras: slots</summary>
+
+> PENDING
+
+</details>
+
+### `hasattr`, `getattr`, `setattr` and `delattr`: Attribute helpers
+
+Now that we've seen that objects are pretty much the same as dictionaries underneath, let's draw a few more paralells between them while we are at it.
+
+We know that accessing as well as reassigning a property inside a dictionary is done using indexing:
+
+```python
+>>> dictionary = {'property': 42}
+>>> dictionary['property']
+42
+```
+
+while on an object it is done via the `.` operator:
+
+```python
+>>> class C:
+...     prop = 42
+...
+>>> C.prop
+42
+```
+
+You can even set and delete properties on objects:
+
+```python
+>>> C.prop = 84
+>>> C.prop
+84
+>>> del C.prop
+AttributeError: type object 'C' has no attribute 'prop'
+```
+
+But dictionaries are so much more flexible: you can for example, check if a property exists in a dictionary:
+
+```python
+>>> d = {}
+>>> 'prop' in d
+False
+>>> d['prop'] = 'exists'
+>>> 'prop' in d
+True
+```
+
+You _could_ do this in an object by using try-catch:
+
+```python
+>>> class X:
+...    pass
+...
+>>> x = X()
+>>> try:
+...     print(x.prop)
+>>> except AttributeError:
+...     print("prop doesn't exist.")
+prop doesn't exist.
+```
+
+But the preferred method to do this would be direct equivalent: `hasattr`
+
+```python
+>>> class X:
+...    pass
+...
+>>> x = X()
+>>> hasattr(x, 'prop')
+False
+>>> x.prop = 'exists'
+>>> hasattr(x, 'prop')
+True
+```
+
+Another thing that dictionaries can do is using a variable to index a dict. You can't really do that with objects, right? Let's try:
+
+```python
+>>> class X:
+...     value = 42
+...
+>>> x = X()
+>>> attr_name = 'value'
+>>> x.attr_name
+AttributeError: 'X' object has no attribute 'attr_name'
+```
+
+Yeah, it doesn't take the variable's value. This should be pretty obvious. But to actually do this, you can use `getattr`, which does take in a string, just like a dictionary key:
+
+```python
+>>> class X:
+...     value = 42
+...
+>>> x = X()
+>>> getattr(x, 'value')
+42
+>>> attr_name = 'value'
+>>> getattr(x, attr_name)
+42  # It works!
+```
+
+`setattr` and `delattr` work the same way: they take in the attribute name as a string, and sets/deletes the corresponding attribute accordingly.
+
+```python
+>>> class X:
+...     value = 42
+...
+>>> x = X()
+>>> setattr(x, 'value', 84)
+>>> x.value
+84
+>>> delattr(x, 'value')  # deletes the attribute completety
+>>> hasattr(x, 'value')
+False  # `value` no longer exists on the object.
+```
+
+Let's try to build something that kinda makes sense with one of these functions:
+
+Sometimes you need to create a function that has to be overloaded to either take a value directly, or take a "factory" object, it can be an object or a function for example, which generates the required value on demand. Let's try to implement that pattern:
+
+```python
+class api:
+    """A dummy API."""
+    def send(item):
+        print(f'Uploaded {item!r}!')
+
+def upload_data(item):
+    """Uploads the provided value to our database."""
+    if hasattr(item, 'get_value'):
+        data = item.get_value()
+        api.send(data)
+    else:
+        api.send(item)
+```
+
+Yeah, that should be it!
+
+```python
+>>> import json
+>>> class DataCollector:
+...     def __init__(self):
+...         self.items = []
+...     def add_item(self, item):
+...         self.items.append(item)
+...     def get_value(self):
+...         return json.dumps(self.items)
+...
+>>> upload_data('some text')
+Uploaded 'some text'!
+>>> collector = DataCollector()
+>>> collector.add_item(42)
+>>> collector.add_item(1000)
+>>> upload_data(collector)
+Uploaded '[42, 1000]'!
+```
+
 ### `bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions
 
 The `bin`, `hex` and `oct` triplet is used to convert between bases in Python. You give them a number, and they will spit out how you can write that number in that base in your code:
@@ -1995,10 +2154,6 @@ They're pretty straightforward:
   >>> round(1728, -2)
   1700
   ```
-
-### `delattr`, `getattr`, `hasattr`, `setattr`
-
-> PENDING
 
 ### `isinstance` and `issubclass`: Runtime type checking
 
