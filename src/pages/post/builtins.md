@@ -67,7 +67,8 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`open`](#open)
   - [`help`, `exit`, `quit`](#help-exit-quit)
   - [`copyright`, `credits`, `license`](#copyright-credits-license)
-- [Where to learn more?](#where-to-learn-more)
+- [So what's next?](#so-whats-next)
+- [The end](#the-end)
 
 ## So what's a builtin?
 
@@ -2536,6 +2537,29 @@ Sorting and reversing a sequence of data are probably the most used algorithmic 
 
 ### `copyright`, `credits`, `license`
 
-## Where to learn more?
+## So what's next?
 
-Through python's docs :D
+Well, here's the deal. _Python is huge._
+
+Here's just a few things that we haven't even touched upon yet:
+
+- Threading / Multiprocessing
+- Type annotations
+- Metaclasses
+- Weak references
+- Garbage collection
+- The 200 or so builtin modules that do everything from html templating, to sending emails, to cryptography.
+
+And that's probably not even all of it.
+
+**But**, the important thing is that you know a LOT about Python's fundamentals now. You know what makes Python tick, you understand its strengths.
+
+The rest of the things you can pick up as you go, you just need to be aware that they exist!
+
+The official Python tutorial has a section on the [builtin modules](https://docs.python.org/3/tutorial/stdlib.html), and the documentation around all of them is actually really good. Reading that whenever you need it will pretty much help you figure out everything as you need it.
+
+So now that you've learned all of this, why don't you build something great?
+
+## The end
+
+Thanks a lot for reading this article. If you managed to read the whole thing, congratulations! And I'd love to know your thoughts on this. Let me know ✨
