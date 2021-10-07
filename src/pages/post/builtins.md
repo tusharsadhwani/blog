@@ -1750,9 +1750,82 @@ b.x  b.y  # autocompletion!
 ```
 
 <details>
-<summary>Extras: slots</summary>
+<summary>Extras: slots?</summary>
 
-> PENDING
+`__slots__` are interesting.
+
+Here's one weird/interesting behaviour that Python has:
+
+```python
+>>> x = object()
+>>> x.foo = 5
+AttributeError: 'object' object has no attribute 'foo'
+>>> class C:
+...     pass
+...
+>>> c = C()
+>>> c.foo = 5
+```
+
+So, for some reason you can't assign arbitrary variables to `object`, but you can to an object of a class that you yourself created. Why could that be? Is it specific to `object`?
+
+```python
+>>> x = list()
+>>> x.foo = 5
+AttributeError: 'list' object has no attribute 'foo'
+```
+
+Nope. So what's going on?
+
+Well, This is where slots come in. Firstly, let me replicate the behaviour shown by `list` and `object` in my own class:
+
+```python
+>>> class C:
+...     __slots__ = ()
+...
+>>> c = C()
+>>> c.foo = 5
+AttributeError: 'C' object has no attribute 'foo'
+```
+
+Now here's the long explanation:
+
+Python actually has two ways of storing data inside objects: as a dictionary (like most cases), and as a "struct". Structs are a C language data type, which can essentially be thought of as tuples from Python. Dictionaries use more memory, because they can be expanded as much as you like and rely on extra space for their reliability in quickly accessing data, that's just how dictionaries are. Structs on the other hand, have a fixed size, and cannot be expanded, but they take the least amount of memory possible as they pack the space those values one after the other.
+
+These two ways of storing data in Python are reflected by the two object properties `__dict__` and `__slots__`. Normally, all instance attributes (`self.foo`) are stored inside `__dict__` the dictionary, unless you define the `__slots__` attribute, in which case the object can only have a constant number of pre-defined attributes.
+
+I can understand if this is getting too confusing. Let me just show an example:
+
+```python
+>>> class NormalClass:
+...     classvar = 'foo'
+...     def __init__(self):
+...         self.x = 1
+...         self.y = 2
+...
+>>> n = NormalClass()
+>>> n.__dict__
+{'x': 1, 'y': 2}  # Note that `classvar` variable isn't here.
+>>>               # That is stored in `NormalClass.__dict__`
+>>> class SlottedClass:
+...     __slots__ = ('x', 'y')
+...     classvar = 'foo'  # This is fine.
+...     def __init__(self):
+...         self.x = 1
+...         self.y = 2
+...         # Trying to create `self.z` here will cause the same
+...         # `AttributeError` as before.
+...
+>>> n = SlottedClass()
+>>> s.__dict__
+AttributeError: 'SlottedClass' object has no attribute '__dict__'
+>>> s.__slots__
+('x', 'y')
+```
+
+So creating slots prevents a `__dict__` from existing, which means no dictionary to add attributes into, and it also means saved memory. That's basically it.
+
+AnthonyWritesCode [made a video](https://www.youtube.com/watch?v=BSNd_kxHXL8) about another interesting piece of code relating to slots and their obscure behaviour, do check that out!
 
 </details>
 
