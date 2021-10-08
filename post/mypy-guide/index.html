@@ -640,6 +640,11 @@ cache <span class="token operator">=</span> <span class="token punctuation">{</s
 <span class="token comment"># 3</span>
 <span class="token comment"># 5</span>
 <span class="token comment"># 8</span>
+</code></pre><pre class=""><code class="language-python"><span class="token comment"># test.pyi</span>
+<span class="token keyword">from</span> typing <span class="token keyword">import</span> Dict
+
+cache<span class="token punctuation">:</span> Dict<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">]</span>
+<span class="token keyword">def</span> <span class="token function">fibonacci</span><span class="token punctuation">(</span>n<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">int</span><span class="token punctuation">:</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 </code></pre><p>Now, run mypy on the current folder (make sure you have an <code>__init__.py</code> file in the folder, if not, create an empty one).</p><pre class=""><code class="language-bash">$ <span class="token function">ls</span>
 __init__.py  test.py  test.pyi
 
