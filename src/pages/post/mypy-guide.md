@@ -968,7 +968,7 @@ Since we're not raising any errors in the generator, `throw_type` is `None`. And
 
 ## Typing `*args` and `**kwargs`
 
-`*args` and `**kwargs` is a feature of python that lets you pass any number of arguments and keyword arguments to a function _(that's what the name `args` and `kwargs` stands for, but these names are just convention, you can name the variables anything)_. [Anthony explains args and kwargs](https://www.youtube.com/watch?v=CqafM-bsnW0)
+`*args` and `**kwargs` is a feature of python that lets you pass any number of arguments and keyword arguments to a function _(that's what the name `args` and `kwargs` stands for, but these names are just convention, you can name the variables anything)_. [Anthony explains args and kwargs](https://www.youtube.com/watch?v=CqafM-bsnW0) pretty well in his video.
 
 All the extra arguments passed to `*args` get turned into a tuple, and kewyord arguments turn into a dictionay, with the keys being the string keywords:
 
@@ -1238,7 +1238,7 @@ print(type(a) == type(b))  # True
 print(type(a) == type(s))  # False
 ```
 
-> You'd usually use `issubclass(x, int)` instead of `type(x) == int` to check for behaviour, but sometimes knowing the exact type can help, for eg. in optimizations.
+> You'd usually use `isinstance(x, int)` instead of `type(x) == int` to check for behaviour, but sometimes knowing the exact type can help, for eg. in optimizations.
 
 Since `type(x)` returns the class of `x`, the type of a class `C` is `Type[C]`:
 
