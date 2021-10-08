@@ -101,6 +101,7 @@ pre {
   padding: 1em;
   border: 2px solid var(--border-color);
   overflow: auto;
+  display: flex;
 }
 pre::-webkit-scrollbar {
   height: 0.3rem;
