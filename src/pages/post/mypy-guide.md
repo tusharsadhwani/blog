@@ -1304,6 +1304,14 @@ for i in range(6):
 # 8
 ```
 
+```python
+# test.pyi
+from typing import Dict
+
+cache: Dict[int, int]
+def fibonacci(n: int) -> int: ...
+```
+
 Now, run mypy on the current folder (make sure you have an `__init__.py` file in the folder, if not, create an empty one).
 
 ```bash
