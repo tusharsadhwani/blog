@@ -2778,7 +2778,7 @@ I'll leave that to you to figure out what happened here ;)
 
 A `slice` object is what's used under the hood when you try to slice a Python iterable.
 
-In `my_list[1:]` for example, `[1:3]` is not the special part, only `1:3` is. The square brackets are still trying to index the list! But `1:3` _inside_ these square brackets here actually creates a `slice` object.
+In `my_list[1:3]` for example, `[1:3]` is not the special part, only `1:3` is. The square brackets are still trying to index the list! But `1:3` _inside_ these square brackets here actually creates a `slice` object.
 
 This is why, `my_list[1:3]` is actually equivalent to `my_list[slice(1, 3)]`:
 
