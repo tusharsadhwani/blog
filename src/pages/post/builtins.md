@@ -9,8 +9,6 @@ layout: "../../layouts/BlogPost.astro"
 # TODO: convert the \\n back to \n once astro fixes it
 ---
 
-> ### This blog is currently a work in progress.
-
 Python as a language is comparatively simple. And I believe, that you can learn quite a lot about Python and its features, just by learning what all of its builtins are, and what they do. And to back up that claim, I'll be doing just that.
 
 > Just to be clear, this is not going to be a tutorial post. Covering such a vast amount of material in a single blog post, while starting from the beginning is pretty much impossible. So I'll be assuming you have a basic to intermediate understanding of Python. But other than that, we should be good to go.
@@ -43,13 +41,13 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`str`, `bytes`, `int`, `bool`, `float` and `complex`: The five primitives](#str-bytes-int-bool-float-and-complex-the-five-primitives)
   - [`object`: The base](#object-the-base)
   - [`type`: The class factory](#type-the-class-factory)
-  - [`list`, `tuple`, `dict`, `set` and `frozenset`: The containers](#list-tuple-dict-set-and-frozenset-the-containers)
   - [`hash` and `id`: The equality fundamentals](#hash-and-id-the-equality-fundamentals)
-  - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
   - [`hasattr`, `getattr`, `setattr` and `delattr`: Attribute helpers](#hasattr-getattr-setattr-and-delattr-attribute-helpers)
   - [`super`](#super)
   - [`property`, `classmethod` and `staticmethod`: Method decorators](#property-classmethod-and-staticmethod-method-decorators)
+  - [`list`, `tuple`, `dict`, `set` and `frozenset`: The containers](#list-tuple-dict-set-and-frozenset-the-containers)
+  - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
   - [`format`](#format)
   - [`any` and `all`](#any-and-all)
@@ -1244,94 +1242,6 @@ If `object` is the father of all classes, `type` is the grandfather.
 
   This can be one way to implement the `collections.namedtuple` class, for example, which takes in a class name and a tuple of attributes.
 
-### `list`, `tuple`, `dict`, `set` and `frozenset`: The containers
-
-A "container" in Python refers to a data structure that can hold any number of items inside it.
-
-Python has 5 fundamental container types:
-
-- `list`: Ordered, indexed container. Every element is present at a specific index. Lists are mutable, i.e. items can be added or removed at any time.
-
-  ```python
-  >>> my_list = [10, 20, 30]  # Creates a list with 3 items
-  >>> my_list[0]              # Indexes start with zero
-  10
-  >>> my_list[1]              # Indexes increase one by one
-  20
-  >>> my_list.append(40)      # Mutable: can add values
-  >>> my_list
-  [10, 20, 30, 40]
-  >>> my_list[0] = 50         # Can also reassign indexes
-  >>> my_list
-  [50, 20, 30, 40]
-  ```
-
-- `tuple`: Ordered and indexed just like lists, but with one key difference: They are _immutable_, which means items cannot be added or deleted once the tuple is created.
-
-  ```python
-  >>> some_tuple = (1, 2, 3)
-  >>> some_tuple[0]              # Indexable
-  1
-  >>> some_tuple.append(4)       # But NOT mutable
-  AttributeError: ...
-  >>> some_tuple[0] = 5          # Cannot reassign an index as well
-  TypeError: ...
-  ```
-
-- `dict`: Unordered key-value pairs. The key is used to access the value. Only one value can correspond to a given key.
-
-  ```python
-  >>> flower_colors = {'roses': 'red', 'violets': 'blue'}
-  >>> flower_colors['violets']               # Use keys to access value
-  'blue'
-  >>> flower_colors['violets'] = 'purple'    # Mutable
-  >>> flower_colors
-  {'roses': 'red', 'violets': 'purple'}
-  >>> flower_colors['daffodil'] = 'yellow'   # Can also add new values
-  >>> flower_colors
-  {'roses': 'red', 'violets': 'purple', 'daffodil': 'yellow'}
-  ```
-
-- `set`: Unordered, unique collection of data. Items in a set simply represent their presence or absence. You could use a set to find for example, the kinds of trees in a forest. Their order doesn't matter, only their existance.
-
-  ```python
-  >>> forest = ['cedar', 'bamboo', 'cedar', 'cedar', 'cedar', 'oak', 'bamboo']
-  >>> tree_types = set(forest)
-  >>> tree_types
-  {'bamboo', 'oak', 'cedar'}      # Only unique items
-  >>> 'oak' in tree_types
-  True
-  >>> tree_types.remove('oak')    # Sets are also mutable
-  >>> tree_types
-  {'bamboo', 'cedar'}
-  ```
-
-- A `frozenset` is identical to a set, but just like `tuple`s, is immutable.
-
-  ```python
-  >>> forest = ['cedar', 'bamboo', 'cedar', 'cedar', 'cedar', 'oak', 'bamboo']
-  >>> tree_types = frozenset(forest)
-  >>> tree_types
-  frozenset({'bamboo', 'oak', 'cedar'})
-  >>> 'cedar' in tree_types
-  True
-  >>> tree_types.add('mahogany')           # CANNOT modify
-  AttributeError: ...
-  ```
-
-The builtins `list`, `tuple` and `dict` can be used to create empty instances of these data structures too:
-
-```python
->>> x = list()
->>> x
-[]
->>> y = dict()
->>> y
-{}
-```
-
-But the short-form `{...}` and `[...]` is more readable and should be preferred. It's also a tiny-bit faster to use the short-form syntax, as `list`, `dict` etc. are defined inside builtins, and looking up these names inside the variable scopes takes some time, whereas `[]` is understood as a list without any lookup.
-
 ### `hash` and `id`: The equality fundamentals
 
 The builtin functions `hash` and `id` make up the backbone of object equality in Python.
@@ -1579,104 +1489,6 @@ class Car:
 ```
 
 </details>
-
-### `bytearray` and `memoryview`: Better byte interfaces
-
-A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to how lists are essentially mutable tuples.
-
-`bytearray` makes a lot of sense, as:
-
-- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficien
-- Bytes have a fixed size (which is... 1 byte). On the other hand, string characters can have various sizes thanks to the unicode encoding standard, "utf-8":
-
-  ```python
-  >>> x = 'I♥🐍'
-  >>> len(x)
-  3
-  >>> x.encode()
-  b'I\xe2\x99\xa5\xf0\x9f\x90\x8d'
-  >>> len(x.encode())
-  8
-  >>> x[2]
-  '🐍'
-  >>> x[2].encode()
-  b'\xf0\x9f\x90\x8d'
-  >>> len(x[2].encode())
-  4
-  ```
-
-  So it turns out, that the three-character string 'I♥🐍' is actually eight bytes, with the snake emoji being 4 bytes long. But, in the encoded version of it, we can access each individual byte. And because it's a byte, its "value" will always be between 0 and 255:
-
-  ```python
-  >>> x[2]
-  '🐍'
-  >>> b = x[2].encode()
-  >>> b
-  b'\xf0\x9f\x90\x8d'  # 4 bytes
-  >>> b[:1]
-  b'\xf0'
-  >>> b[1:2]
-  b'\x9f'
-  >>> b[2:3]
-  b'\x90'
-  >>> b[3:4]
-  b'\x8d'
-  >>> b[0]  # indexing a bytes object gives an integer
-  240
-  >>> b[3]
-  141
-  ```
-
-So let's take a look at some byte/bit manipulation examples:
-
-```python
-def alternate_case(string):
-    """Turns a string into alternating uppercase and lowercase characters."""
-    array = bytearray(string.encode())
-    for index, byte in enumerate(array):
-        if not ((65 <= byte <= 90) or (97 <= byte <= 126)):
-            continue
-
-        if index % 2 == 0:
-            array[index] = byte | 32
-        else:
-            array[index] = byte & ~32
-
-    return array.decode()
-
->>> alternate_case('Hello WORLD?')
-'hElLo wOrLd?'
-```
-
-This is not a good example, and I'm not going to bother explaining it, but it works, and it is much more efficient than creating a new `bytes` object for every character change.
-
-Meanwhile, a `memoryview` takes this idea a step further: It's pretty much just like a bytearray, but it can refer to an object or a slice _by reference_, instead of creating a new copy for itself. It allows you to pass references to sections of bytes in memory around, and edit it in-place:
-
-```python
->>> array = bytearray(range(256))
->>> array
-bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08...
->>> len(array)
-256
->>> array_slice = array[65:91]  # Bytes 65 to 90 are uppercase english characters
->>> array_slice
-bytearray(b'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
->>> view = memoryview(array)[65:91]  # Does the same thing,
->>> view
-<memory at 0x7f438cefe040>  # but doesn't generate a new new bytearray by default
->>> bytearray(view)
-bytearray(b'ABCDEFGHIJKLMNOPQRSTUVWXYZ')  # It can still be converted, though.
->>> view[0]  # 'A'
-65
->>> view[0] += 32  # Turns it lowercase
->>> bytearray(view)
-bytearray(b'aBCDEFGHIJKLMNOPQRSTUVWXYZ')  # 'A' is now lowercase.
->>> bytearray(view[10:15])
-bytearray(b'KLMNO')
->>> view[10:15] = bytearray(view[10:15]).lower()
->>> bytearray(view)
-bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified in-place.
-```
 
 ### `dir` and `vars`: Everything is a dictionary
 
@@ -2156,6 +1968,192 @@ We're reaching the end of all the class and object-related builtin functions, th
   ```
 
 These builtins are created using a pretty advanced topic called **descriptors**. I'll be honest, descriptors are a topic that is so advanced that trying to cover it here won't be of any use beyond what has already been told. I'm planning on writing a detailed article on descriptors and their uses sometime in the future, so stay tuned for that!
+
+### `list`, `tuple`, `dict`, `set` and `frozenset`: The containers
+
+A "container" in Python refers to a data structure that can hold any number of items inside it.
+
+Python has 5 fundamental container types:
+
+- `list`: Ordered, indexed container. Every element is present at a specific index. Lists are mutable, i.e. items can be added or removed at any time.
+
+  ```python
+  >>> my_list = [10, 20, 30]  # Creates a list with 3 items
+  >>> my_list[0]              # Indexes start with zero
+  10
+  >>> my_list[1]              # Indexes increase one by one
+  20
+  >>> my_list.append(40)      # Mutable: can add values
+  >>> my_list
+  [10, 20, 30, 40]
+  >>> my_list[0] = 50         # Can also reassign indexes
+  >>> my_list
+  [50, 20, 30, 40]
+  ```
+
+- `tuple`: Ordered and indexed just like lists, but with one key difference: They are _immutable_, which means items cannot be added or deleted once the tuple is created.
+
+  ```python
+  >>> some_tuple = (1, 2, 3)
+  >>> some_tuple[0]              # Indexable
+  1
+  >>> some_tuple.append(4)       # But NOT mutable
+  AttributeError: ...
+  >>> some_tuple[0] = 5          # Cannot reassign an index as well
+  TypeError: ...
+  ```
+
+- `dict`: Unordered key-value pairs. The key is used to access the value. Only one value can correspond to a given key.
+
+  ```python
+  >>> flower_colors = {'roses': 'red', 'violets': 'blue'}
+  >>> flower_colors['violets']               # Use keys to access value
+  'blue'
+  >>> flower_colors['violets'] = 'purple'    # Mutable
+  >>> flower_colors
+  {'roses': 'red', 'violets': 'purple'}
+  >>> flower_colors['daffodil'] = 'yellow'   # Can also add new values
+  >>> flower_colors
+  {'roses': 'red', 'violets': 'purple', 'daffodil': 'yellow'}
+  ```
+
+- `set`: Unordered, unique collection of data. Items in a set simply represent their presence or absence. You could use a set to find for example, the kinds of trees in a forest. Their order doesn't matter, only their existance.
+
+  ```python
+  >>> forest = ['cedar', 'bamboo', 'cedar', 'cedar', 'cedar', 'oak', 'bamboo']
+  >>> tree_types = set(forest)
+  >>> tree_types
+  {'bamboo', 'oak', 'cedar'}      # Only unique items
+  >>> 'oak' in tree_types
+  True
+  >>> tree_types.remove('oak')    # Sets are also mutable
+  >>> tree_types
+  {'bamboo', 'cedar'}
+  ```
+
+- A `frozenset` is identical to a set, but just like `tuple`s, is immutable.
+
+  ```python
+  >>> forest = ['cedar', 'bamboo', 'cedar', 'cedar', 'cedar', 'oak', 'bamboo']
+  >>> tree_types = frozenset(forest)
+  >>> tree_types
+  frozenset({'bamboo', 'oak', 'cedar'})
+  >>> 'cedar' in tree_types
+  True
+  >>> tree_types.add('mahogany')           # CANNOT modify
+  AttributeError: ...
+  ```
+
+The builtins `list`, `tuple` and `dict` can be used to create empty instances of these data structures too:
+
+```python
+>>> x = list()
+>>> x
+[]
+>>> y = dict()
+>>> y
+{}
+```
+
+But the short-form `{...}` and `[...]` is more readable and should be preferred. It's also a tiny-bit faster to use the short-form syntax, as `list`, `dict` etc. are defined inside builtins, and looking up these names inside the variable scopes takes some time, whereas `[]` is understood as a list without any lookup.
+
+### `bytearray` and `memoryview`: Better byte interfaces
+
+A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to how lists are essentially mutable tuples.
+
+`bytearray` makes a lot of sense, as:
+
+- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficien
+- Bytes have a fixed size (which is... 1 byte). On the other hand, string characters can have various sizes thanks to the unicode encoding standard, "utf-8":
+
+  ```python
+  >>> x = 'I♥🐍'
+  >>> len(x)
+  3
+  >>> x.encode()
+  b'I\xe2\x99\xa5\xf0\x9f\x90\x8d'
+  >>> len(x.encode())
+  8
+  >>> x[2]
+  '🐍'
+  >>> x[2].encode()
+  b'\xf0\x9f\x90\x8d'
+  >>> len(x[2].encode())
+  4
+  ```
+
+  So it turns out, that the three-character string 'I♥🐍' is actually eight bytes, with the snake emoji being 4 bytes long. But, in the encoded version of it, we can access each individual byte. And because it's a byte, its "value" will always be between 0 and 255:
+
+  ```python
+  >>> x[2]
+  '🐍'
+  >>> b = x[2].encode()
+  >>> b
+  b'\xf0\x9f\x90\x8d'  # 4 bytes
+  >>> b[:1]
+  b'\xf0'
+  >>> b[1:2]
+  b'\x9f'
+  >>> b[2:3]
+  b'\x90'
+  >>> b[3:4]
+  b'\x8d'
+  >>> b[0]  # indexing a bytes object gives an integer
+  240
+  >>> b[3]
+  141
+  ```
+
+So let's take a look at some byte/bit manipulation examples:
+
+```python
+def alternate_case(string):
+    """Turns a string into alternating uppercase and lowercase characters."""
+    array = bytearray(string.encode())
+    for index, byte in enumerate(array):
+        if not ((65 <= byte <= 90) or (97 <= byte <= 126)):
+            continue
+
+        if index % 2 == 0:
+            array[index] = byte | 32
+        else:
+            array[index] = byte & ~32
+
+    return array.decode()
+
+>>> alternate_case('Hello WORLD?')
+'hElLo wOrLd?'
+```
+
+This is not a good example, and I'm not going to bother explaining it, but it works, and it is much more efficient than creating a new `bytes` object for every character change.
+
+Meanwhile, a `memoryview` takes this idea a step further: It's pretty much just like a bytearray, but it can refer to an object or a slice _by reference_, instead of creating a new copy for itself. It allows you to pass references to sections of bytes in memory around, and edit it in-place:
+
+```python
+>>> array = bytearray(range(256))
+>>> array
+bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08...
+>>> len(array)
+256
+>>> array_slice = array[65:91]  # Bytes 65 to 90 are uppercase english characters
+>>> array_slice
+bytearray(b'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+>>> view = memoryview(array)[65:91]  # Does the same thing,
+>>> view
+<memory at 0x7f438cefe040>  # but doesn't generate a new new bytearray by default
+>>> bytearray(view)
+bytearray(b'ABCDEFGHIJKLMNOPQRSTUVWXYZ')  # It can still be converted, though.
+>>> view[0]  # 'A'
+65
+>>> view[0] += 32  # Turns it lowercase
+>>> bytearray(view)
+bytearray(b'aBCDEFGHIJKLMNOPQRSTUVWXYZ')  # 'A' is now lowercase.
+>>> bytearray(view[10:15])
+bytearray(b'KLMNO')
+>>> view[10:15] = bytearray(view[10:15]).lower()
+>>> bytearray(view)
+bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified in-place.
+```
 
 ### `bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions
 
