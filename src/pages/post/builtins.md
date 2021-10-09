@@ -62,7 +62,7 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`slice`](#slice)
   - [`sorted` and `reversed`: Sequence manipulators](#sorted-and-reversed-sequence-manipulators)
   - [`globals`, `locals`](#globals-locals)
-  - [`breakpoint`](#breakpoint)
+  - [`breakpoint`: built-in debugging](#breakpoint-built-in-debugging)
   - [`repr`](#repr)
   - [`open`](#open)
   - [`help`, `exit`, `quit`](#help-exit-quit)
@@ -2633,7 +2633,15 @@ Sorting and reversing a sequence of data are probably the most used algorithmic 
 
 ### `globals`, `locals`
 
-### `breakpoint`
+### `breakpoint`: built-in debugging
+
+`breakpoint` was a builtin that was added to Python 3.7, as an easier way to drop into a debugging session. Essentially it just calls `set_trace()` from the `pdb` module, which is the debugger module that is built into Python.
+
+What `pdb` lets you do is stop the execution of your code at any moment, inspect the values of variables, run some code if you like, and then you can even do fancy things like running the code one line at a time, or check the state of the stack frames inside the interpreter.
+
+Using `pdb` to debug your code, by slowly going over it, seeing which lines of code get executed, and inspecting values of objects and variables is a much more efficient way to debug your code than using `print` statements.
+
+Unfortunately there isn't any good way to show a debugger being used in a text-format in a blog. But, AnthonyWritesCode has a [really good video](https://www.youtube.com/watch?v=0LPuG825eAk) explaining some of its features if you're interested.
 
 ### `repr`
 
