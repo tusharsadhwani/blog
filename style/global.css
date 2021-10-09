@@ -132,10 +132,6 @@ pre > code {
   html {
     font-size: 1vw;
   }
-  pre,
-  code {
-    font-size: 0.75vw;
-  }
 }
 
 h1 {
