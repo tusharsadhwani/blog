@@ -41,8 +41,8 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`globals` and `locals`: Where everything is stored](#globals-and-locals-where-everything-is-stored)
   - [`input` and `print`: The bread and butter](#input-and-print-the-bread-and-butter)
   - [`str`, `bytes`, `int`, `bool`, `float` and `complex`: The five primitives](#str-bytes-int-bool-float-and-complex-the-five-primitives)
-  - [`object`](#object)
-  - [`type`](#type)
+  - [`object`: The base](#object-the-base)
+  - [`type`: The class factory](#type-the-class-factory)
   - [`list`, `tuple`, `dict`, `set` and `frozenset`: The containers](#list-tuple-dict-set-and-frozenset-the-containers)
   - [`hash` and `id`: The equality fundamentals](#hash-and-id-the-equality-fundamentals)
   - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
@@ -1168,7 +1168,7 @@ But, it also means that, for better or for worse, you can pass a `bool` wherever
 
 `indent=True` here is treated as `indent=1`, so it works, but I'm pretty sure nobody would intend that to mean an indent of 1 space. Welp.
 
-### `object`
+### `object`: The base
 
 `object` is the base class of the entire class hierarchy. Everyone inherits from `object`.
 
@@ -1201,7 +1201,7 @@ Accessing an attribute with `obj.x` calls the `__getattr__` method underneath. S
 
 > There's actually a lot more to speak about magic methods in Python, as they form the backbone of the object-oriented, duck-typed nature of Python. But, that's a story for another blog. Stay tuned if you're interested 😉
 
-### `type`
+### `type`: The class factory
 
 If `object` is the father of all classes, `type` is the grandfather.
 
@@ -2843,7 +2843,7 @@ Instead of doing:
 >>> menu = ['eggs', 'spam', 'bacon']
 >>> for i in range(len(menu)):
 ...     print(f'{i+1}: {menu[i]}')
-... 
+...
 1: eggs
 2: spam
 3: bacon
@@ -2855,7 +2855,7 @@ You can do this instead:
 >>> menu = ['eggs', 'spam', 'bacon']
 >>> for index, item in enumerate(menu):
 ...     print(f'{index}: {item}')
-... 
+...
 1: eggs
 2: spam
 3: bacon
@@ -2870,7 +2870,7 @@ Instead of doing:
 >>> marks = [65, 74, 81]
 >>> for i in range(len(students)):
 ...     print(f'{students[i]} got {marks[i]} marks')
-... 
+...
 Jared got 65 marks
 Brock got 74 marks
 Jack got 81 marks
@@ -2883,7 +2883,7 @@ You can do:
 >>> marks = [65, 74, 81]
 >>> for student, mark in zip(students, marks):
 ...     print(f'{student} got {mark} marks')
-... 
+...
 Jared got 65 marks
 Brock got 74 marks
 Jack got 81 marks
