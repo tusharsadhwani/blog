@@ -62,7 +62,7 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`slice`](#slice)
   - [`breakpoint`: built-in debugging](#breakpoint-built-in-debugging)
   - [`open`: File I/O](#open-file-io)
-  - [`repr`](#repr)
+  - [`repr`: Developer convenience](#repr-developer-convenience)
   - [`help`, `exit` and `quit`: site builtins](#help-exit-and-quit-site-builtins)
   - [`copyright`, `credits`, `license`: Important texts](#copyright-credits-license-important-texts)
 - [So what's next?](#so-whats-next)
@@ -2933,7 +2933,7 @@ Unfortunately there isn't any good way to show a debugger being used in a text-f
 
 It's... actually rather straightforward, so I'm not even going to bother explaining about it. You can read the [official docs](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) about reading and writing files if you'd like to know more.
 
-### `repr`
+### `repr`: Developer convenience
 
 `repr` is an interesting one. It's intended use-case is simply to help the developers.
 
