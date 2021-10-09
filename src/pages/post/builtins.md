@@ -47,14 +47,14 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
   - [`hasattr`, `getattr`, `setattr` and `delattr`: Attribute helpers](#hasattr-getattr-setattr-and-delattr-attribute-helpers)
+  - [`super`](#super)
+  - [`property`, `classmethod` and `staticmethod`: Method decorators](#property-classmethod-and-staticmethod-method-decorators)
   - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
   - [`format`](#format)
   - [`any` and `all`](#any-and-all)
   - [`abs`, `divmod`, `pow` and `round`: Math basics](#abs-divmod-pow-and-round-math-basics)
   - [`isinstance` and `issubclass`: Runtime type checking](#isinstance-and-issubclass-runtime-type-checking)
   - [`callable` and duck typing basics](#callable-and-duck-typing-basics)
-  - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
-  - [`super`](#super)
   - [`sorted` and `reversed`: Sequence manipulators](#sorted-and-reversed-sequence-manipulators)
   - [`map` and `filter`: Functional primitives](#map-and-filter-functional-primitives)
   - [`len`, `max`, `min` and `sum`: Aggregate functions](#len-max-min-and-sum-aggregate-functions)
@@ -1982,6 +1982,134 @@ Uploaded 'some text'!
 Uploaded '[42, 1000]'!
 ```
 
+### `super`
+
+`super` is Python's way of referencing a superclass, to use its methods, for example.
+
+Take this example, of a class that encapsulates the logic of summing two items.
+
+```python
+class Sum:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def perform(self):
+        return self.x + self.y
+```
+
+Using this class is pretty simple:
+
+```python
+>>> s = Sum(2, 3)
+>>> s.perform()
+5
+```
+
+Now let's say you want to subclass `Sum` to create a a `DoubleSum` class, which has the same `perform` interface but it returns double the value instead. You'd use `super` for that:
+
+```python
+class DoubleSum(Sum):
+    def perform(self):
+        parent_sum = super().perform()
+        return 2 * parent_sum
+```
+
+We didn't need to define anything that was already defined: We didn't need to define `__init__`, and we didn't have to re-write the sum logic as well. We simply piggy-backed on top of the superclass.
+
+```python
+>>> d = DoubleSum(3, 5)
+>>> d.perform()
+16
+```
+
+Now there are some other ways to use the `super` object, even outside of a class:
+
+```python
+>>> super(int)
+<super: <class 'int'>, NULL>
+>>> super(int, int)
+<super: <class 'int'>, <int object>>
+>>> super(int, bool)
+<super: <class 'int'>, <bool object>>
+```
+
+But honestly, I don't understand what these would ever be used for. If you know, let me know in the comments ✨
+
+### `property`, `classmethod` and `staticmethod`: Method decorators
+
+We're reaching the end of all the class and object-related builtin functions, the last of it being these three decorators.
+
+- `property`:
+
+  `@property` is the decorator to use when you want to define getters and setters for properties in your object. Getters and setters provide a way to add validation or run some extra code when trying to read or modify the attributes of an object.
+
+  This is done by turning the property into a set of functions: one function that is run when you try to access the property, and another that is run when you try to change its value.
+
+  Let's take a look at an example, where we try to ensure that the "marks" property of a student is always set to a positive number, as marks cannot be negative:
+
+  ```python
+  class Student:
+      def __init__(self):
+          self._marks = 0
+
+      @property
+      def marks(self):
+          return self._marks
+
+      @marks.setter
+      def marks(self, new_value):
+          if new_value < 0:
+              raise ValueError('marks cannot be negative')
+
+          self._marks = new_value
+  ```
+
+  Running this code:
+
+  ```python
+  >>> student = Student()
+  >>> student.marks
+  0
+  >>> student.marks = 85
+  >>> student.marks
+  85
+  >>> student.marks = -10
+  ValueError: marks cannot be negative
+  ```
+
+- `classmethod`:
+
+  `@classmethod` can be used on a method to make it a class method instead: such that it gets a reference to the class object, instead of the instance (`self`).
+
+  A simple example would be to create a function that returns the name of the class:
+
+  ```python
+  >>> class C:
+  ...     @classmethod
+  ...     def class_name(cls):
+  ...         return cls.__name__
+  ...
+  >>> x = C()
+  >>> x.class_name
+  'C'
+  ```
+
+- `staticmethod`:
+  `@staticmethod` is used to convert a method into a static method: one equivalent to a function sitting inside a class, independent of any class or object properties. Using this completely gets rid of the first `self` argument passed to methods.
+
+  We could make one that for some data validation for example:
+
+  ```python
+  class API:
+      @staticmethod
+      def is_valid_title(title):
+          """Checks whether the string can be used as a blog title."""
+          return title.istitle() and len(title) < 60
+  ```
+
+These builtins are created using a pretty advanced topic called **descriptors**. I'll be honest, descriptors are a topic that is so advanced that trying to cover it here won't be of any use beyond what has already been told. I'm planning on writing a detailed article on descriptors and their uses sometime in the future, so stay tuned for that!
+
 ### `bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions
 
 The `bin`, `hex` and `oct` triplet is used to convert between bases in Python. You give them a number, and they will spit out how you can write that number in that base in your code:
@@ -2421,10 +2549,6 @@ By the way, these "special methods" is how most of Python's syntax and functiona
 Nearly every python behavior has an underlying "special method", or what they're sometimes called as, "dunder method" defined underneath.
 
 If you want to read more into these dunder methods, you can read the documentation page about [Python's data model](https://docs.python.org/3/reference/datamodel.html).
-
-### `property`, `classmethod`, `staticmethod`
-
-### `super`
 
 ### `sorted` and `reversed`: Sequence manipulators
 
