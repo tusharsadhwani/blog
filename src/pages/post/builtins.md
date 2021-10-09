@@ -63,10 +63,10 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`range`, `enumerate`, `zip`](#range-enumerate-zip)
   - [`slice`](#slice)
   - [`breakpoint`: built-in debugging](#breakpoint-built-in-debugging)
+  - [`open`: File I/O](#open-file-io)
   - [`repr`](#repr)
-  - [`open`](#open)
-  - [`help`, `exit`, `quit`](#help-exit-quit)
-  - [`copyright`, `credits`, `license`](#copyright-credits-license)
+  - [`help`, `exit` and `quit`: site builtins](#help-exit-and-quit-site-builtins)
+  - [`copyright`, `credits`, `license`: Important texts](#copyright-credits-license-important-texts)
 - [So what's next?](#so-whats-next)
 - [The end](#the-end)
 
@@ -2812,15 +2812,72 @@ Using `pdb` to debug your code, by slowly going over it, seeing which lines of c
 
 Unfortunately there isn't any good way to show a debugger being used in a text-format in a blog. But, AnthonyWritesCode has a [really good video](https://www.youtube.com/watch?v=0LPuG825eAk) explaining some of its features if you're interested.
 
+### `open`: File I/O
+
+`open` is the function that lets you read and write to files.
+
+It's... actually rather straightforward, so I'm not even going to bother explaining about it. You can read the [official docs](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) about reading and writing files if you'd like to know more.
+
 ### `repr`
 
-### `open`
+`repr` is an interesting one. It's intended use-case is simply to help the developers.
 
-### `help`, `exit`, `quit`
+`repr` is used to create a helpful string representation of an object, hopefully one that concisely describes the object, and its current state. The intent of this is to be able to debug simple issues simply by looking at the object's repr, instead of having to probe into ints attributes at every step.
 
--- defined in site module
+Here's a good example:
 
-### `copyright`, `credits`, `license`
+```python
+>>> class Vector:
+...     def __init__(self, x, y):
+...         self.x = x
+...         self.y = y
+...
+>>> v = Vector(3, 5)
+>>> v
+<__main__.Vector object at 0x7f27dff5a1f0>
+```
+
+The default `repr` is not helpful at all. You'd have to manually check for its attributes:
+
+```python
+>>> dir(v)
+['__class__', ... , 'x', 'y']
+>>> v.x
+3
+>>> v.y
+5
+```
+
+But, if you implement a friendly `repr` to it:
+
+```python
+>>> class Vector:
+...     def __init__(self, x, y):
+...         self.x = x
+...         self.y = y
+...     def __repr__(self):
+...         return f'Vector(x={self.x}, y={self.y})'
+>>> v = Vector(3, 5)
+>>> v
+Vector(x=3, y=5)
+```
+
+Now you don't need to wonder what this object contains. It's right in front of you!
+
+### `help`, `exit` and `quit`: site builtins
+
+Now, these builtins aren't _real_ builtins. As in, they aren't really defined in the `builtins` module. Instead, they are defined in the `site` module.
+
+`site` is a module that is automatically run by default when you start Python. It is responsible for setting up a few useful things, including making pip packages available for import, setting up tab completion in the REPL, among other things.
+
+One more thing that it does is setup these few useful global functions:
+
+- `help` is used to find documentation of modules and objects. It's equivalent to the builtin `pydoc.doc()` method.
+- `exit` and `quit` quit the Python process. Calling them is equivalent to the builtin `sys.exit()`.
+
+### `copyright`, `credits`, `license`: Important texts
+
+These three texts are also defined by the site module, and typing them in the REPL prints out their text, with `license()` being an interactive session.
 
 ## So what's next?
 
