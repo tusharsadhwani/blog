@@ -55,12 +55,12 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`callable` and duck typing basics](#callable-and-duck-typing-basics)
   - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
   - [`super`](#super)
+  - [`sorted` and `reversed`: Sequence manipulators](#sorted-and-reversed-sequence-manipulators)
   - [`map` and `filter`: Functional primitives](#map-and-filter-functional-primitives)
   - [`len`, `max`, `min` and `sum`: Aggregate functions](#len-max-min-and-sum-aggregate-functions)
   - [`iter`, `next`](#iter-next)
   - [`range`, `enumerate`, `zip`](#range-enumerate-zip)
   - [`slice`](#slice)
-  - [`sorted` and `reversed`: Sequence manipulators](#sorted-and-reversed-sequence-manipulators)
   - [`globals`, `locals`](#globals-locals)
   - [`breakpoint`: built-in debugging](#breakpoint-built-in-debugging)
   - [`repr`](#repr)
@@ -2426,6 +2426,67 @@ If you want to read more into these dunder methods, you can read the documentati
 
 ### `super`
 
+### `sorted` and `reversed`: Sequence manipulators
+
+Sorting and reversing a sequence of data are probably the most used algorithmic operations in any programming language. And the top level `sorted` and `reversed` let you do exactly that.
+
+- `sorted`
+  This function sorts the incoming data, and returns a sorted `list` type.
+
+  ```python
+  >>> items = (3, 4, 1, 2)
+  >>> sorted(items)
+  [1, 2, 3, 4]
+  ```
+
+  It uses the "TimSort" algorithm created by by Tim Peters, one of the earliest Python wizards.
+
+  There's also two other parameters that `sorted` can take: `reverse`, which when set to `True` sorts the data in reverse order; and `key`, which takes in a function that is used on every element to sort the data based on a custom property of each item. Let's take a look at it:
+
+  ```python
+  >>> items = [
+  ...   {'value': 3},
+  ...   {'value': 1},
+  ...   {'value': 2},
+  ... ]
+  >>> sorted(items, key=lambda d: d['value'])
+  [{'value': 1}, {'value': 2}, {'value': 3}]
+  >>> names = ['James', 'Kyle', 'Max']
+  >>> sorted(names, key=len)  # Sorts by name length
+  ['Max', 'Kyle', 'James']
+  ```
+
+  Also note, that while `list.sort()` is already one way to sort lists, the `.sort()` method only exists on lists, while `sorted` can take any iterable.
+
+- `reversed`
+
+  `reversed` is a function that takes in any sequence type and returns a **generator**, which yields the values in reversed order.
+
+  Returning a generator is nice, as this means that reversing certain objects takes no extra memory space at all, like `range` or `list`, whose reverse values can be generated one by one.
+
+  ```python
+  >>> items = [1, 2, 3]
+  >>> x = reversed(items)
+  >>> x
+  <list_reverseiterator object at 0x7f1c3ebe07f0>
+  >>> next(x)
+  3
+  >>> next(x)
+  2
+  >>> next(x)
+  1
+  >>> next(x)
+  StopIteration # Error: end of generator
+  >>> for i in reversed(items):
+  ...     print(i)
+  ...
+  3
+  2
+  1
+  >>> list(reversed(items))
+  [3, 2, 1]
+  ```
+
 ### `map` and `filter`: Functional primitives
 
 Now in Python, everything might be an object, but that doesn't necessarily mean that your Python code needs to be object-oriented. You can in-fact write pretty easy to read _functional_ code in Python.
@@ -2569,67 +2630,6 @@ slice(1, None, 2)
 ```
 
 If you want to learn a bit more about slices, how they work and what all can be done with them, I cover that in a separate article [here](slices).
-
-### `sorted` and `reversed`: Sequence manipulators
-
-Sorting and reversing a sequence of data are probably the most used algorithmic operations in any programming language. And the top level `sorted` and `reversed` let you do exactly that.
-
-- `sorted`
-  This function sorts the incoming data, and returns a sorted `list` type.
-
-  ```python
-  >>> items = (3, 4, 1, 2)
-  >>> sorted(items)
-  [1, 2, 3, 4]
-  ```
-
-  It uses the "TimSort" algorithm created by by Tim Peters, one of the earliest Python wizards.
-
-  There's also two other parameters that `sorted` can take: `reverse`, which when set to `True` sorts the data in reverse order; and `key`, which takes in a function that is used on every element to sort the data based on a custom property of each item. Let's take a look at it:
-
-  ```python
-  >>> items = [
-  ...   {'value': 3},
-  ...   {'value': 1},
-  ...   {'value': 2},
-  ... ]
-  >>> sorted(items, key=lambda d: d['value'])
-  [{'value': 1}, {'value': 2}, {'value': 3}]
-  >>> names = ['James', 'Kyle', 'Max']
-  >>> sorted(names, key=len)  # Sorts by name length
-  ['Max', 'Kyle', 'James']
-  ```
-
-  Also note, that while `list.sort()` is already one way to sort lists, the `.sort()` method only exists on lists, while `sorted` can take any iterable.
-
-- `reversed`
-
-  `reversed` is a function that takes in any sequence type and returns a **generator**, which yields the values in reversed order.
-
-  Returning a generator is nice, as this means that reversing certain objects takes no extra memory space at all, like `range` or `list`, whose reverse values can be generated one by one.
-
-  ```python
-  >>> items = [1, 2, 3]
-  >>> x = reversed(items)
-  >>> x
-  <list_reverseiterator object at 0x7f1c3ebe07f0>
-  >>> next(x)
-  3
-  >>> next(x)
-  2
-  >>> next(x)
-  1
-  >>> next(x)
-  StopIteration # Error: end of generator
-  >>> for i in reversed(items):
-  ...     print(i)
-  ...
-  3
-  2
-  1
-  >>> list(reversed(items))
-  [3, 2, 1]
-  ```
 
 ### `globals`, `locals`
 
