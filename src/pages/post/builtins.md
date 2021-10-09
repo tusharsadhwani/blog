@@ -59,8 +59,8 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`sorted` and `reversed`: Sequence manipulators](#sorted-and-reversed-sequence-manipulators)
   - [`map` and `filter`: Functional primitives](#map-and-filter-functional-primitives)
   - [`len`, `max`, `min` and `sum`: Aggregate functions](#len-max-min-and-sum-aggregate-functions)
-  - [`iter`, `next`](#iter-next)
-  - [`range`, `enumerate`, `zip`](#range-enumerate-zip)
+  - [`iter` and `next`: Advanced iteration](#iter-and-next-advanced-iteration)
+  - [`range`, `enumerate` and `zip`: Convenient iteration](#range-enumerate-and-zip-convenient-iteration)
   - [`slice`](#slice)
   - [`breakpoint`: built-in debugging](#breakpoint-built-in-debugging)
   - [`open`: File I/O](#open-file-io)
@@ -2770,9 +2770,126 @@ Three of these can infact take any container data type, like sets, dictionaries 
 
 I'll leave that to you to figure out what happened here ;)
 
-### `iter`, `next`
+### `iter` and `next`: Advanced iteration
 
-### `range`, `enumerate`, `zip`
+`iter` and `next` define the mechanism through which a for loop works.
+
+A for loop that looks like this:
+
+```python
+for item in mylist:
+    print(item)
+```
+
+is actually doing something like this internally:
+
+```python
+mylist_iterable = iter(mylist)
+while True:
+    try:
+        item = next(mylist_iterable)
+
+        print(item)
+
+    except StopIteration:
+        break
+```
+
+A for-loop in Python is a cleverly disguised while loop. When you iterate over a list, or any other datatype that supports iteration, it just means that it understands the `iter` function, and returns an "iterator" object.
+
+Iterator objects in Python do two things:
+
+- They yield new values everytime you pass them to `next`
+- They raise the `StopIteration` builtin exception when the iterator has run out of values.
+
+This is how all for loops work.
+
+BTW, generators also follow the iterator protocol:
+
+```python
+>>> gen = (x**2 for x in range(1, 4))
+>>> next(gen)
+1
+>>> next(gen)
+4
+>>> next(gen)
+9
+>>> next(gen)
+Error: StopIteration
+```
+
+### `range`, `enumerate` and `zip`: Convenient iteration
+
+You already know about `range`. It takes in upto 3 values, and returns an iterable that gives you integer values:
+
+```python
+>>> list(range(10))
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> list(range(3, 8))
+[3, 4, 5, 6, 7]
+>>> list(range(1, 10, 2))
+[1, 3, 5, 7, 9]
+>>> list(range(10, 1, -2))
+[10, 8, 6, 4, 2]
+```
+
+But `enumerate` and `zip` are actually really useful as well.
+
+`enumerate` is great for when you need to access the index and value of elements in a list.
+
+Instead of doing:
+
+```python
+>>> menu = ['eggs', 'spam', 'bacon']
+>>> for i in range(len(menu)):
+...     print(f'{i+1}: {menu[i]}')
+... 
+1: eggs
+2: spam
+3: bacon
+```
+
+You can do this instead:
+
+```python
+>>> menu = ['eggs', 'spam', 'bacon']
+>>> for index, item in enumerate(menu):
+...     print(f'{index}: {item}')
+... 
+1: eggs
+2: spam
+3: bacon
+```
+
+Similarly, `zip` is used to get index-wise values from multiple iterables.
+
+Instead of doing:
+
+```python
+>>> students = ['Jared', 'Brock', 'Jack']
+>>> marks = [65, 74, 81]
+>>> for i in range(len(students)):
+...     print(f'{students[i]} got {marks[i]} marks')
+... 
+Jared got 65 marks
+Brock got 74 marks
+Jack got 81 marks
+```
+
+You can do:
+
+```python
+>>> students = ['Jared', 'Brock', 'Jack']
+>>> marks = [65, 74, 81]
+>>> for student, mark in zip(students, marks):
+...     print(f'{student} got {mark} marks')
+... 
+Jared got 65 marks
+Brock got 74 marks
+Jack got 81 marks
+```
+
+Both can help massively simplify iteration code.
 
 ### `slice`
 
@@ -2886,6 +3003,7 @@ Well, here's the deal. _Python is huge._
 Here's just a few things that we haven't even touched upon yet:
 
 - Threading / Multiprocessing
+- Asynchoronous computation
 - Type annotations
 - Metaclasses
 - Weak references
