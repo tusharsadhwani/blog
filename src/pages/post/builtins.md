@@ -2900,8 +2900,10 @@ The rest of the things you can pick up as you go, you just need to be aware that
 
 The official Python tutorial has a section on the [builtin modules](https://docs.python.org/3/tutorial/stdlib.html), and the documentation around all of them is actually really good. Reading that whenever you need it will pretty much help you figure out everything as you need it.
 
+There's also [more than 300 detailed videos](https://www.youtube.com/watch?v=qvkppppy9K8&list=PLWBKAf81pmOaP9naRiNAqug6EBnkPakvY) made by AnthonyWritesCode that are really informative.
+
 So now that you've learned all of this, why don't you build something great?
 
 ## The end
 
-Thanks a lot for reading this article. If you managed to read the whole thing, congratulations! And I'd love to know your thoughts on this. Let me know ✨
+Thanks a lot for reading this article. If you managed to read the whole thing, congratulations! And I'd love to hear your thoughts on it ✨
