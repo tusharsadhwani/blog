@@ -37,7 +37,8 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`__build_class__`](#__build_class__)
   - [`__cached__`](#__cached__)
 - [All the builtins, one by one](#all-the-builtins-one-by-one)
-  - [`compile`, `exec` and `eval`](#compile-exec-and-eval)
+  - [`compile`, `exec` and `eval`: How the code works](#compile-exec-and-eval-how-the-code-works)
+  - [`globals` and `locals`: Where everything is stored](#globals-and-locals-where-everything-is-stored)
   - [`input` and `print`: The bread and butter](#input-and-print-the-bread-and-butter)
   - [`str`, `bytes`, `int`, `bool`, `float` and `complex`: The five primitives](#str-bytes-int-bool-float-and-complex-the-five-primitives)
   - [`object`](#object)
@@ -61,7 +62,6 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`iter`, `next`](#iter-next)
   - [`range`, `enumerate`, `zip`](#range-enumerate-zip)
   - [`slice`](#slice)
-  - [`globals`, `locals`](#globals-locals)
   - [`breakpoint`: built-in debugging](#breakpoint-built-in-debugging)
   - [`repr`](#repr)
   - [`open`](#open)
@@ -617,7 +617,7 @@ $ python
 
 Now we can finally get on with builtins. And, to build upon the last section, let's start this off with some of the most interesting ones, the ones that build the basis of Python as a language.
 
-### `compile`, `exec` and `eval`
+### `compile`, `exec` and `eval`: How the code works
 
 In the previous section, we saw the 3 steps required to run some python code. This section will get into details about the 3 steps, and how you can observe exactly what Python is doing.
 
@@ -880,6 +880,53 @@ You can also go the long, detailed route with `eval`, you just need to tell `ast
 >>> eval(code_obj)
 2
 ```
+
+### `globals` and `locals`: Where everything is stored
+
+While the code objects produced store the logic as well as constants defined within a piece of code, one thing that they don't (or even can't) store, is the values of the variables being used.
+
+There's a few reasons for this concerning how the language works, but the most obvious reason can be seen very simply:
+
+```python
+def double(number):
+    return number * 2
+```
+
+The code object of this function will store the constant `2`, as well as the variable name `number`, but it obviously cannot contain the actual value of `number`, as that isn't given to it until the function is actually run.
+
+So where does that come from? The answer is that Python stores everything inside dictionaries associated with each local scope. Which means that every piece of code has its own defined "local scope", that contains the values corresponding to each variable name.
+
+Let's try to see that in action:
+
+```python
+>>> value = 5
+>>> def double(number):
+...     return number * 2
+...
+>>> double(value)
+10
+>>> locals()
+{'__name__': '__main__', '__doc__': None, '__package__': None,
+'__loader__': <class '_frozen_importlib.BuiltinImporter'>, '__spec__': None,
+'__annotations__': {}, '__builtins__': <module 'builtins' (built-in)>,
+'value': 5, 'double': <function double at 0x7f971d292af0>}
+```
+
+Take a look at the last line: not only is `value` stored inside the locals dictionary, the function `double` itself is stored there as well! So that's how Python stores its data.
+
+`globals` is pretty similar, except that `globals` always points to the module scope (also known as global scope). So with something like this code:
+
+```python
+magic_number = 42
+
+def function():
+    x = 10
+    y = 20
+    print(locals())
+    print(globals())
+```
+
+`locals` would just contain `x` and `y`, while `globals` would contain `magic_number` and `function` itself.
 
 ### `input` and `print`: The bread and butter
 
@@ -2754,8 +2801,6 @@ slice(1, None, 2)
 ```
 
 If you want to learn a bit more about slices, how they work and what all can be done with them, I cover that in a separate article [here](slices).
-
-### `globals`, `locals`
 
 ### `breakpoint`: built-in debugging
 
