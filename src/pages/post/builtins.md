@@ -55,8 +55,8 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`callable` and duck typing basics](#callable-and-duck-typing-basics)
   - [`property`, `classmethod`, `staticmethod`](#property-classmethod-staticmethod)
   - [`super`](#super)
-  - [`len`, `max`, `min`, `sum`](#len-max-min-sum)
-  - [`map`, `filter`](#map-filter)
+  - [`map` and `filter`: Functional primitives](#map-and-filter-functional-primitives)
+  - [`len`, `max`, `min` and `sum`: Aggregate functions](#len-max-min-and-sum-aggregate-functions)
   - [`iter`, `next`](#iter-next)
   - [`range`, `enumerate`, `zip`](#range-enumerate-zip)
   - [`slice`](#slice)
@@ -2426,9 +2426,117 @@ If you want to read more into these dunder methods, you can read the documentati
 
 ### `super`
 
-### `len`, `max`, `min`, `sum`
+### `map` and `filter`: Functional primitives
 
-### `map`, `filter`
+Now in Python, everything might be an object, but that doesn't necessarily mean that your Python code needs to be object-oriented. You can in-fact write pretty easy to read _functional_ code in Python.
+
+If you don't know what functional languages or functional code is, the idea is that all functionality is provided via functions. There isn't a formal concept of classes and objects, inheritance and the like. In essence, all programs simply manipulate pieces of data, by passing them to functions and getting the modified values returned back to you.
+
+> This might be an oversimplification, don't dwell too much on my definition here. But we're moving on.
+
+Two really common concepts in functional programming are **map** and **filter**, and Python provides builtin functions for those:
+
+- `map`
+
+  `map` is a "higher order function", which just means that it's a function that takes in another function as an argument.
+
+  What `map` really does is it maps from one set of values to another. A really simple example would be a square mapping:
+
+  ```python
+  >>> def square(x):
+  ...     return x * x
+  ...
+  >>> numbers = [8, 4, 6, 5]
+  >>> list(map(square, numbers))
+  [64, 16, 36, 25]
+  >>> for squared in map(square, numbers):
+  ...     print(squared)
+  ...
+  64
+  16
+  36
+  25
+  ```
+
+  `map` takes two arguments: a function, and a sequence. It simply runs that function with each element as input, and it stores all the outputs inside a new list. `map(square, numbers)` Took each of the numbers and returned a list of squared numbers.
+
+  Note that I had to do `list(map(square, numbers))`, and this is because `map` itself returns a generator. The values are lazily mapped one at a time as you request them, e.g. if you loop over a map value, it will run the map function one by one on each item of the sequence. This means that map doesn't store a complete list of mapped values and doesn't waste time computing extra values when not needed.
+
+- `filter`
+
+  `filter` is quite similar to `map`, except it doesn't map every value to a new value, it filters a sequence of values based on a _condition_.
+
+  This means that the output of a filter will contain the same items as the ones that went in, except some may be discarded.
+
+  A really simple example would be to filter out odd numbers from a result:
+
+  ```python
+  >>> items = [13, 10, 25, 8]
+  >>> evens = list(filter(lambda num: num % 2 == 0, items))
+  >>> evens
+  [10, 8]
+  ```
+
+  A few people might have realised that these functions are essentially doing the same thing as list comprehensions, and you'd be right!
+
+  List comprehensions are basically a more Pythonic, more readable way to write these exact same things:
+
+  ```python
+  >>> def square(x):
+  ...     return x * x
+  ...
+  >>> numbers = [8, 4, 6, 5]
+  >>> [square(num) for num in numbers]
+  [64, 16, 36, 25]
+  ```
+
+  ```python
+  >>> items = [13, 10, 25, 8]
+  >>> evens = [num for num in items if num % 2 == 0]
+  >>> evens
+  [10, 8]
+  ```
+
+  You are free to use whichever syntax seems to suit your usecase better.
+
+### `len`, `max`, `min` and `sum`: Aggregate functions
+
+Python has a few _aggregate_ functions: functions that combine a collection of values into a single result.
+
+I think just a little code example should be more than enough to explain these four:
+
+```python
+>>> numbers = [30, 10, 20, 40]
+>>> len(numbers)
+4
+>>> max(numbers)
+40
+>>> min(numbers)
+10
+>>> sum(numbers)
+100
+```
+
+Three of these can infact take any container data type, like sets, dictionaries and even strings:
+
+```python
+>>> author = 'guidovanrossum'
+>>> len(author)
+14
+>>> max(author)
+'v'
+>>> min(author)
+'a'
+```
+
+`sum` is required to take in a container of numbers. Which means, this works:
+
+```python
+>>> sum(b'guidovanrossum')
+1542
+```
+
+I'll leave that to you to figure out what happened here ;)
 
 ### `iter`, `next`
 
