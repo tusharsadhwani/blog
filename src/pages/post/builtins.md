@@ -6,7 +6,7 @@ author: "Tushar Sadhwani"
 heroImage: "/images/builtins.jpg"
 alt: "Understanding all of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
-# TODO: convert the \\n back to \n once astro fixes it
+# TODO: convert the \\n and \\x back to \n and \x inside code blocks once astro fixes it
 ---
 
 Python as a language is comparatively simple. And I believe, that you can learn quite a lot about Python and its features, just by learning what all of its builtins are, and what they do. And to back up that claim, I'll be doing just that.
@@ -44,12 +44,12 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`hash` and `id`: The equality fundamentals](#hash-and-id-the-equality-fundamentals)
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
   - [`hasattr`, `getattr`, `setattr` and `delattr`: Attribute helpers](#hasattr-getattr-setattr-and-delattr-attribute-helpers)
-  - [`super`](#super)
+  - [`super`: The power of inheritance](#super-the-power-of-inheritance)
   - [`property`, `classmethod` and `staticmethod`: Method decorators](#property-classmethod-and-staticmethod-method-decorators)
   - [`list`, `tuple`, `dict`, `set` and `frozenset`: The containers](#list-tuple-dict-set-and-frozenset-the-containers)
   - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
-  - [`format`](#format)
+  - [`format`: Easy text transforms](#format-easy-text-transforms)
   - [`any` and `all`](#any-and-all)
   - [`abs`, `divmod`, `pow` and `round`: Math basics](#abs-divmod-pow-and-round-math-basics)
   - [`isinstance` and `issubclass`: Runtime type checking](#isinstance-and-issubclass-runtime-type-checking)
@@ -70,7 +70,7 @@ Python as a language is comparatively simple. And I believe, that you can learn 
 
 ## So what's a builtin?
 
-A builtin in a Python is everything that lives in the `builtins` module.
+A builtin in Python is everything that lives in the `builtins` module.
 
 To understand this better, you'll need to learn about the **L.E.G.B.** rule.
 
@@ -108,7 +108,7 @@ Running this code outputs:
 11
 ```
 
-So here's what's happening: Doing `x = 22` defines a new variable inside `some_function` is in it's own **local namespace**. After that point, when the function refers to `x` it means the one in its own scope. Accessing `x` outside of `some_function` refers to the one defined outside.
+So here's what's happening: Doing `x = 22` defines a new variable inside `some_function` that is in its own **local namespace**. After that point, whenever the function refers to `x`, it means the one in its own scope. Accessing `x` outside of `some_function` refers to the one defined outside.
 
 ### Enclosing scope
 
@@ -143,7 +143,7 @@ Outer x: 22
 Global x: 11
 ```
 
-What it essentially means is that every new function/class creates its own local scope, **separate from its outer environment**. Trying to access an outer variable will work, but any variable created in the local scope does not affect the outer scope.
+What it essentially means is that every new function/class creates its own local scope, **separate from its outer environment**. Trying to access an outer variable will work, but any variable created in the local scope does not affect the outer scope. This is why redefining x to be `33` inside the inner function doesn't affect the outer or global definitions of `x`.
 
 > But what if I want to affect the outer scope?
 
@@ -171,9 +171,9 @@ Outer x: 22
 
 ### Global scope
 
-Global scope (or module scope) simply refers to the scope where all the module's variables, functions and classes are defined.
+Global scope (or module scope) simply refers to the scope where all the module's top-level variables, functions and classes are defined.
 
-A "module" is any python file or package that can be run or imported. For eg. `time` is a module (as you can do `import time` in your code), and `time.sleep()` is a function defined in the `time` module's global scope.
+A "module" is any python file or package that can be run or imported. For eg. `time` is a module (as you can do `import time` in your code), and `time.sleep()` is a function defined in `time` module's global scope.
 
 Every module in Python has a few pre-defined globals, such as `__name__` and `__doc__`, which refer to the module's name and the module's docstring, respectively. You can try this in the REPL:
 
@@ -196,7 +196,7 @@ Now we get to the topic of this blog -- the builtin scope.
 So there's two things to know about the builtin scope in Python:
 
 - It's the scope where essentially all of Python's top level functions are defined, such as `len`, `range` and `print`.
-- When a variable is not found in the local, enclosing or global scope, Python looks for it inside the builtins.
+- When a variable is not found in the local, enclosing or global scope, Python looks for it in the builtins.
 
 You can inspect the builtins directly if you want, by importing the `builtins` module, and checking methods inside it:
 
@@ -253,12 +253,13 @@ So let's tackle the biggest group by far:
 
 ## Exceptions
 
-Python has 66 built-in exception classes, each one intended to be used by the user, the standard library and everyone else, to serve as meaningful ways to interpret and catch errors in your code.
+Python has 66 built-in exception classes (so far), each one intended to be used by the user, the standard library and everyone else, to serve as meaningful ways to interpret and catch errors in your code.
 
 To explain exactly why there's separate Exception classes in Python, here's a quick example:
 
 ```python
 def fetch_from_cache(key):
+    """Returns a key's value from cached items."""
     if key is None:
         raise ValueError('key must not be None')
 
@@ -317,13 +318,13 @@ Doing that would even catch `KeyboardInterrupt`, which would make you unable to 
 
 </details>
 
-Now I should point it out that now _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
+Now I should point it out that not _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
 
 ## Constants
 
 There's exactly 5 constants: `True`, `False`, `None`, `Ellipsis`, and `NotImplemented`.
 
-`True` `False` and `None` are the most obvious constants.
+`True`, `False` and `None` are the most obvious constants.
 
 `Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](/mypy-guide), and for some very fancy slicing support.
 
@@ -339,13 +340,23 @@ class MyNumber:
         return other + 42
 ```
 
+This results in our object acting as the value `42` during addition:
+
+```python
+>>> num = MyNumber()
+>>> num + 3
+45
+>>> num + 100
+142
+```
+
 <details>
 <summary>Extras: right-operators</summary>
 
-If you're wondering from the code example above why I never tried to do `3 + n`, it's because it doesn't work yet:
+If you're wondering from the code example above why I didn't try to do `3 + num`, it's because it doesn't work yet:
 
 ```python
->>> 100 + n
+>>> 100 + num
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: unsupported operand type(s) for +: 'int' and 'MyNumber'
@@ -362,15 +373,15 @@ class MyNumber:
         return other + 42
 ```
 
-As a bonus, this also adds support for adding two `MyNumber` classes:
+As a bonus, this also adds support for adding two `MyNumber` classes together:
 
 ```python
->>> n = MyNumber()
->>> n + 100
+>>> num = MyNumber()
+>>> num + 100
 142
->>> 3 + n
+>>> 3 + num
 45
->>> n + n
+>>> num + num
 84
 ```
 
@@ -402,13 +413,13 @@ A weird fact about constants is that they aren't even implemented in Python, the
 
 ## Funky globals
 
-There's another group of odd-looking values in the builtins output we saw above: values like `__spec__`, `__loader__`, `__debug__` etc.
+There's another group of odd-looking values in the [builtins output](#all-the-builtins) we saw above: values like `__spec__`, `__loader__`, `__debug__` etc.
 
 These are actually not unique to the `builtins` module. These properties are all present in the global scope of every module in Python, as they are _module attributes_. These hold information about the module that is required for the **import machinery**. Let's take a look at them:
 
 ### `__name__`
 
-Contains the name of the module. `builtins.__name__` will be the string `'builtins'`. When you run a Python file, that is also run as a module, and the module name for that is `__main__`. This should explain why `if __name__ == '__main__'` is used in Python files.
+Contains the name of the module. For example, `builtins.__name__` will be the string `'builtins'`. When you run a Python file, that is also run as a module, and the module name for that is `__main__`. This should explain how `if __name__ == '__main__'` works when used in Python files.
 
 ### `__doc__`
 
@@ -440,6 +451,8 @@ The package to which this module belongs. For top-level modules it is the same a
 >>> import urllib.request
 >>> urllib.__package__
 'urllib'
+>>> urllib.request.__name__
+'urllib.request'
 >>> urllib.request.__package__
 'urllib'
 ```
@@ -483,6 +496,8 @@ So you might ask, what are these weird `_frozen` modules? Well, my friend, it's 
 
 The _actual_ source code of these two modules is actually inside the `importlib.machinery` module. These `_frozen` aliases are frozen versions of the source code of these loaders. To create a frozen module, the Python code is compiled to a code object, marshalled into a file, and then added to the Python executable.
 
+> If you have no idea what that meant, don't worry, we will cover this in detail later.
+
 Python freezes these two modules because they implement the core of the import system and, thus, cannot be imported like other Python files when the interpreter boots up. Essentially, they are needed to exist to _bootstrap the import system_.
 
 Funnily enough, there's another well-defined frozen module in Python: it's `__hello__`:
@@ -521,7 +536,7 @@ This is a global, constant value in Python, which is almost always set to `True`
 
 What it refers to, is Python running in _debug mode_. And Python always runs in debug mode by default.
 
-The other mode that Python can run in, is _"optimized mode"_. To run python in "optimized mode", you can invoke it by passing the `-O` flag. And all it does, is prevents assert statements from doing anything (at least so far), which is in all honesty, not really useful at all.
+The other mode that Python can run in, is _"optimized mode"_. To run python in "optimized mode", you can invoke it by passing the `-O` flag. And all it does, is prevents assert statements from doing anything (at least so far), which in all honesty, isn't really useful at all.
 
 ```python
 $ python
@@ -537,7 +552,7 @@ $ python -O
 >>> __debug__
 False
 >>> assert False, 'some error'
->>>
+>>> # Didn't raise any error.
 ```
 
 Also, `__debug__`, `True`, `False` and `None` are the only **true constants** in Python, i.e. these 4 are the only global variables in Python that you cannot overwrite with a new value.
@@ -573,7 +588,7 @@ Subclass got data: {'num': 42, 'data': 'xyz'}
 
 Before Python 3.1, The class creation syntax only allowed passing base classes to inherit from, and a metaclass property. The new requirements were to allow variable number of positional and keyword arguments. This would be a bit messy and complex to add to the language.
 
-But, we already have this, of course, in the code for calling regular functions. So it was proposed that the `Class X(...)` syntax will simply delegate to a function call underneath: `__build_class__(cls, ...)`.
+But, we already have this, of course, in the code for calling regular functions. So it was proposed that the `Class X(...)` syntax will simply delegate to a function call underneath: `__build_class__('X', ...)`.
 
 ### `__cached__`
 
@@ -585,10 +600,10 @@ When you import a module, the `__cached__` property stores the path of the cache
 
 Yeah. Python _is_ compiled. In fact, all Python code is compiled, but not to machine code -- to **bytecode**. Let me explain this point by explaining how Python runs your code.
 
-Here are the steps that the Python interpreter does to run your code:
+Here are the steps that the Python interpreter takes to run your code:
 
 - It takes your source file, and parses it into a syntax tree. The syntax tree is a representation of your code that can be more easily understood by a program. It finds and reports any errors in the code's syntax, and ensures that there are no ambiguities.
-- The next step is to compile the source file into _bytecode_. This bytecode is a set of micro-instructions for **Python's virtual machine**. This "virtual machine" is where Python's interpreter logic resides. It essentially _emulates_ a very simple stack-based computer on your machine, in order to execute the Python code written by you.
+- The next step is to compile this syntax tree into _bytecode_. Bytecode is a set of micro-instructions for **Python's virtual machine**. This "virtual machine" is where Python's interpreter logic resides. It essentially _emulates_ a very simple stack-based computer on your machine, in order to execute the Python code written by you.
 - This bytecode-form of your code is then run on the Python VM. The bytecode instructions are simple things like pushing and popping data off the current stack. Each of these instructions, when run one after the other, executes the entire program.
 
 > We will take a really detailed example of the steps above, in the next section. Hang tight!
@@ -626,7 +641,7 @@ x = [1, 2]
 print(x)
 ```
 
-You can save this code into a file and run it, or type it in the Python REPL. In both the cases, you'll get an output.
+You can save this code into a file and run it, or type it in the Python REPL. In both the cases, you'll get an output of `[1, 2]`.
 
 Or thirdly, you can give the program as a string to Python's builtin function `exec`:
 
@@ -743,7 +758,7 @@ The module's body has two children (two statements):
           Name(id='x', ctx=Load())],
   ```
 
-Doesn't seem that bad now, right?
+So the `Assign` part is describing `x = [1, 2]` and the `Expr` is describing `print(x)`. Doesn't seem that bad now, right?
 
 <details>
 <summary>Extras: the Tokenizer</summary>
@@ -781,7 +796,7 @@ This "token stream" is what's parsed into an AST.
 
 </details>
 
-So now we have an AST object. We can _compile_ it into a code object using `compile`. Running `exec` on the code object will do the same thing:
+So now we have an AST object. We can _compile_ it into a code object using the `compile` builtin. Running `exec` on the code object will then run it just as before:
 
 ```python
 >>> import ast
@@ -793,14 +808,13 @@ So now we have an AST object. We can _compile_ it into a code object using `comp
 >>> code_obj = compile(tree, 'myfile.py', 'exec')
 >>> exec(code_obj)
 [1, 2]
->>>
 ```
 
 But now, we can look into what a code object looks like. Let's examine some of its properties:
 
 ```python
 >>> code_obj.co_code
-b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'
+b'd\\x00d\\x01g\\x02Z\\x00e\\x01e\\x00\\x83\\x01\\x01\\x00d\\x02S\\x00'
 >>> code_obj.co_filename
 'myfile.py'
 >>> code_obj.co_names
@@ -816,7 +830,7 @@ If you want to dive deep into what the bytecode means, the extras section below 
 <details>
 <summary>Extras: the "dis" module</summary>
 
-The `dis` module in Python ...
+The `dis` module in Python can be used to visualize the contents of code objects in a human-understandable way, to help figure out what Python is doing under the hood. It takes in the bytecode, constant and variable information, and produces this:
 
 ```python
 >>> import dis
@@ -841,9 +855,9 @@ The `dis` module in Python ...
 It shows that:
 
 - Line 1 creates 4 bytecodes, to load 2 constants `1` and `2` onto the stack, build a list from the top `2` values on the stack, and store it into the variable `x`.
-- Line 2 creates 6 bytecodes, it loads `print` and `x` onto the stack, and calls the function on the stack with the `1` argument on top of it. Then it gets rid of the return value from the call by doing `POP_TOP` because we didn't use or store the return value from `print(x)`. The two lines at the end returns `None` from the end of the file's execution, which does nothing.
+- Line 2 creates 6 bytecodes, it loads `print` and `x` onto the stack, and calls the function on the stack with the `1` argument on top of it (Meaning, it calls `print` with argument `x`). Then it gets rid of the return value from the call by doing `POP_TOP` because we didn't use or store the return value from `print(x)`. The two lines at the end returns `None` from the end of the file's execution, which does nothing.
 
-Each of these bytecodes is 2 bytes long when stored as opcodes, that's why the numbers to the left of the opcodes are spaces 2 away from each other. It shows that this entire code is 20 bytes long. And indeed, if you do:
+Each of these bytecodes is 2 bytes long when stored as "opcodes" (the names that you are seeing, `LOAD_CONST` for example, are opcodes), that's why the numbers to the left of the opcodes are 2 away from each other. It also shows that this entire code is 20 bytes long. And indeed, if you do:
 
 ```python
 >>> code_obj = compile('''
@@ -851,7 +865,7 @@ Each of these bytecodes is 2 bytes long when stored as opcodes, that's why the n
 ... print(x)
 ... ''', 'test', 'exec')
 >>> code_obj.co_code
-b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'
+b'd\\x00d\\x01g\\x02Z\\x00e\\x01e\\x00\\x83\\x01\\x01\\x00d\\x02S\\x00'
 >>> len(code_obj.co_code)
 20
 ```
@@ -860,7 +874,7 @@ You can confirm that the bytecode generated is exactly 20 bytes.
 
 </details>
 
-`eval` is pretty similar to exec, except it only accepts expressions (not statements or a set of statements like `exec`), and unlike `exec`, it returns a value -- the result of said expression.
+`eval` is pretty similar to `exec`, except it only accepts expressions (not statements or a set of statements like `exec`), and unlike `exec`, it returns a value -- the result of said expression.
 
 Here's an example:
 
@@ -881,7 +895,7 @@ You can also go the long, detailed route with `eval`, you just need to tell `ast
 
 ### `globals` and `locals`: Where everything is stored
 
-While the code objects produced store the logic as well as constants defined within a piece of code, one thing that they don't (or even can't) store, is the values of the variables being used.
+While the code objects produced store the logic as well as constants defined within a piece of code, one thing that they don't (or even can't) store, is the actual values of the variables being used.
 
 There's a few reasons for this concerning how the language works, but the most obvious reason can be seen very simply:
 
@@ -892,7 +906,7 @@ def double(number):
 
 The code object of this function will store the constant `2`, as well as the variable name `number`, but it obviously cannot contain the actual value of `number`, as that isn't given to it until the function is actually run.
 
-So where does that come from? The answer is that Python stores everything inside dictionaries associated with each local scope. Which means that every piece of code has its own defined "local scope", that contains the values corresponding to each variable name.
+So where does that come from? The answer is that Python stores everything inside dictionaries associated with each local scope. Which means that every piece of code has its own defined "local scope" which is accessed using `locals()` inside that code, that contains the values corresponding to each variable name.
 
 Let's try to see that in action:
 
@@ -1040,7 +1054,11 @@ def print_writer(file_path):
         sys.stdout = f
         yield  # this is where everything inside the `with` statement happens
         sys.stdout = original_stdout
+```
 
+That's it! And here's how you would use it:
+
+```python
 with print_writer('myfile.txt'):
     print('Printing straight to the file!')
     for i in range(5):
@@ -1049,10 +1067,10 @@ with print_writer('myfile.txt'):
 print('and regular print still works!')
 ```
 
+</details>
+
 `flush` is a boolean flag to the `print` function. All it does is tell `print` to write the text immediately to the console/file instead of putting it in a buffer. This usually doesn't make much of a difference, but if you're printing a very large string to a console, you might want to set it to `True`
 to avoid lag in showing the output to the user.
-
-</details>
 
 Now I'm sure many of you are interested in what secrets the `input` function hides, but there's none. `input` simply takes in a string to show as the prompt. Yeah, bummer, I know.
 
@@ -1062,7 +1080,7 @@ Python has exactly 6 primitive data types (well, actually just 5, but we'll get 
 
 `str` is one of the most familiar data types in Python. Taking user input using the `input` method gives you a string, and every other data type in Python can be converted into a string. This is necessary because all computer Input/Output is in text-form, be it user I/O or file I/O, which is probably why strings are everywhere.
 
-`bytes` on the other hand, are _actually_ the basis of all I/O in computing. If you know about computers, you would know that all data is stored and handled as bits and bytes -- and that's how terminals really work as well.
+`bytes` on the other hand, are _actually_ the basis of all I/O in computing. If you know about computers, you would probably know that all data is stored and handled as bits and bytes -- and that's how terminals really work as well.
 
 If you want to take a peek at the bytes underneath the `input` and `print` calls: you need to take a look at the I/O buffers in the `sys` module: `sys.stdout.buffer` and `sys.stdin.buffer`:
 
@@ -1080,13 +1098,13 @@ Hello!
 
 The buffer objects take in `bytes`, write those directly to the output buffer, and return the number of bytes returned.
 
-To prove that everything is just bytes underneath, let's look at another example:
+To prove that everything is just bytes underneath, let's look at another example that prints an emoji using its bytes:
 
 ```python
 >>> import sys
 >>> '🐍'.encode()
-b'\xf0\x9f\x90\x8d'   # utf-8 encoded string of the snake emoji
->>> _ = sys.stdout.buffer.write(b'\xf0\x9f\x90\x8d')
+b'\\xf0\\x9f\\x90\\x8d'   # utf-8 encoded string of the snake emoji
+>>> _ = sys.stdout.buffer.write(b'\\xf0\\x9f\\x90\\x8d')
 🐍
 ```
 
@@ -1094,7 +1112,7 @@ b'\xf0\x9f\x90\x8d'   # utf-8 encoded string of the snake emoji
 
 What this means is that all `int`s are valid as a `float` as well as a `complex`, but not the other way around. Similarly, all `float`s are also valid as a `complex`.
 
-> If you don't know, `complex` is the implementation for "complex numbers" in Python. They're a really common tool for mathematics.
+> If you don't know, `complex` is the implementation for "complex numbers" in Python. They're a really common tool in mathematics.
 
 Let's take a look at them:
 
@@ -1120,7 +1138,7 @@ Now, I mentioned for a moment that there's actually only 5 primitive data types 
 
 You can check it yourself, by looking into the `mro` property of these classes.
 
-`mro` stands for "method resolution order". It defines the order in which the methods called on a class are looked for. Essentially, the method calls are first looked for in the class itself, and if it's not present there, it's searched in its parent class, and then its parent, all the way to the top: `object`. Everything in Python inherits from `object`. Yes, everything in Python is an object.
+`mro` stands for "method resolution order". It defines the order in which the methods called on a class are looked for. Essentially, the method calls are first looked for in the class itself, and if it's not present there, it's searched in its parent class, and then its parent, all the way to the top: `object`. Everything in Python inherits from `object`. Yes, pretty much everything in Python is an object.
 
 Take a look:
 
@@ -1134,12 +1152,12 @@ Take a look:
 >>> str.mro()
 [<class 'str'>, <class 'object'>]
 >>> bool.mro()
-[<class 'bool'>, <class 'int'>, <class 'object'>]
+[<class 'bool'>, <class 'int'>, <class 'object'>]  # Look!
 ```
 
 You can see from their "ancestry", that all the other data types are not "sub-classes" of anything (except for `object`, which will always be there). Except `bool`, which inherits from `int`.
 
-Now at this point, you might be wondering "WHY? Why does `bool` subclass `int`?" And the answer is a bit anti-climatic. It's mostly because of compatibility reasons. Historically, logical true/false operations tended to simply use `0` for false and `1` for true. In Python version 2.2, the boolean values `True` and `False` were added to Python, and they were simply wrappers around the integer values. The fact has stayed the same till date. That's all.
+Now at this point, you might be wondering "WHY? Why does `bool` subclass `int`?" And the answer is a bit anti-climatic. It's mostly because of compatibility reasons. Historically, logical true/false operations in Python simply used `0` for false and `1` for true. In Python version 2.2, the boolean values `True` and `False` were added to Python, and they were simply wrappers around these integer values. The fact has stayed the same till date. That's all.
 
 But, it also means that, for better or for worse, you can pass a `bool` wherever an `int` is expected:
 
@@ -1176,7 +1194,10 @@ It does all of this through its pre-defined "magic methods":
 
 ```python
 >>> dir(object)
-['__class__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__']
+['__class__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__',
+'__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__',
+'__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__',
+'__setattr__', '__sizeof__', '__str__', '__subclasshook__']
 ```
 
 Accessing an attribute with `obj.x` calls the `__getattr__` method underneath. Similarly setting a new attribute and deleting an attribute calls `__setattr__` and `__detattr__` respectively. The object's hash is generated by the pre-defined `__hash__` method, and the string representation of objects comes from `__repr__`.
@@ -1197,11 +1218,13 @@ Accessing an attribute with `obj.x` calls the `__getattr__` method underneath. S
 8746615722250
 ```
 
-> There's actually a lot more to speak about magic methods in Python, as they form the backbone of the object-oriented, duck-typed nature of Python. But, that's a story for another blog. Stay tuned if you're interested 😉
+> There's actually a lot more to speak about magic methods in Python, as they form the backbone of the object-oriented, duck-typed nature of Python. But, that's a story for another blog.
+>
+> Stay tuned if you're interested 😉
 
 ### `type`: The class factory
 
-If `object` is the father of all classes, `type` is the grandfather.
+If `object` is the father of all objects, `type` is father of all "classes". As in, while all objects inherit from `object`, all classes inherit from `type`.
 
 `type` is the builtin that can be used to dynamically create new classes. Well, it actually has two uses:
 
@@ -1327,7 +1350,7 @@ Nothing was passed.
 
 To understand why objects only compare to themselves, we will have to understand the `is` keyword.
 
-Python's `is` operator is used to check if two values reference the same exact object in memory. Think of Python objects like boxes floating around in space, and variables, array indexes, and so on being named arrows pointing to the objects.
+Python's `is` operator is used to check if two values reference the same exact object in memory. Think of Python objects like boxes floating around in space, and variables, array indexes, and so on being named arrows pointing to these objects.
 
 Let's take a quick example:
 
@@ -1336,12 +1359,12 @@ Let's take a quick example:
 >>> y = object()
 >>> z = y
 >>> x is y
-True
+False
 >>> y is z
 True
 ```
 
-In the code above, there are two separate objects, and three labels `x` `y` and `z` pointing to these two objects: `x` pointing to the first one, and `y` and `z` both pointing to the other one.
+In the code above, there are two separate objects, and three labels `x`, `y` and `z` pointing to these two objects: `x` pointing to the first one, and `y` and `z` both pointing to the other one.
 
 ```python
 >>> del x
@@ -1459,9 +1482,9 @@ Comparing hashes is a really fast way to check for "presence". This is what dict
 ```python
 >>> import timeit
 >>> timeit.timeit('999 in l', setup='l = list(range(1000))')
-12.224023487000522
+12.224023487000522   # 12 seconds to run a million times
 >>> timeit.timeit('999 in s', setup='s = set(range(1000))')
-0.06099735599855194
+0.06099735599855194  # 0.06 seconds for the same thing
 ```
 
 Notice that the set solution is running hunderds of times faster than the list solution! This is because they use the hash values as their replacement for "indices", and if a value _at the same hash_ is already stored in the set/dictionary, Python can quickly check if it's the same item or not. This process makes checking for presence pretty much instant.
@@ -1492,9 +1515,9 @@ class Car:
 
 ### `dir` and `vars`: Everything is a dictionary
 
-Have you ever wondered how Python stores objects, their variables, their methods and such? We know that all objects have their own properties and methods attached to them, but hoe exactly does Python keep track of them?
+Have you ever wondered how Python stores objects, their variables, their methods and such? We know that all objects have their own properties and methods attached to them, but how exactly does Python keep track of them?
 
-The simple answer is that everything is stored in a dictionary. And the `vars` method exposes the variables stored inside objects and classes.
+The simple answer is that everything is stored inside dictionaries. And the `vars` method exposes the variables stored inside objects and classes.
 
 ```python
 >>> class C:
@@ -1509,12 +1532,19 @@ The simple answer is that everything is stored in a dictionary. And the `vars` m
 >>> vars(c)
 {'x': 3, 'y': 5}
 >>> vars(C)
-mappingproxy({'__module__': '__main__', 'some_constant': 42, '__init__': <function C.__init__ at 0x7fd27fc66d30>, 'some_method': <function C.some_method at 0x7fd27f350ca0>, '__dict__': <attribute '__dict__' of 'C' objects>, '__weakref__': <attribute '__weakref__' of 'C' objects>, '__doc__': None})
+mappingproxy(
+  {'__module__': '__main__', 'some_constant': 42,
+  '__init__': <function C.__init__ at 0x7fd27fc66d30>,
+  'some_method': <function C.some_method at 0x7fd27f350ca0>,
+  '__dict__': <attribute '__dict__' of 'C' objects>,
+  '__weakref__': <attribute '__weakref__' of 'C' objects>,
+  '__doc__': None
+})
 ```
 
 As you can see, the attributes `x` and `y` related to the object `c` are stored in its own dictionary, and the methods (`some_function` and `__init__`) are actually stored as functions in the class's dictionary. Which makes sense, as the code of the function itself doesn't change for every object, only the variables passed to it change.
 
-This can be demonstrated with the fact that `c.some_method(x)` is the same as `C.some_method(c, x)`:
+This can be demonstrated with the fact that `c.method(x)` is the same as `C.method(c, x)`:
 
 ```python
 >>> class C:
@@ -1528,7 +1558,7 @@ self=<__main__.C object at 0x7f90762461f0>, x=5
 self=<__main__.C object at 0x7f90762461f0>, x=5
 ```
 
-It shows that a function defined inside a class really is just a function, with `self` just being an object being passed. The object syntax `c.method(x)` is just cleaner syntax to write `C.method(c, x)`.
+It shows that a function defined inside a class really is just a function, with `self` being just an object that is passed as the first argument. The object syntax `c.method(x)` is just a cleaner way to write `C.method(c, x)`.
 
 Now here's a slightly different question. If `vars` shows all methods inside a class, then why does this work?
 
@@ -1537,7 +1567,13 @@ Now here's a slightly different question. If `vars` shows all methods inside a c
 ...     def function(self, x): pass
 ...
 >>> vars(C)
-mappingproxy({'__module__': '__main__', 'function': <function C.function at 0x7f607ddedb80>, '__dict__': <attribute '__dict__' of 'C' objects>, '__weakref__': <attribute '__weakref__' of 'C' objects>, '__doc__': None})
+mappingproxy({
+  '__module__': '__main__',
+  'function': <function C.function at 0x7f607ddedb80>,
+  '__dict__': <attribute '__dict__' of 'C' objects>,
+  '__weakref__': <attribute '__weakref__' of 'C' objects>,
+  '__doc__': None
+})
 >>> c = C()
 >>> vars(c)
 {}
@@ -1551,10 +1587,14 @@ If you want a definitive answer of which properties can be accessed on an object
 
 ```python
 >>> dir(c)
-['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'function']
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__',
+'__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__',
+'__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__',
+'__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__',
+'__subclasshook__', '__weakref__', 'function']
 ```
 
-So where are the rest of the properties? Well, the story is slightly more complicated, for one simple reason: Python supports inheritance.
+So where are the rest of the properties coming from? Well, the story is slightly more complicated, for one simple reason: Python supports inheritance.
 
 All objects in python inherit by default from the `object` class, and indeed, `__class__` is defined on `object`:
 
@@ -1562,12 +1602,15 @@ All objects in python inherit by default from the `object` class, and indeed, `_
 >>> '__class__' in vars(object)
 True
 >>> vars(object).keys()
-dict_keys(['__repr__', '__hash__', '__str__', '__getattribute__', '__setattr__', '__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__', '__init__', '__new__', '__reduce_ex__', '__reduce__', '__subclasshook__', '__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__', '__doc__'])
+dict_keys(['__repr__', '__hash__', '__str__', '__getattribute__', '__setattr__',
+'__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__',
+'__init__', '__new__', '__reduce_ex__', '__reduce__', '__subclasshook__',
+'__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__', '__doc__'])
 ```
 
 And that does cover everything that we see in the output of `dir(c)`.
 
-Now that I've mentioned inheritence, I think I should also mention the "method resolution order". MRO for short, this is the list of classes that an object inherits properties and methods from. Here's a quick example:
+Now that I've mentioned inheritence, I think I should also elaborate how the "method resolution order" works. MRO for short, this is the list of classes that an object inherits properties and methods from. Here's a quick example:
 
 ```python
 >>> class A:
@@ -1584,7 +1627,11 @@ Now that I've mentioned inheritence, I think I should also mention the "method r
 >>> B.mro()
 [<class '__main__.B'>, <class '__main__.A'>, <class 'object'>]
 >>> dir(b)
-['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'x', 'y', 'z']
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__',
+'__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__',
+'__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__',
+'__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__',
+'__subclasshook__', '__weakref__', 'x', 'y', 'z']
 >>> set(dir(b)) - set(dir(a))  # all values in dir(b) that are not in dir(a)
 {'z'}
 >>> vars(b).keys()
@@ -1625,6 +1672,7 @@ AttributeError: 'object' object has no attribute 'foo'
 ...
 >>> c = C()
 >>> c.foo = 5
+>>> # works?
 ```
 
 So, for some reason you can't assign arbitrary variables to `object`, but you can to an object of a class that you yourself created. Why could that be? Is it specific to `object`?
@@ -1650,7 +1698,7 @@ AttributeError: 'C' object has no attribute 'foo'
 
 Now here's the long explanation:
 
-Python actually has two ways of storing data inside objects: as a dictionary (like most cases), and as a "struct". Structs are a C language data type, which can essentially be thought of as tuples from Python. Dictionaries use more memory, because they can be expanded as much as you like and rely on extra space for their reliability in quickly accessing data, that's just how dictionaries are. Structs on the other hand, have a fixed size, and cannot be expanded, but they take the least amount of memory possible as they pack the space those values one after the other.
+Python actually has two ways of storing data inside objects: as a dictionary (like most cases), and as a "struct". Structs are a C language data type, which can essentially be thought of as tuples from Python. Dictionaries use more memory, because they can be expanded as much as you like and rely on extra space for their reliability in quickly accessing data, that's just how dictionaries are. Structs on the other hand, have a fixed size, and cannot be expanded, but they take the least amount of memory possible as they pack those values one after the other without any wasted space.
 
 These two ways of storing data in Python are reflected by the two object properties `__dict__` and `__slots__`. Normally, all instance attributes (`self.foo`) are stored inside `__dict__` the dictionary, unless you define the `__slots__` attribute, in which case the object can only have a constant number of pre-defined attributes.
 
@@ -1683,7 +1731,7 @@ AttributeError: 'SlottedClass' object has no attribute '__dict__'
 ('x', 'y')
 ```
 
-So creating slots prevents a `__dict__` from existing, which means no dictionary to add attributes into, and it also means saved memory. That's basically it.
+So creating slots prevents a `__dict__` from existing, which means no dictionary to add new attributes into, and it also means saved memory. That's basically it.
 
 AnthonyWritesCode [made a video](https://www.youtube.com/watch?v=BSNd_kxHXL8) about another interesting piece of code relating to slots and their obscure behaviour, do check that out!
 
@@ -1746,7 +1794,7 @@ You _could_ do this in an object by using try-catch:
 prop doesn't exist.
 ```
 
-But the preferred method to do this would be direct equivalent: `hasattr`
+But the preferred method to do this would be direct equivalent: `hasattr`.
 
 ```python
 >>> class X:
@@ -1820,7 +1868,7 @@ def upload_data(item):
         api.send(item)
 ```
 
-Yeah, that should be it!
+The `upload_data` function is checking if we have gotten a factory object, by checking if it has a `get_value` method. If it does, that function is used to get the actual value to upload. Let's try to use it!
 
 ```python
 >>> import json
@@ -1841,11 +1889,11 @@ Uploaded 'some text'!
 Uploaded '[42, 1000]'!
 ```
 
-### `super`
+### `super`: The power of inheritance
 
 `super` is Python's way of referencing a superclass, to use its methods, for example.
 
-Take this example, of a class that encapsulates the logic of summing two items.
+Take this example, of a class that encapsulates the logic of summing two items:
 
 ```python
 class Sum:
@@ -1918,9 +1966,11 @@ We're reaching the end of all the class and object-related builtin functions, th
 
       @marks.setter
       def marks(self, new_value):
+          # Doing validation
           if new_value < 0:
               raise ValueError('marks cannot be negative')
 
+          # before actually setting the value.
           self._marks = new_value
   ```
 
@@ -1957,14 +2007,14 @@ We're reaching the end of all the class and object-related builtin functions, th
 - `staticmethod`:
   `@staticmethod` is used to convert a method into a static method: one equivalent to a function sitting inside a class, independent of any class or object properties. Using this completely gets rid of the first `self` argument passed to methods.
 
-  We could make one that for some data validation for example:
+  We could make one that does some data validation for example:
 
   ```python
   class API:
       @staticmethod
-      def is_valid_title(title):
+      def is_valid_title(title_text):
           """Checks whether the string can be used as a blog title."""
-          return title.istitle() and len(title) < 60
+          return title_text.istitle() and len(title_text) < 60
   ```
 
 These builtins are created using a pretty advanced topic called **descriptors**. I'll be honest, descriptors are a topic that is so advanced that trying to cover it here won't be of any use beyond what has already been told. I'm planning on writing a detailed article on descriptors and their uses sometime in the future, so stay tuned for that!
@@ -2063,7 +2113,7 @@ A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to h
 
 `bytearray` makes a lot of sense, as:
 
-- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficien
+- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficient.
 - Bytes have a fixed size (which is... 1 byte). On the other hand, string characters can have various sizes thanks to the unicode encoding standard, "utf-8":
 
   ```python
@@ -2071,13 +2121,13 @@ A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to h
   >>> len(x)
   3
   >>> x.encode()
-  b'I\xe2\x99\xa5\xf0\x9f\x90\x8d'
+  b'I\\xe2\\x99\\xa5\\xf0\\x9f\\x90\\x8d'
   >>> len(x.encode())
   8
   >>> x[2]
   '🐍'
   >>> x[2].encode()
-  b'\xf0\x9f\x90\x8d'
+  b'\\xf0\\x9f\\x90\\x8d'
   >>> len(x[2].encode())
   4
   ```
@@ -2089,15 +2139,15 @@ A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to h
   '🐍'
   >>> b = x[2].encode()
   >>> b
-  b'\xf0\x9f\x90\x8d'  # 4 bytes
+  b'\\xf0\\x9f\\x90\\x8d'  # 4 bytes
   >>> b[:1]
-  b'\xf0'
+  b'\\xf0'
   >>> b[1:2]
-  b'\x9f'
+  b'\\x9f'
   >>> b[2:3]
-  b'\x90'
+  b'\\x90'
   >>> b[3:4]
-  b'\x8d'
+  b'\\x8d'
   >>> b[0]  # indexing a bytes object gives an integer
   240
   >>> b[3]
@@ -2132,7 +2182,7 @@ Meanwhile, a `memoryview` takes this idea a step further: It's pretty much just 
 ```python
 >>> array = bytearray(range(256))
 >>> array
-bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08...
+bytearray(b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08...
 >>> len(array)
 256
 >>> array_slice = array[65:91]  # Bytes 65 to 90 are uppercase english characters
@@ -2152,7 +2202,7 @@ bytearray(b'aBCDEFGHIJKLMNOPQRSTUVWXYZ')  # 'A' is now lowercase.
 bytearray(b'KLMNO')
 >>> view[10:15] = bytearray(view[10:15]).lower()
 >>> bytearray(view)
-bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified in-place.
+bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified 'KLMNO' in-place.
 ```
 
 ### `bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions
@@ -2189,17 +2239,17 @@ But there are times where it makes sense to use other bases instead, like when w
 
 ```python
 >>> bytes([255, 254])
-b'\xff\xfe'              # Not very easy to comprehend
+b'\\xff\\xfe'              # Not very easy to comprehend
 >>> # This can be written as:
 >>> bytes([0xff, 0xfe])
-b'\xff\xfe'              # An exact one-to-one translation
+b'\\xff\\xfe'              # An exact one-to-one translation
 ```
 
 Or when writing OS-specific codes that are implemented in octal, for example:
 
 ```python
 import os
->>> os.open('file.txt', os.O_RDWR, mode=384)    # ???
+>>> os.open('file.txt', os.O_RDWR, mode=384)    # ??? what's 384
 >>> # This can be written as:
 >>> os.open('file.txt', os.O_RDWR, mode=0o600)  # mode is 600 -> read-write
 ```
@@ -2224,13 +2274,13 @@ Note that `bin` for example is only supposed to be used when you want to create 
 '0x1f40d'
 >>> chr(0x1f40d)
 '🐍'
->>> '\U0001f40d'  # The same value, as a unicode escape inside a string
+>>> '\\U0001f40d'  # The same value, as a unicode escape inside a string
 '🐍'
 ```
 
 It's pretty simple.
 
-### `format`
+### `format`: Easy text transforms
 
 `format(string, spec)` is just another way to do `string.format(spec)`.
 
@@ -2319,7 +2369,7 @@ And with the wording I believe it should be obvious, that `any` does the opposit
 <details>
 <summary>Extras: listcomps inside any / all</summary>
 
-Note that the code using `any` or `call` could've also been written as a list comprehension:
+Note that the code using `any` or `all` could've also been written as a list comprehension:
 
 ```python
 >>> any([num == 0 for num in nums])
@@ -2352,7 +2402,7 @@ So, yeah. Never pass list comprehensions inside `any` or `all` when you can pass
 
 ### `abs`, `divmod`, `pow` and `round`: Math basics
 
-These four number functions are so common in programming that they have been thrown straight into the builtins where they are always available, rather than putting them in the `math` module.
+These four math functions are so common in programming that they have been thrown straight into the builtins where they are always available, rather than putting them in the `math` module.
 
 They're pretty straightforward:
 
@@ -2493,7 +2543,7 @@ False
 True  # This works!
 ```
 
-> We could've also used the `Iterable` base class, but that would behave differently for strings as strings are iterable, but aren't a container. That's why `Container` was chosen here.
+> We should've used the `Iterable` or `Collection` base class here, but that would behave differently for strings as strings are iterable, but aren't a container. That's why `Container` was chosen here. This is only for ease of explanation, and in real-world code it is recommended to see exactly which base class is appropriate for your use case. You can find that using the [docs](https://docs.python.org/3/library/collections.abc.html).
 
 Every container object type will return `True` in the check against the `Container` base class. `issubclass` works too:
 
@@ -2554,7 +2604,7 @@ Some items in Python can be "called" to return a value, like functions and class
 TypeError: 'int' object is not callable
 ```
 
-How do you even begin to check if you can try and "call" a function, class, and whatnot? The answer is actually quite simple: You just see if the object implements a `__call__` special method.
+How do you even begin to check if you can try and "call" a function, class, and whatnot? The answer is actually quite simple: You just see if the object implements the `__call__` special method.
 
 ```python
 >>> def is_callable(item):
@@ -2688,7 +2738,7 @@ Two really common concepts in functional programming are **map** and **filter**,
   25
   ```
 
-  `map` takes two arguments: a function, and a sequence. It simply runs that function with each element as input, and it stores all the outputs inside a new list. `map(square, numbers)` Took each of the numbers and returned a list of squared numbers.
+  `map` takes two arguments: a function, and a sequence. It simply runs that function with each element as input, and it stores all the outputs inside a new list. `map(square, numbers)` took each of the numbers and returned a list of squared numbers.
 
   Note that I had to do `list(map(square, numbers))`, and this is because `map` itself returns a generator. The values are lazily mapped one at a time as you request them, e.g. if you loop over a map value, it will run the map function one by one on each item of the sequence. This means that map doesn't store a complete list of mapped values and doesn't waste time computing extra values when not needed.
 
@@ -2931,11 +2981,11 @@ Unfortunately there isn't any good way to show a debugger being used in a text-f
 
 `open` is the function that lets you read and write to files.
 
-It's... actually rather straightforward, so I'm not even going to bother explaining about it. You can read the [official docs](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) about reading and writing files if you'd like to know more.
+It's... actually rather straightforward, and there aren't any obscure things about it that I can explain, so I'm not even going to bother with it. You can read the [official docs](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) about reading and writing files if you'd like to know more.
 
 ### `repr`: Developer convenience
 
-`repr` is an interesting one. It's intended use-case is simply to help the developers.
+`repr` is an interesting one. Its intended use-case is simply to help the developers.
 
 `repr` is used to create a helpful string representation of an object, hopefully one that concisely describes the object, and its current state. The intent of this is to be able to debug simple issues simply by looking at the object's repr, instead of having to probe into ints attributes at every step.
 
@@ -2981,14 +3031,14 @@ Now you don't need to wonder what this object contains. It's right in front of y
 
 ### `help`, `exit` and `quit`: site builtins
 
-Now, these builtins aren't _real_ builtins. As in, they aren't really defined in the `builtins` module. Instead, they are defined in the `site` module.
+Now, these builtins aren't _real_ builtins. As in, they aren't really defined in the `builtins` module. Instead, they are defined in the `site` module, and then injected into builtins when `site` module runs.
 
-`site` is a module that is automatically run by default when you start Python. It is responsible for setting up a few useful things, including making pip packages available for import, setting up tab completion in the REPL, among other things.
+`site` is a module that is automatically run by default when you start Python. It is responsible for setting up a few useful things, including making pip packages available for import, and setting up tab completion in the REPL, among other things.
 
 One more thing that it does is setup these few useful global functions:
 
-- `help` is used to find documentation of modules and objects. It's equivalent to the builtin `pydoc.doc()` method.
-- `exit` and `quit` quit the Python process. Calling them is equivalent to the builtin `sys.exit()`.
+- `help` is used to find documentation of modules and objects. It's equivalent to calling `pydoc.doc()`.
+- `exit` and `quit` quit the Python process. Calling them is equivalent to calling `sys.exit()`.
 
 ### `copyright`, `credits`, `license`: Important texts
 
@@ -3005,7 +3055,6 @@ Here's just a few things that we haven't even touched upon yet:
 - Type annotations
 - Metaclasses
 - Weak references
-- Garbage collection
 - The 200 or so builtin modules that do everything from html templating, to sending emails, to cryptography.
 
 And that's probably not even all of it.
