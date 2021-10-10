@@ -70,7 +70,7 @@ Python as a language is comparatively simple. And I believe, that you can learn 
 
 ## So what's a builtin?
 
-A builtin in a Python is everything that lives in the `builtins` module.
+A builtin in Python is everything that lives in the `builtins` module.
 
 To understand this better, you'll need to learn about the **L.E.G.B.** rule.
 
@@ -108,7 +108,7 @@ Running this code outputs:
 11
 ```
 
-So here's what's happening: Doing `x = 22` defines a new variable inside `some_function` is in it's own **local namespace**. After that point, when the function refers to `x` it means the one in its own scope. Accessing `x` outside of `some_function` refers to the one defined outside.
+So here's what's happening: Doing `x = 22` defines a new variable inside `some_function` that is in its own **local namespace**. After that point, whenever the function refers to `x`, it means the one in its own scope. Accessing `x` outside of `some_function` refers to the one defined outside.
 
 ### Enclosing scope
 
@@ -143,7 +143,7 @@ Outer x: 22
 Global x: 11
 ```
 
-What it essentially means is that every new function/class creates its own local scope, **separate from its outer environment**. Trying to access an outer variable will work, but any variable created in the local scope does not affect the outer scope.
+What it essentially means is that every new function/class creates its own local scope, **separate from its outer environment**. Trying to access an outer variable will work, but any variable created in the local scope does not affect the outer scope. This is why redefining x to be `33` inside the inner function doesn't affect the outer or global definitions of `x`.
 
 > But what if I want to affect the outer scope?
 
@@ -171,9 +171,9 @@ Outer x: 22
 
 ### Global scope
 
-Global scope (or module scope) simply refers to the scope where all the module's variables, functions and classes are defined.
+Global scope (or module scope) simply refers to the scope where all the module's top-level variables, functions and classes are defined.
 
-A "module" is any python file or package that can be run or imported. For eg. `time` is a module (as you can do `import time` in your code), and `time.sleep()` is a function defined in the `time` module's global scope.
+A "module" is any python file or package that can be run or imported. For eg. `time` is a module (as you can do `import time` in your code), and `time.sleep()` is a function defined in `time` module's global scope.
 
 Every module in Python has a few pre-defined globals, such as `__name__` and `__doc__`, which refer to the module's name and the module's docstring, respectively. You can try this in the REPL:
 
@@ -196,7 +196,7 @@ Now we get to the topic of this blog -- the builtin scope.
 So there's two things to know about the builtin scope in Python:
 
 - It's the scope where essentially all of Python's top level functions are defined, such as `len`, `range` and `print`.
-- When a variable is not found in the local, enclosing or global scope, Python looks for it inside the builtins.
+- When a variable is not found in the local, enclosing or global scope, Python looks for it in the builtins.
 
 You can inspect the builtins directly if you want, by importing the `builtins` module, and checking methods inside it:
 
@@ -253,12 +253,13 @@ So let's tackle the biggest group by far:
 
 ## Exceptions
 
-Python has 66 built-in exception classes, each one intended to be used by the user, the standard library and everyone else, to serve as meaningful ways to interpret and catch errors in your code.
+Python has 66 built-in exception classes (so far), each one intended to be used by the user, the standard library and everyone else, to serve as meaningful ways to interpret and catch errors in your code.
 
 To explain exactly why there's separate Exception classes in Python, here's a quick example:
 
 ```python
 def fetch_from_cache(key):
+    """Returns a key's value from cached items."""
     if key is None:
         raise ValueError('key must not be None')
 
@@ -317,13 +318,13 @@ Doing that would even catch `KeyboardInterrupt`, which would make you unable to 
 
 </details>
 
-Now I should point it out that now _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
+Now I should point it out that not _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
 
 ## Constants
 
 There's exactly 5 constants: `True`, `False`, `None`, `Ellipsis`, and `NotImplemented`.
 
-`True` `False` and `None` are the most obvious constants.
+`True`, `False` and `None` are the most obvious constants.
 
 `Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](/mypy-guide), and for some very fancy slicing support.
 
@@ -339,13 +340,23 @@ class MyNumber:
         return other + 42
 ```
 
+This results in our object acting as the value `42` during addition:
+
+```python
+>>> num = MyNumber()
+>>> num + 3
+45
+>>> num + 100
+142
+```
+
 <details>
 <summary>Extras: right-operators</summary>
 
-If you're wondering from the code example above why I never tried to do `3 + n`, it's because it doesn't work yet:
+If you're wondering from the code example above why I didn't try to do `3 + num`, it's because it doesn't work yet:
 
 ```python
->>> 100 + n
+>>> 100 + num
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: unsupported operand type(s) for +: 'int' and 'MyNumber'
@@ -362,15 +373,15 @@ class MyNumber:
         return other + 42
 ```
 
-As a bonus, this also adds support for adding two `MyNumber` classes:
+As a bonus, this also adds support for adding two `MyNumber` classes together:
 
 ```python
->>> n = MyNumber()
->>> n + 100
+>>> num = MyNumber()
+>>> num + 100
 142
->>> 3 + n
+>>> 3 + num
 45
->>> n + n
+>>> num + num
 84
 ```
 
@@ -402,13 +413,13 @@ A weird fact about constants is that they aren't even implemented in Python, the
 
 ## Funky globals
 
-There's another group of odd-looking values in the builtins output we saw above: values like `__spec__`, `__loader__`, `__debug__` etc.
+There's another group of odd-looking values in the [builtins output](#all-the-builtins) we saw above: values like `__spec__`, `__loader__`, `__debug__` etc.
 
 These are actually not unique to the `builtins` module. These properties are all present in the global scope of every module in Python, as they are _module attributes_. These hold information about the module that is required for the **import machinery**. Let's take a look at them:
 
 ### `__name__`
 
-Contains the name of the module. `builtins.__name__` will be the string `'builtins'`. When you run a Python file, that is also run as a module, and the module name for that is `__main__`. This should explain why `if __name__ == '__main__'` is used in Python files.
+Contains the name of the module. For example, `builtins.__name__` will be the string `'builtins'`. When you run a Python file, that is also run as a module, and the module name for that is `__main__`. This should explain how `if __name__ == '__main__'` works when used in Python files.
 
 ### `__doc__`
 
@@ -440,6 +451,8 @@ The package to which this module belongs. For top-level modules it is the same a
 >>> import urllib.request
 >>> urllib.__package__
 'urllib'
+>>> urllib.request.__name__
+'urllib.request'
 >>> urllib.request.__package__
 'urllib'
 ```
@@ -483,6 +496,8 @@ So you might ask, what are these weird `_frozen` modules? Well, my friend, it's 
 
 The _actual_ source code of these two modules is actually inside the `importlib.machinery` module. These `_frozen` aliases are frozen versions of the source code of these loaders. To create a frozen module, the Python code is compiled to a code object, marshalled into a file, and then added to the Python executable.
 
+> If you have no idea what that meant, don't worry, we will cover this in detail later.
+
 Python freezes these two modules because they implement the core of the import system and, thus, cannot be imported like other Python files when the interpreter boots up. Essentially, they are needed to exist to _bootstrap the import system_.
 
 Funnily enough, there's another well-defined frozen module in Python: it's `__hello__`:
@@ -521,7 +536,7 @@ This is a global, constant value in Python, which is almost always set to `True`
 
 What it refers to, is Python running in _debug mode_. And Python always runs in debug mode by default.
 
-The other mode that Python can run in, is _"optimized mode"_. To run python in "optimized mode", you can invoke it by passing the `-O` flag. And all it does, is prevents assert statements from doing anything (at least so far), which is in all honesty, not really useful at all.
+The other mode that Python can run in, is _"optimized mode"_. To run python in "optimized mode", you can invoke it by passing the `-O` flag. And all it does, is prevents assert statements from doing anything (at least so far), which in all honesty, isn't really useful at all.
 
 ```python
 $ python
@@ -537,7 +552,7 @@ $ python -O
 >>> __debug__
 False
 >>> assert False, 'some error'
->>>
+>>> # Didn't raise any error.
 ```
 
 Also, `__debug__`, `True`, `False` and `None` are the only **true constants** in Python, i.e. these 4 are the only global variables in Python that you cannot overwrite with a new value.
@@ -573,7 +588,7 @@ Subclass got data: {'num': 42, 'data': 'xyz'}
 
 Before Python 3.1, The class creation syntax only allowed passing base classes to inherit from, and a metaclass property. The new requirements were to allow variable number of positional and keyword arguments. This would be a bit messy and complex to add to the language.
 
-But, we already have this, of course, in the code for calling regular functions. So it was proposed that the `Class X(...)` syntax will simply delegate to a function call underneath: `__build_class__(cls, ...)`.
+But, we already have this, of course, in the code for calling regular functions. So it was proposed that the `Class X(...)` syntax will simply delegate to a function call underneath: `__build_class__('X', ...)`.
 
 ### `__cached__`
 
@@ -585,10 +600,10 @@ When you import a module, the `__cached__` property stores the path of the cache
 
 Yeah. Python _is_ compiled. In fact, all Python code is compiled, but not to machine code -- to **bytecode**. Let me explain this point by explaining how Python runs your code.
 
-Here are the steps that the Python interpreter does to run your code:
+Here are the steps that the Python interpreter takes to run your code:
 
 - It takes your source file, and parses it into a syntax tree. The syntax tree is a representation of your code that can be more easily understood by a program. It finds and reports any errors in the code's syntax, and ensures that there are no ambiguities.
-- The next step is to compile the source file into _bytecode_. This bytecode is a set of micro-instructions for **Python's virtual machine**. This "virtual machine" is where Python's interpreter logic resides. It essentially _emulates_ a very simple stack-based computer on your machine, in order to execute the Python code written by you.
+- The next step is to compile this syntax tree into _bytecode_. Bytecode is a set of micro-instructions for **Python's virtual machine**. This "virtual machine" is where Python's interpreter logic resides. It essentially _emulates_ a very simple stack-based computer on your machine, in order to execute the Python code written by you.
 - This bytecode-form of your code is then run on the Python VM. The bytecode instructions are simple things like pushing and popping data off the current stack. Each of these instructions, when run one after the other, executes the entire program.
 
 > We will take a really detailed example of the steps above, in the next section. Hang tight!
@@ -626,7 +641,7 @@ x = [1, 2]
 print(x)
 ```
 
-You can save this code into a file and run it, or type it in the Python REPL. In both the cases, you'll get an output.
+You can save this code into a file and run it, or type it in the Python REPL. In both the cases, you'll get an output of `[1, 2]`.
 
 Or thirdly, you can give the program as a string to Python's builtin function `exec`:
 
@@ -743,7 +758,7 @@ The module's body has two children (two statements):
           Name(id='x', ctx=Load())],
   ```
 
-Doesn't seem that bad now, right?
+So the `Assign` part is describing `x = [1, 2]` and the `Expr` is describing `print(x)`. Doesn't seem that bad now, right?
 
 <details>
 <summary>Extras: the Tokenizer</summary>
@@ -781,7 +796,7 @@ This "token stream" is what's parsed into an AST.
 
 </details>
 
-So now we have an AST object. We can _compile_ it into a code object using `compile`. Running `exec` on the code object will do the same thing:
+So now we have an AST object. We can _compile_ it into a code object using the `compile` builtin. Running `exec` on the code object will then run it just as before:
 
 ```python
 >>> import ast
@@ -793,7 +808,6 @@ So now we have an AST object. We can _compile_ it into a code object using `comp
 >>> code_obj = compile(tree, 'myfile.py', 'exec')
 >>> exec(code_obj)
 [1, 2]
->>>
 ```
 
 But now, we can look into what a code object looks like. Let's examine some of its properties:
@@ -816,7 +830,7 @@ If you want to dive deep into what the bytecode means, the extras section below 
 <details>
 <summary>Extras: the "dis" module</summary>
 
-The `dis` module in Python ...
+The `dis` module in Python can be used to visualize the contents of code objects in a human-understandable way, to help figure out what Python is doing under the hood. It takes in the bytecode, constant and variable information, and produces this:
 
 ```python
 >>> import dis
@@ -841,9 +855,9 @@ The `dis` module in Python ...
 It shows that:
 
 - Line 1 creates 4 bytecodes, to load 2 constants `1` and `2` onto the stack, build a list from the top `2` values on the stack, and store it into the variable `x`.
-- Line 2 creates 6 bytecodes, it loads `print` and `x` onto the stack, and calls the function on the stack with the `1` argument on top of it. Then it gets rid of the return value from the call by doing `POP_TOP` because we didn't use or store the return value from `print(x)`. The two lines at the end returns `None` from the end of the file's execution, which does nothing.
+- Line 2 creates 6 bytecodes, it loads `print` and `x` onto the stack, and calls the function on the stack with the `1` argument on top of it (Meaning, it calls `print` with argument `x`). Then it gets rid of the return value from the call by doing `POP_TOP` because we didn't use or store the return value from `print(x)`. The two lines at the end returns `None` from the end of the file's execution, which does nothing.
 
-Each of these bytecodes is 2 bytes long when stored as opcodes, that's why the numbers to the left of the opcodes are spaces 2 away from each other. It shows that this entire code is 20 bytes long. And indeed, if you do:
+Each of these bytecodes is 2 bytes long when stored as "opcodes" (the names that you are seeing, `LOAD_CONST` for example, are opcodes), that's why the numbers to the left of the opcodes are 2 away from each other. It also shows that this entire code is 20 bytes long. And indeed, if you do:
 
 ```python
 >>> code_obj = compile('''
@@ -860,7 +874,7 @@ You can confirm that the bytecode generated is exactly 20 bytes.
 
 </details>
 
-`eval` is pretty similar to exec, except it only accepts expressions (not statements or a set of statements like `exec`), and unlike `exec`, it returns a value -- the result of said expression.
+`eval` is pretty similar to `exec`, except it only accepts expressions (not statements or a set of statements like `exec`), and unlike `exec`, it returns a value -- the result of said expression.
 
 Here's an example:
 
@@ -881,7 +895,7 @@ You can also go the long, detailed route with `eval`, you just need to tell `ast
 
 ### `globals` and `locals`: Where everything is stored
 
-While the code objects produced store the logic as well as constants defined within a piece of code, one thing that they don't (or even can't) store, is the values of the variables being used.
+While the code objects produced store the logic as well as constants defined within a piece of code, one thing that they don't (or even can't) store, is the actual values of the variables being used.
 
 There's a few reasons for this concerning how the language works, but the most obvious reason can be seen very simply:
 
@@ -892,7 +906,7 @@ def double(number):
 
 The code object of this function will store the constant `2`, as well as the variable name `number`, but it obviously cannot contain the actual value of `number`, as that isn't given to it until the function is actually run.
 
-So where does that come from? The answer is that Python stores everything inside dictionaries associated with each local scope. Which means that every piece of code has its own defined "local scope", that contains the values corresponding to each variable name.
+So where does that come from? The answer is that Python stores everything inside dictionaries associated with each local scope. Which means that every piece of code has its own defined "local scope" which is accessed using `locals()` inside that code, that contains the values corresponding to each variable name.
 
 Let's try to see that in action:
 
