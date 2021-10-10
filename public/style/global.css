@@ -119,13 +119,15 @@ code {
   font-size: 1.12em;
 }
 code {
-  background: rgb(0, 0, 0, 0.4);
+  background: rgb(27, 27, 27, 0.4);
   padding: 0.2rem;
+  border: 0.1rem solid rgb(54, 54, 54, 0.3);
   border-radius: 0.3rem;
 }
 pre > code {
   background: unset;
   padding: unset;
+  border-width: 0;
 }
 
 @media screen and (min-width: 1601px) {
