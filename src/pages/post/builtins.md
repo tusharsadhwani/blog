@@ -6,7 +6,7 @@ author: "Tushar Sadhwani"
 heroImage: "/images/builtins.jpg"
 alt: "Understanding all of Python, through its builtins"
 layout: "../../layouts/BlogPost.astro"
-# TODO: convert the \\n back to \n once astro fixes it
+# TODO: convert the \\n and \\x back to \n and \x inside code blocks once astro fixes it
 ---
 
 Python as a language is comparatively simple. And I believe, that you can learn quite a lot about Python and its features, just by learning what all of its builtins are, and what they do. And to back up that claim, I'll be doing just that.
@@ -800,7 +800,7 @@ But now, we can look into what a code object looks like. Let's examine some of i
 
 ```python
 >>> code_obj.co_code
-b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'
+b'd\\x00d\\x01g\\x02Z\\x00e\\x01e\\x00\\x83\\x01\\x01\\x00d\\x02S\\x00'
 >>> code_obj.co_filename
 'myfile.py'
 >>> code_obj.co_names
@@ -851,7 +851,7 @@ Each of these bytecodes is 2 bytes long when stored as opcodes, that's why the n
 ... print(x)
 ... ''', 'test', 'exec')
 >>> code_obj.co_code
-b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'
+b'd\\x00d\\x01g\\x02Z\\x00e\\x01e\\x00\\x83\\x01\\x01\\x00d\\x02S\\x00'
 >>> len(code_obj.co_code)
 20
 ```
@@ -1085,8 +1085,8 @@ To prove that everything is just bytes underneath, let's look at another example
 ```python
 >>> import sys
 >>> '🐍'.encode()
-b'\xf0\x9f\x90\x8d'   # utf-8 encoded string of the snake emoji
->>> _ = sys.stdout.buffer.write(b'\xf0\x9f\x90\x8d')
+b'\\xf0\\x9f\\x90\\x8d'   # utf-8 encoded string of the snake emoji
+>>> _ = sys.stdout.buffer.write(b'\\xf0\\x9f\\x90\\x8d')
 🐍
 ```
 
@@ -2071,13 +2071,13 @@ A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to h
   >>> len(x)
   3
   >>> x.encode()
-  b'I\xe2\x99\xa5\xf0\x9f\x90\x8d'
+  b'I\\xe2\\x99\\xa5\\xf0\\x9f\\x90\\x8d'
   >>> len(x.encode())
   8
   >>> x[2]
   '🐍'
   >>> x[2].encode()
-  b'\xf0\x9f\x90\x8d'
+  b'\\xf0\\x9f\\x90\\x8d'
   >>> len(x[2].encode())
   4
   ```
@@ -2089,15 +2089,15 @@ A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to h
   '🐍'
   >>> b = x[2].encode()
   >>> b
-  b'\xf0\x9f\x90\x8d'  # 4 bytes
+  b'\\xf0\\x9f\\x90\\x8d'  # 4 bytes
   >>> b[:1]
-  b'\xf0'
+  b'\\xf0'
   >>> b[1:2]
-  b'\x9f'
+  b'\\x9f'
   >>> b[2:3]
-  b'\x90'
+  b'\\x90'
   >>> b[3:4]
-  b'\x8d'
+  b'\\x8d'
   >>> b[0]  # indexing a bytes object gives an integer
   240
   >>> b[3]
@@ -2132,7 +2132,7 @@ Meanwhile, a `memoryview` takes this idea a step further: It's pretty much just 
 ```python
 >>> array = bytearray(range(256))
 >>> array
-bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08...
+bytearray(b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08...
 >>> len(array)
 256
 >>> array_slice = array[65:91]  # Bytes 65 to 90 are uppercase english characters
@@ -2189,10 +2189,10 @@ But there are times where it makes sense to use other bases instead, like when w
 
 ```python
 >>> bytes([255, 254])
-b'\xff\xfe'              # Not very easy to comprehend
+b'\\xff\\xfe'              # Not very easy to comprehend
 >>> # This can be written as:
 >>> bytes([0xff, 0xfe])
-b'\xff\xfe'              # An exact one-to-one translation
+b'\\xff\\xfe'              # An exact one-to-one translation
 ```
 
 Or when writing OS-specific codes that are implemented in octal, for example:
