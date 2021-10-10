@@ -322,7 +322,7 @@ $ py <span class="token operator">-</span>m tokenize code<span class="token punc
 <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span>
 </code></pre><p>But now, we can look into what a code object looks like. Let’s examine some of its properties:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code_obj<span class="token punctuation">.</span>co_code
-<span class="token string">b'ddgZeedS'</span>
+<span class="token string">b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code_obj<span class="token punctuation">.</span>co_filename
 <span class="token string">'myfile.py'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code_obj<span class="token punctuation">.</span>co_names
@@ -351,7 +351,7 @@ $ py <span class="token operator">-</span>m tokenize code<span class="token punc
 ... print(x)
 ... '''</span><span class="token punctuation">,</span> <span class="token string">'test'</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">)</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code_obj<span class="token punctuation">.</span>co_code
-<span class="token string">b'ddgZeedS'</span>
+<span class="token string">b'd\x00d\x01g\x02Z\x00e\x01e\x00\x83\x01\x01\x00d\x02S\x00'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>code_obj<span class="token punctuation">.</span>co_code<span class="token punctuation">)</span>
 <span class="token number">20</span>
 </code></pre><p>You can confirm that the bytecode generated is exactly 20 bytes.</p></details><p><code>eval</code> is pretty similar to exec, except it only accepts expressions (not statements or a set of statements like <code>exec</code>), and unlike <code>exec</code>, it returns a value — the result of said expression.</p><p>Here’s an example:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> result <span class="token operator">=</span> <span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token string">'1 + 1'</span><span class="token punctuation">)</span>
@@ -462,8 +462,8 @@ Hello!
 <span class="token number">7</span>
 </code></pre><p>The buffer objects take in <code>bytes</code>, write those directly to the output buffer, and return the number of bytes returned.</p><p>To prove that everything is just bytes underneath, let’s look at another example:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> sys
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token string">'🐍'</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token string">b'ð'</span>   <span class="token comment"># utf-8 encoded string of the snake emoji</span>
-<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> _ <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout<span class="token punctuation">.</span><span class="token builtin">buffer</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">b'ð'</span><span class="token punctuation">)</span>
+<span class="token string">b'\xf0\x9f\x90\x8d'</span>   <span class="token comment"># utf-8 encoded string of the snake emoji</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> _ <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout<span class="token punctuation">.</span><span class="token builtin">buffer</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">b'\xf0\x9f\x90\x8d'</span><span class="token punctuation">)</span>
 🐍
 </code></pre><p><code>int</code> is another widely-used, fundamental primitive data type. It’s also the lowest common denominator of 2 other data types: , <code>float</code> and <code>complex</code>. <code>complex</code> is a supertype of <code>float</code>, which, in turn, is a supertype of <code>int</code>.</p><p>What this means is that all <code>int</code>s are valid as a <code>float</code> as well as a <code>complex</code>, but not the other way around. Similarly, all <code>float</code>s are also valid as a <code>complex</code>.</p><blockquote><p>If you don’t know, <code>complex</code> is the implementation for “complex numbers” in Python. They’re a really common tool for mathematics.</p></blockquote><p>Let’s take a look at them:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> x <span class="token operator">=</span> <span class="token number">5</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> y <span class="token operator">=</span> <span class="token number">5.0</span>
@@ -960,28 +960,28 @@ AttributeError<span class="token punctuation">:</span> <span class="token punctu
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
 <span class="token number">3</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> x<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token string">b'Iâ¥ð'</span>
+<span class="token string">b'I\xe2\x99\xa5\xf0\x9f\x90\x8d'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token number">8</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> x<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
 <span class="token string">'🐍'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> x<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token string">b'ð'</span>
+<span class="token string">b'\xf0\x9f\x90\x8d'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token number">4</span>
 </code></pre><p>So it turns out, that the three-character string ‘I♥🐍’ is actually eight bytes, with the snake emoji being 4 bytes long. But, in the encoded version of it, we can access each individual byte. And because it’s a byte, its “value” will always be between 0 and 255:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> x<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
 <span class="token string">'🐍'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b <span class="token operator">=</span> x<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b
-<span class="token string">b'ð'</span>  <span class="token comment"># 4 bytes</span>
+<span class="token string">b'\xf0\x9f\x90\x8d'</span>  <span class="token comment"># 4 bytes</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span>
-<span class="token string">b'ð'</span>
+<span class="token string">b'\xf0'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span>
-<span class="token string">b''</span>
+<span class="token string">b'\x9f'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>
-<span class="token string">b''</span>
+<span class="token string">b'\x90'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">]</span>
-<span class="token string">b''</span>
+<span class="token string">b'\x8d'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># indexing a bytes object gives an integer</span>
 <span class="token number">240</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>
@@ -1004,7 +1004,7 @@ AttributeError<span class="token punctuation">:</span> <span class="token punctu
 <span class="token string">'hElLo wOrLd?'</span>
 </code></pre><p>This is not a good example, and I’m not going to bother explaining it, but it works, and it is much more efficient than creating a new <code>bytes</code> object for every character change.</p><p>Meanwhile, a <code>memoryview</code> takes this idea a step further: It’s pretty much just like a bytearray, but it can refer to an object or a slice <em>by reference</em>, instead of creating a new copy for itself. It allows you to pass references to sections of bytes in memory around, and edit it in-place:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> array <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> array
-<span class="token builtin">bytearray</span><span class="token punctuation">(</span>b'<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token builtin">bytearray</span><span class="token punctuation">(</span>b'\x00\x01\x02\x03\x04\x05\x06\x07\x08<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span>
 <span class="token number">256</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> array_slice <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">65</span><span class="token punctuation">:</span><span class="token number">91</span><span class="token punctuation">]</span>  <span class="token comment"># Bytes 65 to 90 are uppercase english characters</span>
@@ -1044,10 +1044,10 @@ AttributeError<span class="token punctuation">:</span> <span class="token punctu
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token number">0o100</span> <span class="token operator">==</span> <span class="token number">64</span>
 <span class="token boolean">True</span>
 </code></pre><p>But there are times where it makes sense to use other bases instead, like when writing bytes:</p><pre class=""><code class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">254</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token string">b'ÿþ'</span>              <span class="token comment"># Not very easy to comprehend</span>
+<span class="token string">b'\xff\xfe'</span>              <span class="token comment"># Not very easy to comprehend</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token comment"># This can be written as:</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0xff</span><span class="token punctuation">,</span> <span class="token number">0xfe</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token string">b'ÿþ'</span>              <span class="token comment"># An exact one-to-one translation</span>
+<span class="token string">b'\xff\xfe'</span>              <span class="token comment"># An exact one-to-one translation</span>
 </code></pre><p>Or when writing OS-specific codes that are implemented in octal, for example:</p><pre class=""><code class="language-python"><span class="token keyword">import</span> os
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> os<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'file.txt'</span><span class="token punctuation">,</span> os<span class="token punctuation">.</span>O_RDWR<span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token number">384</span><span class="token punctuation">)</span>    <span class="token comment"># ???</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token comment"># This can be written as:</span>
