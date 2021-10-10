@@ -44,12 +44,12 @@ Python as a language is comparatively simple. And I believe, that you can learn 
   - [`hash` and `id`: The equality fundamentals](#hash-and-id-the-equality-fundamentals)
   - [`dir` and `vars`: Everything is a dictionary](#dir-and-vars-everything-is-a-dictionary)
   - [`hasattr`, `getattr`, `setattr` and `delattr`: Attribute helpers](#hasattr-getattr-setattr-and-delattr-attribute-helpers)
-  - [`super`](#super)
+  - [`super`: The power of inheritance](#super-the-power-of-inheritance)
   - [`property`, `classmethod` and `staticmethod`: Method decorators](#property-classmethod-and-staticmethod-method-decorators)
   - [`list`, `tuple`, `dict`, `set` and `frozenset`: The containers](#list-tuple-dict-set-and-frozenset-the-containers)
   - [`bytearray` and `memoryview`: Better byte interfaces](#bytearray-and-memoryview-better-byte-interfaces)
   - [`bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions](#bin-hex-oct-ord-chr-and-ascii-basic-conversions)
-  - [`format`](#format)
+  - [`format`: Easy text transforms](#format-easy-text-transforms)
   - [`any` and `all`](#any-and-all)
   - [`abs`, `divmod`, `pow` and `round`: Math basics](#abs-divmod-pow-and-round-math-basics)
   - [`isinstance` and `issubclass`: Runtime type checking](#isinstance-and-issubclass-runtime-type-checking)
@@ -1794,7 +1794,7 @@ You _could_ do this in an object by using try-catch:
 prop doesn't exist.
 ```
 
-But the preferred method to do this would be direct equivalent: `hasattr`
+But the preferred method to do this would be direct equivalent: `hasattr`.
 
 ```python
 >>> class X:
@@ -1868,7 +1868,7 @@ def upload_data(item):
         api.send(item)
 ```
 
-Yeah, that should be it!
+The `upload_data` function is checking if we have gotten a factory object, by checking if it has a `get_value` method. If it does, that function is used to get the actual value to upload. Let's try to use it!
 
 ```python
 >>> import json
@@ -1889,11 +1889,11 @@ Uploaded 'some text'!
 Uploaded '[42, 1000]'!
 ```
 
-### `super`
+### `super`: The power of inheritance
 
 `super` is Python's way of referencing a superclass, to use its methods, for example.
 
-Take this example, of a class that encapsulates the logic of summing two items.
+Take this example, of a class that encapsulates the logic of summing two items:
 
 ```python
 class Sum:
@@ -1966,9 +1966,11 @@ We're reaching the end of all the class and object-related builtin functions, th
 
       @marks.setter
       def marks(self, new_value):
+          # Doing validation
           if new_value < 0:
               raise ValueError('marks cannot be negative')
 
+          # before actually setting the value.
           self._marks = new_value
   ```
 
@@ -2005,14 +2007,14 @@ We're reaching the end of all the class and object-related builtin functions, th
 - `staticmethod`:
   `@staticmethod` is used to convert a method into a static method: one equivalent to a function sitting inside a class, independent of any class or object properties. Using this completely gets rid of the first `self` argument passed to methods.
 
-  We could make one that for some data validation for example:
+  We could make one that does some data validation for example:
 
   ```python
   class API:
       @staticmethod
-      def is_valid_title(title):
+      def is_valid_title(title_text):
           """Checks whether the string can be used as a blog title."""
-          return title.istitle() and len(title) < 60
+          return title_text.istitle() and len(title_text) < 60
   ```
 
 These builtins are created using a pretty advanced topic called **descriptors**. I'll be honest, descriptors are a topic that is so advanced that trying to cover it here won't be of any use beyond what has already been told. I'm planning on writing a detailed article on descriptors and their uses sometime in the future, so stay tuned for that!
@@ -2111,7 +2113,7 @@ A `bytearray` is the mutable equivalent of a `bytes` object, pretty similar to h
 
 `bytearray` makes a lot of sense, as:
 
-- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficien
+- A lot of low-level interactions have to do with byte and bit manipulation, like this [horrible implementation for `str.upper`](https://twitter.com/sadhlife/status/1441654357691305989), so having a byte array where you can mutate individual bytes is going to be much more efficient.
 - Bytes have a fixed size (which is... 1 byte). On the other hand, string characters can have various sizes thanks to the unicode encoding standard, "utf-8":
 
   ```python
@@ -2200,7 +2202,7 @@ bytearray(b'aBCDEFGHIJKLMNOPQRSTUVWXYZ')  # 'A' is now lowercase.
 bytearray(b'KLMNO')
 >>> view[10:15] = bytearray(view[10:15]).lower()
 >>> bytearray(view)
-bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified in-place.
+bytearray(b'aBCDEFGHIJklmnoPQRSTUVWXYZ')  # Modified 'KLMNO' in-place.
 ```
 
 ### `bin`, `hex`, `oct`, `ord`, `chr` and `ascii`: Basic conversions
@@ -2247,7 +2249,7 @@ Or when writing OS-specific codes that are implemented in octal, for example:
 
 ```python
 import os
->>> os.open('file.txt', os.O_RDWR, mode=384)    # ???
+>>> os.open('file.txt', os.O_RDWR, mode=384)    # ??? what's 384
 >>> # This can be written as:
 >>> os.open('file.txt', os.O_RDWR, mode=0o600)  # mode is 600 -> read-write
 ```
@@ -2272,13 +2274,13 @@ Note that `bin` for example is only supposed to be used when you want to create 
 '0x1f40d'
 >>> chr(0x1f40d)
 '🐍'
->>> '\U0001f40d'  # The same value, as a unicode escape inside a string
+>>> '\\U0001f40d'  # The same value, as a unicode escape inside a string
 '🐍'
 ```
 
 It's pretty simple.
 
-### `format`
+### `format`: Easy text transforms
 
 `format(string, spec)` is just another way to do `string.format(spec)`.
 
@@ -2367,7 +2369,7 @@ And with the wording I believe it should be obvious, that `any` does the opposit
 <details>
 <summary>Extras: listcomps inside any / all</summary>
 
-Note that the code using `any` or `call` could've also been written as a list comprehension:
+Note that the code using `any` or `all` could've also been written as a list comprehension:
 
 ```python
 >>> any([num == 0 for num in nums])
@@ -2400,7 +2402,7 @@ So, yeah. Never pass list comprehensions inside `any` or `all` when you can pass
 
 ### `abs`, `divmod`, `pow` and `round`: Math basics
 
-These four number functions are so common in programming that they have been thrown straight into the builtins where they are always available, rather than putting them in the `math` module.
+These four math functions are so common in programming that they have been thrown straight into the builtins where they are always available, rather than putting them in the `math` module.
 
 They're pretty straightforward:
 
@@ -2541,7 +2543,7 @@ False
 True  # This works!
 ```
 
-> We could've also used the `Iterable` base class, but that would behave differently for strings as strings are iterable, but aren't a container. That's why `Container` was chosen here.
+> We should've used the `Iterable` or `Collection` base class here, but that would behave differently for strings as strings are iterable, but aren't a container. That's why `Container` was chosen here. This is only for ease of explanation, and in real-world code it is recommended to see exactly which base class is appropriate for your use case. You can find that using the [docs](https://docs.python.org/3/library/collections.abc.html).
 
 Every container object type will return `True` in the check against the `Container` base class. `issubclass` works too:
 
@@ -2602,7 +2604,7 @@ Some items in Python can be "called" to return a value, like functions and class
 TypeError: 'int' object is not callable
 ```
 
-How do you even begin to check if you can try and "call" a function, class, and whatnot? The answer is actually quite simple: You just see if the object implements a `__call__` special method.
+How do you even begin to check if you can try and "call" a function, class, and whatnot? The answer is actually quite simple: You just see if the object implements the `__call__` special method.
 
 ```python
 >>> def is_callable(item):
@@ -2736,7 +2738,7 @@ Two really common concepts in functional programming are **map** and **filter**,
   25
   ```
 
-  `map` takes two arguments: a function, and a sequence. It simply runs that function with each element as input, and it stores all the outputs inside a new list. `map(square, numbers)` Took each of the numbers and returned a list of squared numbers.
+  `map` takes two arguments: a function, and a sequence. It simply runs that function with each element as input, and it stores all the outputs inside a new list. `map(square, numbers)` took each of the numbers and returned a list of squared numbers.
 
   Note that I had to do `list(map(square, numbers))`, and this is because `map` itself returns a generator. The values are lazily mapped one at a time as you request them, e.g. if you loop over a map value, it will run the map function one by one on each item of the sequence. This means that map doesn't store a complete list of mapped values and doesn't waste time computing extra values when not needed.
 
@@ -2979,11 +2981,11 @@ Unfortunately there isn't any good way to show a debugger being used in a text-f
 
 `open` is the function that lets you read and write to files.
 
-It's... actually rather straightforward, so I'm not even going to bother explaining about it. You can read the [official docs](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) about reading and writing files if you'd like to know more.
+It's... actually rather straightforward, and there aren't any obscure things about it that I can explain, so I'm not even going to bother with it. You can read the [official docs](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) about reading and writing files if you'd like to know more.
 
 ### `repr`: Developer convenience
 
-`repr` is an interesting one. It's intended use-case is simply to help the developers.
+`repr` is an interesting one. Its intended use-case is simply to help the developers.
 
 `repr` is used to create a helpful string representation of an object, hopefully one that concisely describes the object, and its current state. The intent of this is to be able to debug simple issues simply by looking at the object's repr, instead of having to probe into ints attributes at every step.
 
@@ -3029,14 +3031,14 @@ Now you don't need to wonder what this object contains. It's right in front of y
 
 ### `help`, `exit` and `quit`: site builtins
 
-Now, these builtins aren't _real_ builtins. As in, they aren't really defined in the `builtins` module. Instead, they are defined in the `site` module.
+Now, these builtins aren't _real_ builtins. As in, they aren't really defined in the `builtins` module. Instead, they are defined in the `site` module, and then injected into builtins when `site` module runs.
 
-`site` is a module that is automatically run by default when you start Python. It is responsible for setting up a few useful things, including making pip packages available for import, setting up tab completion in the REPL, among other things.
+`site` is a module that is automatically run by default when you start Python. It is responsible for setting up a few useful things, including making pip packages available for import, and setting up tab completion in the REPL, among other things.
 
 One more thing that it does is setup these few useful global functions:
 
-- `help` is used to find documentation of modules and objects. It's equivalent to the builtin `pydoc.doc()` method.
-- `exit` and `quit` quit the Python process. Calling them is equivalent to the builtin `sys.exit()`.
+- `help` is used to find documentation of modules and objects. It's equivalent to calling `pydoc.doc()`.
+- `exit` and `quit` quit the Python process. Calling them is equivalent to calling `sys.exit()`.
 
 ### `copyright`, `credits`, `license`: Important texts
 
@@ -3053,7 +3055,6 @@ Here's just a few things that we haven't even touched upon yet:
 - Type annotations
 - Metaclasses
 - Weak references
-- Garbage collection
 - The 200 or so builtin modules that do everything from html templating, to sending emails, to cryptography.
 
 And that's probably not even all of it.
