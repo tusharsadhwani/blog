@@ -21,7 +21,7 @@ export async function getStaticPaths({paginate, rss}) {
       title: item.title,
       description: item.description,
       link: item.url,
-      pubDate: item.date,
+      pubDate: new Date(item.publishDate).toISOString(),
     })),
   });
 
