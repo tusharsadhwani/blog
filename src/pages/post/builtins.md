@@ -158,7 +158,7 @@ def outer_function():
         x = 22
         print('Inner x:', x)
 
-    inner_funcion()
+    inner_function()
     print('Outer x:', x)
 ```
 
