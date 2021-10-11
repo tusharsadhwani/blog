@@ -2901,7 +2901,7 @@ You can do this instead:
 
 ```python
 >>> menu = ['eggs', 'spam', 'bacon']
->>> for index, item in enumerate(menu):
+>>> for index, item in enumerate(menu, start=1):
 ...     print(f'{index}: {item}')
 ...
 1: eggs
