@@ -1452,6 +1452,9 @@ These can be defined in this way:
 ```python
 class list:
     def __eq__(self, other):
+        if len(self) != len(other):
+            return False
+
         return all(x == y for x, y in zip(self, other))
 
         # Can also be written as:
@@ -1465,6 +1468,9 @@ Similarly, sets are unordered so even their location doesn't matter, only their 
 ```python
 class list:
     def __eq__(self, other):
+        if len(self) != len(other):
+            return False
+
         return all(item in other for item in self)
 ```
 
