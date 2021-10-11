@@ -326,7 +326,7 @@ There's exactly 5 constants: `True`, `False`, `None`, `Ellipsis`, and `NotImplem
 
 `True`, `False` and `None` are the most obvious constants.
 
-`Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](/mypy-guide), and for some very fancy slicing support.
+`Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](mypy-guide), and for some very fancy slicing support.
 
 `NotImplemented` is the most interesting of them all _(other than the fact that `True` and `False` actually function as `1` and `0` if you didn't know that, but I digress)_. `NotImplemented` is used inside a class' operator definitions, when you want to tell Python that a certain operator isn't defined for this class.
 
