@@ -2292,7 +2292,7 @@ Python's string formatting can do a lot of interesting things, like:
 >>> format(604, 'f')            # int to float
 '604.000000'
 >>> format(357/18, '.2f')       # specify decimal precision
-'19.83%'
+'19.83'
 >>> format(604, 'x')            # int to hex
 '25c'
 >>> format(604, 'b')            # int to binary
@@ -2317,7 +2317,7 @@ def validate_responses(responses):
         # Make sure that `id` exists
         if 'id' not in response:
             return False
-        # Make sure it is an integer
+        # Make sure it is a string
         if not isinstance(response['id'], str):
             return False
         # Make sure it is 20 characters
