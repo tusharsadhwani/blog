@@ -1107,7 +1107,7 @@ AttributeError<span class="token punctuation">:</span> <span class="token punctu
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">format</span><span class="token punctuation">(</span><span class="token number">604</span><span class="token punctuation">,</span> <span class="token string">'f'</span><span class="token punctuation">)</span>            <span class="token comment"># int to float</span>
 <span class="token string">'604.000000'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">format</span><span class="token punctuation">(</span><span class="token number">357</span><span class="token operator">/</span><span class="token number">18</span><span class="token punctuation">,</span> <span class="token string">'.2f'</span><span class="token punctuation">)</span>       <span class="token comment"># specify decimal precision</span>
-<span class="token string">'19.83%'</span>
+<span class="token string">'19.83'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">format</span><span class="token punctuation">(</span><span class="token number">604</span><span class="token punctuation">,</span> <span class="token string">'x'</span><span class="token punctuation">)</span>            <span class="token comment"># int to hex</span>
 <span class="token string">'25c'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">format</span><span class="token punctuation">(</span><span class="token number">604</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">)</span>            <span class="token comment"># int to binary</span>
@@ -1121,7 +1121,7 @@ AttributeError<span class="token punctuation">:</span> <span class="token punctu
         <span class="token comment"># Make sure that `id` exists</span>
         <span class="token keyword">if</span> <span class="token string">'id'</span> <span class="token keyword">not</span> <span class="token keyword">in</span> response<span class="token punctuation">:</span>
             <span class="token keyword">return</span> <span class="token boolean">False</span>
-        <span class="token comment"># Make sure it is an integer</span>
+        <span class="token comment"># Make sure it is a string</span>
         <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>response<span class="token punctuation">[</span><span class="token string">'id'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
             <span class="token keyword">return</span> <span class="token boolean">False</span>
         <span class="token comment"># Make sure it is 20 characters</span>
