@@ -1067,6 +1067,23 @@ with print_writer('myfile.txt'):
 print('and regular print still works!')
 ```
 
+Sending prints to files or IO objects is a common enough use-case that `contextlib` has a pre-defined function for it, called `redirect_stdout`:
+
+```python
+from contextlib import redirect_stdout
+
+with open('this.txt', 'w') as file:
+    with redirect_stdout(file):
+        import this
+
+with open('this.txt') as file:
+    print(file.read())
+
+# Output:
+# The Zen of Python, by Tim Peters
+# ...
+```
+
 </details>
 
 `flush` is a boolean flag to the `print` function. All it does is tell `print` to write the text immediately to the console/file instead of putting it in a buffer. This usually doesn't make much of a difference, but if you're printing a very large string to a console, you might want to set it to `True`
