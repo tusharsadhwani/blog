@@ -298,7 +298,7 @@ There's 3 things that can happen in that function:
 If `ValueError` and `KeyError` weren't predefined, meaningful error types, there wouldn't be any way to differentiate between error types in this way.
 
 <details>
-<summary>P.S. Some extra Exception trivia...</summary>
+<summary>Extras: Exception trivia</summary>
 
 A fun fact about exceptions is that they can be sub-classed to make your own, more specific error types. For example, you can create a `InvalidEmailError` extending `ValueError`, to raise errors when you expected to receive an E-mail string, but it wasn't valid. If you do this, you'll be able to catch `InvalidEmailError` by doing `except ValueError` as well.
 
@@ -318,7 +318,7 @@ Doing that would even catch `KeyboardInterrupt`, which would make you unable to 
 
 </details>
 
-Now I should point it out that not _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
+Now I should point out that not _all_ uppercase values in that output above were exception types, there's in-fact, 1 another type of built-in objects in Python that are uppercase: constants. So let's talk about those.
 
 ## Constants
 
