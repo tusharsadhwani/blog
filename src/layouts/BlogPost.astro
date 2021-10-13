@@ -12,8 +12,35 @@ const {title, description, publishDate, author, heroImage, alt} = content;
   <head>
     <BaseHead title={title} description={description} heroImage={heroImage} />
   </head>
+  <style>
+    body {
+      position: relative;
+    }
+    .back-to-top-wrapper {
+      position: absolute;
+      top: 150vh;
+      bottom: 0;
+      right: 1.5rem;
+      pointer-events: none;
+    }
+    .back-to-top-link {
+      position: fixed;  /* backwards compatibility */
+      position: sticky;
+      pointer-events: all;
+      top: calc(100vh - 4.5rem);
+      background: var(--border-color);
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 9999px;
+      color: white;
+      box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3), 0 4px 8px rgb(0, 0, 0, 0.4);
+    }
+  </style>
 
-  <body>
+  <body id="top">
     <BlogHeader />
     <BlogPost title={title} author={author} heroImage={heroImage} publishDate={publishDate} alt={alt}>
       <slot />
@@ -21,6 +48,13 @@ const {title, description, publishDate, author, heroImage, alt} = content;
     <hr />
     <div class="centered">
       <Newsletter client:only />
+    </div>
+    <div class="back-to-top-wrapper">
+      <a href="#top" class="back-to-top-link" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+        </svg>
+      </a>
     </div>
     <script
       src="https://utteranc.es/client.js"
