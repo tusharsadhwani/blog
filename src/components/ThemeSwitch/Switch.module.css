@@ -24,7 +24,6 @@
   border-radius: 1.25rem;
   top: 0.125rem;
   left: 0.125rem;
-  transition: 200ms linear;
 }
 
 .themeSwitch input:checked + label::after {
@@ -35,6 +34,8 @@
   background-color: var(--shadow-color);
 }
 
-:global(body) {
-  transition: 200ms linear;
+@media screen and (prefers-reduced-motion: no-preference) {
+  .themeSwitch label::after {
+    transition: 200ms linear;
+  }
 }
