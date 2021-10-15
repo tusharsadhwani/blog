@@ -20,7 +20,7 @@ const {title, description, publishDate, author, heroImage, alt} = content;
       position: absolute;
       top: 150vh;
       bottom: 0;
-      right: 1.5rem;
+      right: 0.6rem;
       pointer-events: none;
     }
     .back-to-top-link {
@@ -37,6 +37,11 @@ const {title, description, publishDate, author, heroImage, alt} = content;
       border-radius: 9999px;
       color: white;
       box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3), 0 4px 8px rgb(0, 0, 0, 0.4);
+    }
+    @media screen and (max-width: 700px) {
+      .back-to-top-link {
+        top: calc(100vh - 3.6rem);
+      }
     }
   </style>
 
