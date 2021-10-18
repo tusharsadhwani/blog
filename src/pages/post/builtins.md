@@ -1747,7 +1747,7 @@ I can understand if this is getting too confusing. Let me just show an example:
 ...         # Trying to create `self.z` here will cause the same
 ...         # `AttributeError` as before.
 ...
->>> n = SlottedClass()
+>>> s = SlottedClass()
 >>> s.__dict__
 AttributeError: 'SlottedClass' object has no attribute '__dict__'
 >>> s.__slots__
