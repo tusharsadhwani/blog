@@ -834,7 +834,7 @@ AttributeError<span class="token punctuation">:</span> <span class="token string
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>         <span class="token comment"># Trying to create `self.z` here will cause the same</span>
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>         <span class="token comment"># `AttributeError` as before.</span>
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> n <span class="token operator">=</span> SlottedClass<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s <span class="token operator">=</span> SlottedClass<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__dict__
 AttributeError<span class="token punctuation">:</span> <span class="token string">'SlottedClass'</span> <span class="token builtin">object</span> has no attribute <span class="token string">'__dict__'</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__slots__
