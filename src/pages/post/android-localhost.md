@@ -4,7 +4,7 @@ description: "Figure out how to setup your android development environment, the 
 publishDate: "Saturday, 17 April 2021"
 author: "Tushar Sadhwani"
 heroImage: "/images/android-localhost.jpg"
-alt: "Connecting android apps to localost, simplified"
+alt: "Connecting android apps to localhost, simplified"
 layout: "../../layouts/BlogPost.astro"
 ---
 
