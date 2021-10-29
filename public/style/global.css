@@ -15,10 +15,10 @@
 }
 :root[data-theme="light"] {
   --background-color: rgb(233, 233, 255);
-  --highlight-color: rgb(188, 173, 255);
-  --border-color: rgb(117, 117, 255);
+  --highlight-color: rgb(235, 230, 255);
+  --border-color: rgb(171, 171, 255);
   --primary-color: rgb(60, 40, 161);
-  --link-color: rgb(9, 126, 180);
+  --link-color: rgb(0, 120, 175);
   --active-color: rgb(190, 39, 163);
   --subheading-color: rgba(0, 0, 0, 0.7);
   --shadow-color: rgb(141, 141, 197);
@@ -95,7 +95,7 @@ body::-webkit-scrollbar-thumb {
 pre {
   background: var(--highlight-color);
   padding: 1em;
-  border: 2px solid var(--border-color);
+  border: 0.1rem solid var(--border-color);
   border-radius: 0.5rem;
   overflow: auto;
   display: flex;
@@ -116,9 +116,9 @@ code {
   font-size: 1.12em;
 }
 code {
-  background: rgb(27, 27, 27, 0.4);
+  background: var(--highlight-color);
   padding: 0.2rem;
-  border: 0.1rem solid rgb(54, 54, 54, 0.3);
+  border: 0.1rem solid var(--border-color);
   border-radius: 0.3rem;
 }
 pre > code {
