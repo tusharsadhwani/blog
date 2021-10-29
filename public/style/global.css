@@ -105,6 +105,7 @@ pre {
   background: var(--highlight-color);
   padding: 1em;
   border: 2px solid var(--border-color);
+  border-radius: 0.5rem;
   overflow: auto;
   display: flex;
 }
@@ -133,6 +134,12 @@ pre > code {
   background: unset;
   padding: unset;
   border-width: 0;
+}
+code[class*="language-"],
+pre[class*="language-"] {
+  font-size: 1.15rem;
+  line-height: 1.4;
+  letter-spacing: 0.04rem;
 }
 
 @media screen and (min-width: 1601px) {
