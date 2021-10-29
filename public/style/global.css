@@ -3,35 +3,26 @@
   margin: 0;
 }
 :root {
-  --background-color-dark: rgb(10, 10, 20);
-  --highlight-color-dark: rgb(15, 15, 30);
-  --border-color-dark: rgb(30, 30, 60);
-  --primary-color-dark: rgb(90, 60, 235);
-  --link-color-dark: rgb(15, 180, 255);
-  --active-color-dark: rgb(255, 54, 218);
-  --subheading-color-dark: rgba(255, 255, 255, 0.7);
-  --shadow-color-dark: rgb(26, 26, 36);
-  --text-color-dark: white;
-
-  --background-color-light: rgb(233, 233, 255);
-  --highlight-color-light: rgb(188, 173, 255);
-  --border-color-light: rgb(117, 117, 255);
-  --primary-color-light: rgb(60, 40, 161);
-  --link-color-light: rgb(9, 126, 180);
-  --active-color-light: rgb(190, 39, 163);
-  --subheading-color-light: rgba(0, 0, 0, 0.7);
-  --shadow-color-light: rgb(141, 141, 197);
-  --text-color-light: black;
-
-  --background-color: var(--background-color-dark);
-  --highlight-color: var(--highlight-color-dark);
-  --border-color: var(--border-color-dark);
-  --primary-color: var(--primary-color-dark);
-  --link-color: var(--link-color-dark);
-  --active-color: var(--active-color-dark);
-  --subheading-color: var(--subheading-color-dark);
-  --shadow-color: var(--shadow-color-dark);
-  --text-color: var(--text-color-dark);
+  --background-color: rgb(10, 10, 20);
+  --highlight-color: rgb(15, 15, 30);
+  --border-color: rgb(30, 30, 60);
+  --primary-color: rgb(90, 60, 235);
+  --link-color: rgb(15, 180, 255);
+  --active-color: rgb(255, 54, 218);
+  --subheading-color: rgba(255, 255, 255, 0.7);
+  --shadow-color: rgb(26, 26, 36);
+  --text-color: white;
+}
+:root[data-theme="light"] {
+  --background-color: rgb(233, 233, 255);
+  --highlight-color: rgb(188, 173, 255);
+  --border-color: rgb(117, 117, 255);
+  --primary-color: rgb(60, 40, 161);
+  --link-color: rgb(9, 126, 180);
+  --active-color: rgb(190, 39, 163);
+  --subheading-color: rgba(0, 0, 0, 0.7);
+  --shadow-color: rgb(141, 141, 197);
+  --text-color: black;
 }
 
 html,
