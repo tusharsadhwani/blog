@@ -15,8 +15,8 @@
 }
 :root[data-theme="light"] {
   --background-color: rgb(233, 233, 255);
-  --highlight-color: rgb(235, 230, 255);
-  --border-color: rgb(171, 171, 255);
+  --highlight-color: rgb(235, 235, 255);
+  --border-color: rgb(200, 200, 255);
   --primary-color: rgb(60, 40, 161);
   --link-color: rgb(0, 120, 175);
   --active-color: rgb(190, 39, 163);
