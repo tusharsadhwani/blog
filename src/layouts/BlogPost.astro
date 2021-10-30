@@ -38,6 +38,9 @@ const {title, description, publishDate, author, heroImage, alt} = content;
       color: white;
       box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3), 0 4px 8px rgb(0, 0, 0, 0.4);
     }
+    :global(:root[data-theme="light"] .back-to-top-link) {
+      background-color: var(--primary-color);
+    }
     @media screen and (max-width: 700px) {
       .back-to-top-link {
         top: calc(100vh - 3.6rem);

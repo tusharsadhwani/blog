@@ -30,10 +30,6 @@
   left: calc(100% - 1.375rem);
 }
 
-.themeSwitch input:checked + label {
-  background-color: var(--shadow-color);
-}
-
 @media screen and (prefers-reduced-motion: no-preference) {
   .themeSwitch label::after {
     transition: 200ms linear;
