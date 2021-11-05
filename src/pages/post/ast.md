@@ -22,6 +22,8 @@ All your code is a tree of data.
 
 ### All the `Node`s
 
+### What's a `ctx`?
+
 ### AST utilities
 
 ## The power of AST manipulation
