@@ -9,3 +9,37 @@ layout: "../../layouts/BlogPost.astro"
 ---
 
 > This is currently a work in progress.
+
+<!-- Remember to add a twitter mention here :") -->
+
+## So what is an AST?
+
+All your code is a tree of data.
+
+## Why is it important?
+
+## The `ast` module
+
+### All the `Node`s
+
+### AST utilities
+
+## The power of AST manipulation
+
+Some really bizarre examples of modifying your code's runtime behaviour go here.
+
+## Let's build: A simple linter
+
+ASTs let you examine code patterns as well, they're really nice.
+
+## What about code formatters?
+
+You need whitespace info, comments and other details that ASTs drop, like what
+kind of quotes did you use, single or double. for that for most cases.
+Which means you need a CST.
+
+Differentiate between the two, and point towards libcst.
+
+## Where can I learn more?
+
+Read the docs, ast, libcst and and greentreesnakes.
