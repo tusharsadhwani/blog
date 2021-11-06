@@ -22,13 +22,19 @@ All your code is a tree of data.
 
 ### All the `Node`s
 
-### What's a `ctx`?
+~~ somewhere in here, the idea of visitors is to be explained.
 
-### AST utilities
+### What's a `ctx`?
 
 ## The power of AST manipulation
 
 Some really bizarre examples of modifying your code's runtime behaviour go here.
+
+~~ explain transformers here?
+
+### AST utilities
+
+~~ fix missing locations, literal eval, parse/unparse, and walk
 
 ## Let's build: A simple linter
 
