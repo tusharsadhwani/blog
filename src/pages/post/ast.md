@@ -21,7 +21,7 @@ The programs that you and I write in our language of choice is usually called th
 
 On the other end, computer chips can only understand "machine code", which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers in this "machine code" are instructions, which tell the CPU a simple task to perform, like "add the numbers stored in these two places", or "jump 10 numbers down and continue running code from there". The instructions in machine code are run one by one, and they dictate the flow of the program.
 
-And similarly, in all the languages that I know of, you define your programs as a set of "statements", with each statement being like an analogue to the instructions in the machine code. These statements also run one-by-one, and define the behaviour of your software.
+And similarly, in all the languages that I know of, you define your programs as a set of "statements", with each statement being an analogue to the instructions in the machine code. These statements also run one-by-one, and define the behaviour of your software.
 
 I know that the theory is hard to understand if you've never heard of these terms before, so I'm going to go through a bunch of examples. So let's write the same statements in many languages:
 
