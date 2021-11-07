@@ -1,10 +1,10 @@
 ---
-title: "Understand Python's ASTs, by building your own linter"
+title: "Learn Python ASTs, by building your own linter"
 description: "The only resource you need to read to learn about ASTs in Python, and the superpowers they give you."
 publishDate: "Thursday, 4 November 2000"
 author: "Tushar Sadhwani"
 heroImage: "/images/ast.jpg"
-alt: "Understand Python's ASTs, by building your own linter"
+alt: "Learn Python ASTs, by building your own linter"
 layout: "../../layouts/BlogPost.astro"
 ---
 
@@ -14,7 +14,10 @@ layout: "../../layouts/BlogPost.astro"
 
 ## So what is an AST?
 
-All your code is a tree of data.
+To answer that question, we must first understand the structure of a computer
+program.
+
+Basically, all your code represents a tree of data. And that tree is called the Abstract Syntax Tree.
 
 ## Why is it important?
 
