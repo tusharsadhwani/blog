@@ -23,7 +23,7 @@ On the other end, computer chips can only understand "machine code", which is a 
 
 And similarly, in all the languages that I know of, you define your programs as a set of "statements", with each statement being an analogue to the instructions in the machine code. These statements also run one-by-one, and define the behaviour of your software.
 
-I know that the theory is hard to understand if you've never heard of these terms before, so I'm going to go through a bunch of examples. So let's write the same statements in many languages:
+I know that the theory is hard to understand if you've never heard of these terms before, so I'm going to go through a bunch of examples. So let's write the same code in many languages:
 
 - Python
 
