@@ -89,7 +89,7 @@ We're doing essentially the same thing in all of these, and I'll break it down p
 
 - For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing more statements, like one that prints out the value of `area_of_circle` called with the radius of 5.
 
-You can sort-of start to see a somewhat repetitive nature of source code. There's blocks of statements, and within those statements sometimes, there can be more statements, and so on. If you imagine each statement to be a "node", then you can imagine each of these "nodes" being composed of one or more other "nodes". You can properly define this kind of structure as a "tree":
+You can start to see the somewhat repetitive nature of source code. There's blocks of statements, and sometimes within those statements there can be more statements, and so on. If you imagine each statement to be a "node", then you can think of each of these nodes being composed of one or more other "nodes". You can properly define this kind of structure as a "tree":
 
 ```text
                  (program)
