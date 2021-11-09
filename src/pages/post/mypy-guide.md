@@ -14,7 +14,7 @@ All mypy does is check your type hints. It's **not like TypeScript**, which need
 
 This gives us the advantage of having types, as you can know for certain that there is no type-mismatch in your code, just as you can in typed, compiled languages like C++ and Java, but you also get the benefit of being Python 🐍✨ _(you also get other benefits like null safety!)_
 
-For a more detailed explanation on what are types useful for, head over to the blog I wrote previously: [Does Python need types?](./does-python-need-types)
+For a more detailed explanation on what are types useful for, head over to the blog I wrote previously: [Does Python need types?](/post/does-python-need-types)
 
 This article is going to be a deep dive for anyone who wants to learn about mypy, and all of its capabilities.
 
@@ -81,7 +81,7 @@ Success: no issues found in 1 source file
 
 🤨
 
-Don't worry though, it's nothing unexpected. As explained in [my previous article](./does-python-need-types), **mypy doesn't force you to add types to your code**. But, if it finds types, it will evaluate them.
+Don't worry though, it's nothing unexpected. As explained in [my previous article](/post/does-python-need-types), **mypy doesn't force you to add types to your code**. But, if it finds types, it will evaluate them.
 
 This can definitely lead to mypy missing entire parts of your code just because you accidentally forgot to add types.
 
