@@ -326,7 +326,7 @@ There's exactly 5 constants: `True`, `False`, `None`, `Ellipsis`, and `NotImplem
 
 `True`, `False` and `None` are the most obvious constants.
 
-`Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](mypy-guide), and for some very fancy slicing support.
+`Ellipsis` is an interesting one, and it's actually represented in two forms: the word `Ellipsis`, and the symbol `...`. It mostly exists to support [type annotations](./mypy-guide), and for some very fancy slicing support.
 
 `NotImplemented` is the most interesting of them all _(other than the fact that `True` and `False` actually function as `1` and `0` if you didn't know that, but I digress)_. `NotImplemented` is used inside a class' operator definitions, when you want to tell Python that a certain operator isn't defined for this class.
 
@@ -2326,7 +2326,7 @@ Python's string formatting can do a lot of interesting things, like:
 '🐍🐍🐍🐍Python!🐍🐍🐍🐍'
 ```
 
-I have an entire article on string formatting [right here](what-the-f-strings), so check that out for more.
+I have an entire article on string formatting [right here](./what-the-f-strings), so check that out for more.
 
 ### `any` and `all`
 
@@ -2988,7 +2988,7 @@ slice(1, None, 2)
 [1, 3, 5, 7, 9]
 ```
 
-If you want to learn a bit more about slices, how they work and what all can be done with them, I cover that in a separate article [here](slices).
+If you want to learn a bit more about slices, how they work and what all can be done with them, I cover that in a separate article [here](./slices).
 
 ### `breakpoint`: built-in debugging
 
