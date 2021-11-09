@@ -162,6 +162,6 @@ And turns out, **you can start gradually adding types to your existing Python co
 
 So, this was my introduction to you, to the world of static type checking in Python. Are you interested in learning more about it? I'll be dropping a detailed guide to mypy very soon, so stay tuned.
 
-> UPDATE: [It's out!](mypy-guide)
+> UPDATE: [It's out!](./mypy-guide)
 
 I'd also love to hear your thoughs on this article, so let me know what you think about mypy down in the comments.
