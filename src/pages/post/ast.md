@@ -103,17 +103,37 @@ define    calculate        run area_of_circle
 
 The nodes here can be anything, from statements, to expressions, to any other construct that the language defines. Once the code is in this tree structure, computers can start to make sense of it, such as traversing its nodes one by one and generate the appropriate machine code.
 
-Essentially, all your code represents a tree of data. And that tree is called the **Abstract Syntax Tree**.
+Essentially, all your code represents a tree of data. And that tree is called the **Abstract Syntax Tree**. Each programming language has its own AST representation, but the idea is always the same.
 
-## Why is it important?
+And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.
 
 ## The `ast` module
 
+Python has a builtin `ast` module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let's take a look at what all the `ast` module gives us, and try to do something interesting with it:
+
 ### All the `Node`s
+
+- what's a node, what does it have?
+  A Python AST looks like this:
+
+  ```python
+  Module(
+    body=[
+      Statement(
+        ...
+      )
+    ]
+  )
+  ```
+
+- types of nodes: statements, expressions, operators, are there more?
+- More examples of source codes and their corresponding ASTs.
 
 ~~ somewhere in here, the idea of visitors is to be explained.
 
 ### What's a `ctx`?
+
+~~ Explain how everything that has a value (variables, attributes, indices, slices, etc.) can either be used to access its value or to store a new value in it.
 
 ## The power of AST manipulation
 
