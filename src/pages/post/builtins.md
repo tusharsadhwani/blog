@@ -1789,6 +1789,7 @@ You can even set and delete properties on objects:
 >>> C.prop
 84
 >>> del C.prop
+>>> C.prop
 AttributeError: type object 'C' has no attribute 'prop'
 ```
 
