@@ -14,8 +14,7 @@ layout: "../../layouts/BlogPost.astro"
 
 ## So what is an AST?
 
-To answer that question, we must first understand the structure of a computer
-program.
+In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.
 
 The programs that you and I write in our language of choice is usually called the "source code", and I'll be referring to it as such in this article.
 
