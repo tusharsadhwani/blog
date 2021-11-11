@@ -51,6 +51,7 @@ body {
     transparent 0
   );
   background-attachment: fixed;
+  transition-duration: 250ms;
 }
 input,
 button {
@@ -61,6 +62,7 @@ button {
   padding: 0.5rem;
   color: var(--text-color);
   margin-bottom: 0.5rem;
+  transition-duration: 250ms;
 }
 input {
   background-color: var(--highlight-color);
