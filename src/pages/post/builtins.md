@@ -1453,7 +1453,7 @@ The actual implementation of `object` is written in C.
 
 > Unlike `==`, there's no way to override the behavior of the `is` operator.
 
-Container types, on the other hand, are equal if they can be replaced with each other. Good examples would be lists with have the same items at the same indices, or sets containing the exact same values.
+Container types, on the other hand, are equal if they can be replaced with each other. Good examples would be lists which have the same items at the same indices, or sets containing the exact same values.
 
 ```python
 >>> x = [1, 2, 3]
