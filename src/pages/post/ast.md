@@ -113,6 +113,10 @@ Python has a builtin `ast` module, which has a rich set of features to create, m
 
 ### All the `Node`s
 
+There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: Literals, Variables, Statements and Expressions. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.
+
+> PENDING
+
 - what's a node, what does it have?
   A Python AST looks like this:
 
