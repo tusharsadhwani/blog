@@ -8,7 +8,7 @@ alt: "What the f-strings?"
 layout: "../../layouts/BlogPost.astro"
 ---
 
-So a couple months ago, I wrote a [comprehensive blog on mypy](https://dev.to/tusharsadhwani/the-comprehensive-guide-to-mypy-561m). Today I'm planning to do the same with f-strings, putting everything I know about them into a single source of knowledge. It's an awesome Python feature, and I hope you'll get to learn something new about it ✨
+So a couple months ago, I wrote a [comprehensive blog on mypy](../mypy-guide). Today I'm planning to do the same with f-strings, putting everything I know about them into a single source of knowledge. It's an awesome Python feature, and I hope you'll get to learn something new about it ✨
 
 ## Index
 
