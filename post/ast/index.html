@@ -1,59 +1,98 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>"><title>Learn Python ASTs, by building your own linter</title><meta name="title" content="Learn Python ASTs, by building your own linter"><meta name="description" content="The only resource you need to read to learn about ASTs in Python, and the superpowers they give you."><meta property="og:type" content="website"><meta property="og:url" content="https://sadh.life"><meta property="og:title" content="Learn Python ASTs, by building your own linter"><meta property="og:description" content="The only resource you need to read to learn about ASTs in Python, and the superpowers they give you."><meta property="og:image" content="https://sadh.life/images/ast.jpg"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://sadh.life"><meta property="twitter:title" content="Learn Python ASTs, by building your own linter"><meta property="twitter:description" content="The only resource you need to read to learn about ASTs in Python, and the superpowers they give you."><meta property="twitter:image" content="https://sadh.life/images/ast.jpg"><link rel="stylesheet" href="/_astro/common-2rascQ.css" type="text/css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap"><style type="text/css">astro-root, astro-fragment { display: contents; }</style><style type="text/css">
-    body {
-      position: relative;
-    }
-    .back-to-top-wrapper.astro-ziW8fDF5 {
-      position: absolute;
-      top: 150vh;
-      bottom: 0;
-      right: 0.6rem;
-      pointer-events: none;
-    }
-    .back-to-top-link.astro-ziW8fDF5 {
-      position: fixed;  /* backwards compatibility */
-      position: sticky;
-      pointer-events: all;
-      top: calc(100vh - 4.5rem);
-      background: var(--border-color);
-      width: 3rem;
-      height: 3rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 9999px;
-      color: white;
-      box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3), 0 4px 8px rgb(0, 0, 0, 0.4);
-    }
-    :root[data-theme="light"] .back-to-top-link {
-      background-color: var(--primary-color);
-    }
-    @media screen and (max-width: 700px) {
-      .back-to-top-link.astro-ziW8fDF5 {
-        top: calc(100vh - 3.6rem);
-      }
-    }
-  </style></head><body id="top"><header class="astro-mYHAcGzO"><a href="/" class="astro-mYHAcGzO"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-mYHAcGzO"><g class="astro-mYHAcGzO"><rect width="380" height="380" x="10" y="10" stroke="var(--text-color)" stroke-width="18" rx="18" fill-opacity="0" class="astro-mYHAcGzO"></rect><text x="52.5" y="357.427" font-family="sans-serif" font-size="250" font-weight="bold" text-anchor="start" transform="matrix(0.946786642074585,0,0,1.0035842657089233,19.687279514968395,-1.4603642597794533)" xml:space="preserve" style="stroke: var(--text-color); fill: var(--text-color)" class="astro-mYHAcGzO">TS</text></g></svg></a><div class="right astro-mYHAcGzO"><astro-root uid="N"></astro-root>
-<script type="module">
-import setup from '/_astro_frontend/hydrate/only.js';
-setup("N", {}, async () => {
-  
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("/_astro/src/components/ThemeSwitch/Switch.js"), import("/_snowpack/pkg/@astrojs.renderer-preact.client.v0.2.1.js")]);
-  return (el, children) => hydrate(el)(Component, {}, children);
+<!DOCTYPE html><html lang="en" class="astro-7CIAHWF2"><head>
+    
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
-});
-</script></div></header><div class="layout astro-eZ0V7RoP"><header class="astro-eZ0V7RoP"><p class="publish-date astro-eZ0V7RoP">Thursday, 4 November 2000</p><h1 class="title astro-eZ0V7RoP">Learn Python ASTs, by building your own linter</h1><img src="/images/ast.jpg" alt="Learn Python ASTs, by building your own linter" class="astro-eZ0V7RoP"><div class="author astro-vgbcRyj4"><p class="astro-vgbcRyj4"><a href="https://tusharsadhwani.dev" class="astro-vgbcRyj4">@tusharsadhwani</a></p></div></header><article class="content astro-eZ0V7RoP"><main class="astro-eZ0V7RoP"><blockquote><p>This is currently a work in progress.</p></blockquote><h2 id="so-what-is-an-ast"><a aria-hidden="true" tabindex="-1" href="#so-what-is-an-ast"><span class="icon icon-link"></span></a>So what is an AST?</h2><p>In programmer terms, “ASTs are a programmatic way to understand the structure of your source code”. But to understand what that really means, we must first understand a few things about the structure of a computer program.</p><p>The programs that you and I write in our language of choice is usually called the “source code”, and I’ll be referring to it as such in this article.</p><p>On the other end, computer chips can only understand “machine code”, which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers in this “machine code” are instructions, which tell the CPU a simple task to perform, like “add the numbers stored in these two places”, or “jump 10 numbers down and continue running code from there”. The instructions in machine code are run one by one, and they dictate the flow of the program.</p><p>And similarly, in all the languages that I know of, you define your programs as a set of “statements”, with each statement being an analogue to the instructions in the machine code. These statements also run one-by-one, and define the behaviour of your software.</p><p>I know that the theory is hard to understand if you’ve never heard of these terms before, so I’m going to go through a bunch of examples. So let’s write the same code in many languages:</p><ul><li><p>Python</p><pre class=""><code class="language-python"><span class="token keyword">def</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span>radius<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<!-- Primary Meta Tags -->
+<title>Learn Python ASTs, by building your own linter</title>
+<meta name="title" content="Learn Python ASTs, by building your own linter">
+<meta name="description" content="The only resource you need to read to learn about ASTs in Python, and the superpowers they give you.">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sadh.life">
+<meta property="og:title" content="Learn Python ASTs, by building your own linter">
+<meta property="og:description" content="The only resource you need to read to learn about ASTs in Python, and the superpowers they give you.">
+<meta property="og:image" content="https://sadh.life/images/ast.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://sadh.life">
+<meta property="twitter:title" content="Learn Python ASTs, by building your own linter">
+<meta property="twitter:description" content="The only resource you need to read to learn about ASTs in Python, and the superpowers they give you.">
+<meta property="twitter:image" content="https://sadh.life/images/ast.jpg">
+
+<link rel="stylesheet" href="/style/global.css">
+<link rel="stylesheet" href="/style/merged-themes.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.9f423efd.css">
+
+
+
+
+<script type="module" src="../../assets/ast.0ebbefef.js"></script>
+</head>
+  
+
+  <body id="top">
+    <header class="astro-D64JDZG7">
+  <a href="/" class="astro-D64JDZG7">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-D64JDZG7">
+      <g class="astro-D64JDZG7">
+        <rect width="380" height="380" x="10" y="10" stroke="var(--text-color)" stroke-width="18" rx="18" fill-opacity="0" class="astro-D64JDZG7"></rect>
+        <text x="52.5" y="357.427" font-family="sans-serif" font-size="250" font-weight="bold" text-anchor="start" transform="matrix(0.946786642074585,0,0,1.0035842657089233,19.687279514968395,-1.4603642597794533)" xml:space="preserve" style="stroke: var(--text-color); fill: var(--text-color)" class="astro-D64JDZG7">TS</text>
+      </g>
+    </svg>
+
+  </a>
+  <div class="right astro-D64JDZG7">
+    <astro-root uid="rve9A"></astro-root>
+  </div>
+</header>
+
+
+
+    <div class="layout astro-ERN4UYHG">
+  <header class="astro-ERN4UYHG">
+    <p class="publish-date astro-ERN4UYHG">Thursday, 4 November 2000</p>
+    <h1 class="title astro-ERN4UYHG">Learn Python ASTs, by building your own linter</h1>
+    <img src="/images/ast.jpg" alt="Learn Python ASTs, by building your own linter" class="astro-ERN4UYHG">
+    
+<div class="author astro-BL6UQIAR">
+  <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
+</div>
+
+  </header>
+  <article class="content astro-ERN4UYHG">
+    <main class="astro-ERN4UYHG">
+      <blockquote>
+<p>This is currently a work in progress.</p>
+</blockquote><h2 id="so-what-is-an-ast">So what is an AST?</h2><p>In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.</p><p>The programs that you and I write in our language of choice is usually called the "source code", and I'll be referring to it as such in this article.</p><p>On the other end, computer chips can only understand "machine code", which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers in this "machine code" are instructions, which tell the CPU a simple task to perform, like "add the numbers stored in these two places", or "jump 10 numbers down and continue running code from there". The instructions in machine code are run one by one, and they dictate the flow of the program.</p><p>And similarly, in all the languages that I know of, you define your programs as a set of "statements", with each statement being an analogue to the instructions in the machine code. These statements also run one-by-one, and define the behaviour of your software.</p><p>I know that the theory is hard to understand if you've never heard of these terms before, so I'm going to go through a bunch of examples. So let's write the same code in many languages:</p><ul>
+<li>
+<p>Python</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span>radius<span class="token punctuation">)</span><span class="token punctuation">:</span>
     pi <span class="token operator">=</span> <span class="token number">3.14</span>
     <span class="token keyword">return</span> pi <span class="token operator">*</span> radius <span class="token operator">*</span> radius
 
 area_of_circle<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-<span class="token comment"># Output: 78.5</span>
-</code></pre></li><li><p>Scheme Lisp</p><pre class=""><code class="language-lisp"><span class="token punctuation">(</span><span class="token car">define</span> <span class="token punctuation">(</span><span class="token car">area_of_circle</span> radius<span class="token punctuation">)</span>
+<span class="token comment"># Output: 78.5</span></code></pre>
+</li>
+<li>
+<p>Scheme Lisp</p>
+<pre class="language-lisp"><code data-astro-raw="" class="language-lisp"><span class="token punctuation">(</span><span class="token car">define</span> <span class="token punctuation">(</span><span class="token car">area_of_circle</span> radius<span class="token punctuation">)</span>
   <span class="token punctuation">(</span><span class="token car">define</span> pi <span class="token number">3.14</span><span class="token punctuation">)</span>
   <span class="token punctuation">(</span><span class="token car">*</span> pi radius radius<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
 <span class="token punctuation">(</span><span class="token car">area_of_circle</span> <span class="token number">5</span><span class="token punctuation">)</span>
-<span class="token comment">; Output: 78.5</span>
-</code></pre></li><li><p>C</p><pre class=""><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token comment">; Output: 78.5</span></code></pre>
+</li>
+<li>
+<p>C</p>
+<pre class="language-c"><code data-astro-raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
 
 <span class="token keyword">float</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span><span class="token keyword">float</span> radius<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">float</span> pi <span class="token operator">=</span> <span class="token number">3.14</span><span class="token punctuation">;</span>
@@ -63,8 +102,11 @@ area_of_circle<span class="token punctuation">(</span><span class="token number"
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%f"</span><span class="token punctuation">,</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span class="token comment">// Output: 78.500000</span>
-</code></pre></li><li><p>Go</p><pre class=""><code class="language-go"><span class="token keyword">package</span> main
+<span class="token comment">// Output: 78.500000</span></code></pre>
+</li>
+<li>
+<p>Go</p>
+<pre class="language-go"><code data-astro-raw="" class="language-go"><span class="token keyword">package</span> main
 
 <span class="token keyword">func</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span>radius <span class="token builtin">float64</span><span class="token punctuation">)</span> <span class="token builtin">float64</span> <span class="token punctuation">{</span>
   pi <span class="token operator">:=</span> <span class="token number">3.14</span>
@@ -74,32 +116,93 @@ area_of_circle<span class="token punctuation">(</span><span class="token number"
 <span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token function">println</span><span class="token punctuation">(</span><span class="token function">area_of_circle</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span>
-<span class="token comment">// Output: +7.850000e+001</span>
-</code></pre></li></ul><p>We’re doing essentially the same thing in all of these, and I’ll break it down piece by piece:</p><ul><li><p>We’re defining our source code as a block of statements. In our case, there are two statements at the top-level of our source code: one statement that defines our <code>area_of_circle</code> function, and another statement that runs this function with the value “5”.</p><blockquote><p>In some languages like C and Go, you need to define the <code>main</code> function as the entry-point of the program. In those cases, this second statement is inside the main function.</p></blockquote></li><li><p>The definition of the <code>area_of_circle</code> function has two parts: the input parameters (the radius, in our case), and the body, which itself is a block of statements. There’s two statements inside <code>area_of_circle</code> to be specific: the first one defines <code>pi</code>, and the second one uses it to calculate the area, and returns it.</p></li><li><p>For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing more statements, like one that prints out the value of <code>area_of_circle</code> called with the radius of 5.</p></li></ul><p>You can start to see the somewhat repetitive nature of source code. There’s blocks of statements, and sometimes within those statements there can be more statements, and so on. If you imagine each statement to be a “node”, then you can think of each of these nodes being composed of one or more other “nodes”. You can properly define this kind of structure as a “tree”:</p><pre class=""><code class="language-text">                 (program)
+<span class="token comment">// Output: +7.850000e+001</span></code></pre>
+</li>
+</ul><p>We're doing essentially the same thing in all of these, and I'll break it down piece by piece:</p><ul>
+<li>
+<p>We're defining our source code as a block of statements. In our case, there are two statements at the top-level of our source code: one statement that defines our <code data-astro-raw="">area_of_circle</code> function, and another statement that runs this function with the value "5".</p>
+<blockquote>
+<p>In some languages like C and Go, you need to define the <code data-astro-raw="">main</code> function as the entry-point of the program. In those cases, this second statement is inside the main function.</p>
+</blockquote>
+</li>
+<li>
+<p>The definition of the <code data-astro-raw="">area_of_circle</code> function has two parts: the input parameters (the radius, in our case), and the body, which itself is a block of statements. There's two statements inside <code data-astro-raw="">area_of_circle</code> to be specific: the first one defines <code data-astro-raw="">pi</code>, and the second one uses it to calculate the area, and returns it.</p>
+</li>
+<li>
+<p>For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing more statements, like one that prints out the value of <code data-astro-raw="">area_of_circle</code> called with the radius of 5.</p>
+</li>
+</ul><p>You can start to see the somewhat repetitive nature of source code. There's blocks of statements, and sometimes within those statements there can be more statements, and so on. If you imagine each statement to be a "node", then you can think of each of these nodes being composed of one or more other "nodes". You can properly define this kind of structure as a "tree":</p><pre class="language-text"><code data-astro-raw="" class="language-text">                 (program)
                 /          \
   (area_of_circle r)       (main)
   /           |               |
 define    calculate        run area_of_circle
   pi        area             with r = "5"
            /   |
-     multiply  (pi, r, r)
-</code></pre><p>The nodes here can be anything, from statements, to expressions, to any other construct that the language defines. Once the code is in this tree structure, computers can start to make sense of it, such as traversing its nodes one by one and generate the appropriate machine code.</p><p>Essentially, all your code represents a tree of data. And that tree is called the <strong>Abstract Syntax Tree</strong>. Each programming language has its own AST representation, but the idea is always the same.</p><p>And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.</p><h2 id="the-ast-module"><a aria-hidden="true" tabindex="-1" href="#the-ast-module"><span class="icon icon-link"></span></a>The <code>ast</code> module</h2><p>Python has a builtin <code>ast</code> module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let’s take a look at what all the <code>ast</code> module gives us, and try to do something interesting with it:</p><h3 id="all-the-nodes"><a aria-hidden="true" tabindex="-1" href="#all-the-nodes"><span class="icon icon-link"></span></a>All the <code>Node</code>s</h3><p>There are a lot of kinds of “Nodes” in a Python AST each with their own functionalities, but you can broadly divide them into four categories: Literals, Variables, Statements and Expressions. We’ll take a look at them one by one, but before we do that we need to understand how a “Node” is represented.</p><blockquote><p>PENDING</p></blockquote><ul><li><p>what’s a node, what does it have?
-A Python AST looks like this:</p><pre class=""><code class="language-python">Module<span class="token punctuation">(</span>
+     multiply  (pi, r, r)</code></pre><p>The nodes here can be anything, from statements, to expressions, to any other construct that the language defines. Once the code is in this tree structure, computers can start to make sense of it, such as traversing its nodes one by one and generate the appropriate machine code.</p><p>Essentially, all your code represents a tree of data. And that tree is called the <strong>Abstract Syntax Tree</strong>. Each programming language has its own AST representation, but the idea is always the same.</p><p>And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.</p><h2 id="the-ast-module">The <code data-astro-raw="">ast</code> module</h2><p>Python has a builtin <code data-astro-raw="">ast</code> module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let's take a look at what all the <code data-astro-raw="">ast</code> module gives us, and try to do something interesting with it:</p><h3 id="all-the-nodes">All the <code data-astro-raw="">Node</code>s</h3><p>There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: Literals, Variables, Statements and Expressions. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.</p><blockquote>
+<p>PENDING</p>
+</blockquote><ul>
+<li>
+<p>what's a node, what does it have?
+A Python AST looks like this:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Module<span class="token punctuation">(</span>
   body<span class="token operator">=</span><span class="token punctuation">[</span>
     Statement<span class="token punctuation">(</span>
       <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
     <span class="token punctuation">)</span>
   <span class="token punctuation">]</span>
-<span class="token punctuation">)</span>
-</code></pre></li><li><p>types of nodes: statements, expressions, operators, are there more?</p></li><li><p>More examples of source codes and their corresponding ASTs.</p></li></ul><p>~~ somewhere in here, the idea of visitors is to be explained.</p><h3 id="whats-a-ctx"><a aria-hidden="true" tabindex="-1" href="#whats-a-ctx"><span class="icon icon-link"></span></a>What’s a <code>ctx</code>?</h3><p>~~ Explain how everything that has a value (variables, attributes, indices, slices, etc.) can either be used to access its value or to store a new value in it.</p><h2 id="the-power-of-ast-manipulation"><a aria-hidden="true" tabindex="-1" href="#the-power-of-ast-manipulation"><span class="icon icon-link"></span></a>The power of AST manipulation</h2><p>Some really bizarre examples of modifying your code’s runtime behaviour go here.</p><p>~~ explain transformers here?</p><h3 id="ast-utilities"><a aria-hidden="true" tabindex="-1" href="#ast-utilities"><span class="icon icon-link"></span></a>AST utilities</h3><p>~~ fix missing locations, literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter"><a aria-hidden="true" tabindex="-1" href="#lets-build-a-simple-linter"><span class="icon icon-link"></span></a>Let’s build: A simple linter</h2><p>ASTs let you examine code patterns as well, they’re really nice.</p><h2 id="what-about-code-formatters"><a aria-hidden="true" tabindex="-1" href="#what-about-code-formatters"><span class="icon icon-link"></span></a>What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
+<span class="token punctuation">)</span></code></pre>
+</li>
+<li>
+<p>types of nodes: statements, expressions, operators, are there more?</p>
+</li>
+<li>
+<p>More examples of source codes and their corresponding ASTs.</p>
+</li>
+</ul><p>~~ somewhere in here, the idea of visitors is to be explained.</p><h3 id="whats-a-ctx">What's a <code data-astro-raw="">ctx</code>?</h3><p>~~ Explain how everything that has a value (variables, attributes, indices, slices, etc.) can either be used to access its value or to store a new value in it.</p><h2 id="the-power-of-ast-manipulation">The power of AST manipulation</h2><p>Some really bizarre examples of modifying your code's runtime behaviour go here.</p><p>~~ explain transformers here?</p><h3 id="ast-utilities">AST utilities</h3><p>~~ fix missing locations, literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
-Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more"><a aria-hidden="true" tabindex="-1" href="#where-can-i-learn-more"><span class="icon icon-link"></span></a>Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p></main></article></div><hr class="astro-ziW8fDF5"><div class="centered astro-ziW8fDF5"><astro-root uid="M"></astro-root>
-<script type="module">
-import setup from '/_astro_frontend/hydrate/only.js';
-setup("M", {}, async () => {
-  
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("/_astro/src/components/Newsletter/Newsletter.js"), import("/_snowpack/pkg/@astrojs.renderer-preact.client.v0.2.1.js")]);
-  return (el, children) => hydrate(el)(Component, {}, children);
+Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p>
+    </main>
+  </article>
+</div>
 
-});
-</script></div><div class="back-to-top-wrapper astro-ziW8fDF5"><a href="#top" class="back-to-top-link astro-ziW8fDF5" aria-label="Scroll to Top"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-ziW8fDF5" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-ziW8fDF5"></path></svg></a></div><script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async=""></script><hr class="astro-n31rkg6Y"><footer class="astro-n31rkg6Y"><a href="https://twitter.com/sadhlife" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">Follow for Python tips</p></a><a href="https://discord.gg/XjAQ53YbpE" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M20.222 0c1.406 0 2.54 1.137 2.607 2.475V24l-2.677-2.273-1.47-1.338-1.604-1.398.67 2.205H3.71c-1.402 0-2.54-1.065-2.54-2.476V2.48C1.17 1.142 2.31.003 3.715.003h16.5L20.222 0zm-6.118 5.683h-.03l-.202.2c2.073.6 3.076 1.537 3.076 1.537-1.336-.668-2.54-1.002-3.744-1.137-.87-.135-1.74-.064-2.475 0h-.2c-.47 0-1.47.2-2.81.735-.467.203-.735.336-.735.336s1.002-1.002 3.21-1.537l-.135-.135s-1.672-.064-3.477 1.27c0 0-1.805 3.144-1.805 7.02 0 0 1 1.74 3.743 1.806 0 0 .4-.533.805-1.002-1.54-.468-2.14-1.404-2.14-1.404s.134.066.335.2h.06c.03 0 .044.015.06.03v.006c.016.016.03.03.06.03.33.136.66.27.93.4.466.202 1.065.403 1.8.536.93.135 1.996.2 3.21 0 .6-.135 1.2-.267 1.8-.535.39-.2.87-.4 1.397-.737 0 0-.6.936-2.205 1.404.33.466.795 1 .795 1 2.744-.06 3.81-1.8 3.87-1.726 0-3.87-1.815-7.02-1.815-7.02-1.635-1.214-3.165-1.26-3.435-1.26l.056-.02zm.168 4.413c.703 0 1.27.6 1.27 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334.002-.74.573-1.338 1.27-1.338zm-4.543 0c.7 0 1.266.6 1.266 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334 0-.74.57-1.338 1.27-1.338z" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">Join the community</p></a><a href="https://github.com/tusharsadhwani/blog" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">Check source code</p></a><a href="https://tusharsadhwani.dev" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M14.31.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.83l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.23l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05L0 11.97l.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.24l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05 1.07.13zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09-.33.22zM21.1 6.11l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01.21.03zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08-.33.23z" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">View the main site</p></a></footer><noscript><img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-ziW8fDF5"></noscript><script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script></body></html>
+
+
+    <hr class="astro-7CIAHWF2">
+    <div class="centered astro-7CIAHWF2">
+      <astro-root uid="ZwUM0Q"></astro-root>
+    </div>
+    <div class="back-to-top-wrapper astro-7CIAHWF2">
+      <a href="#top" class="back-to-top-link astro-7CIAHWF2" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-7CIAHWF2" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-7CIAHWF2"></path>
+        </svg>
+      </a>
+    </div>
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    </script>
+  <hr class="astro-ZUKZCZIV">
+<footer class="astro-ZUKZCZIV">
+  <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">Follow for Python tips</p>
+  </a>
+  <a href="https://discord.gg/XjAQ53YbpE" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M20.222 0c1.406 0 2.54 1.137 2.607 2.475V24l-2.677-2.273-1.47-1.338-1.604-1.398.67 2.205H3.71c-1.402 0-2.54-1.065-2.54-2.476V2.48C1.17 1.142 2.31.003 3.715.003h16.5L20.222 0zm-6.118 5.683h-.03l-.202.2c2.073.6 3.076 1.537 3.076 1.537-1.336-.668-2.54-1.002-3.744-1.137-.87-.135-1.74-.064-2.475 0h-.2c-.47 0-1.47.2-2.81.735-.467.203-.735.336-.735.336s1.002-1.002 3.21-1.537l-.135-.135s-1.672-.064-3.477 1.27c0 0-1.805 3.144-1.805 7.02 0 0 1 1.74 3.743 1.806 0 0 .4-.533.805-1.002-1.54-.468-2.14-1.404-2.14-1.404s.134.066.335.2h.06c.03 0 .044.015.06.03v.006c.016.016.03.03.06.03.33.136.66.27.93.4.466.202 1.065.403 1.8.536.93.135 1.996.2 3.21 0 .6-.135 1.2-.267 1.8-.535.39-.2.87-.4 1.397-.737 0 0-.6.936-2.205 1.404.33.466.795 1 .795 1 2.744-.06 3.81-1.8 3.87-1.726 0-3.87-1.815-7.02-1.815-7.02-1.635-1.214-3.165-1.26-3.435-1.26l.056-.02zm.168 4.413c.703 0 1.27.6 1.27 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334.002-.74.573-1.338 1.27-1.338zm-4.543 0c.7 0 1.266.6 1.266 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334 0-.74.57-1.338 1.27-1.338z" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">Join the community</p>
+  </a>
+  <a href="https://github.com/tusharsadhwani/blog" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">Check source code</p>
+  </a>
+  <a href="https://tusharsadhwani.dev" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M14.31.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.83l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.23l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05L0 11.97l.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.24l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05 1.07.13zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09-.33.22zM21.1 6.11l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01.21.03zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08-.33.23z" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">View the main site</p>
+  </a>
+</footer>
+
+
+  <noscript>
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+  </noscript>
+  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</body></html>

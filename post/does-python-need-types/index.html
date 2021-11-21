@@ -1,55 +1,87 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>"><title>Does Python need types?</title><meta name="title" content="Does Python need types?"><meta name="description" content="Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?"><meta property="og:type" content="website"><meta property="og:url" content="https://sadh.life"><meta property="og:title" content="Does Python need types?"><meta property="og:description" content="Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?"><meta property="og:image" content="https://sadh.life/images/python-types.jpg"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://sadh.life"><meta property="twitter:title" content="Does Python need types?"><meta property="twitter:description" content="Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?"><meta property="twitter:image" content="https://sadh.life/images/python-types.jpg"><link rel="stylesheet" href="/_astro/common-2rascQ.css" type="text/css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap"><style type="text/css">astro-root, astro-fragment { display: contents; }</style><style type="text/css">
-    body {
-      position: relative;
-    }
-    .back-to-top-wrapper.astro-ziW8fDF5 {
-      position: absolute;
-      top: 150vh;
-      bottom: 0;
-      right: 0.6rem;
-      pointer-events: none;
-    }
-    .back-to-top-link.astro-ziW8fDF5 {
-      position: fixed;  /* backwards compatibility */
-      position: sticky;
-      pointer-events: all;
-      top: calc(100vh - 4.5rem);
-      background: var(--border-color);
-      width: 3rem;
-      height: 3rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 9999px;
-      color: white;
-      box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3), 0 4px 8px rgb(0, 0, 0, 0.4);
-    }
-    :root[data-theme="light"] .back-to-top-link {
-      background-color: var(--primary-color);
-    }
-    @media screen and (max-width: 700px) {
-      .back-to-top-link.astro-ziW8fDF5 {
-        top: calc(100vh - 3.6rem);
-      }
-    }
-  </style></head><body id="top"><header class="astro-mYHAcGzO"><a href="/" class="astro-mYHAcGzO"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-mYHAcGzO"><g class="astro-mYHAcGzO"><rect width="380" height="380" x="10" y="10" stroke="var(--text-color)" stroke-width="18" rx="18" fill-opacity="0" class="astro-mYHAcGzO"></rect><text x="52.5" y="357.427" font-family="sans-serif" font-size="250" font-weight="bold" text-anchor="start" transform="matrix(0.946786642074585,0,0,1.0035842657089233,19.687279514968395,-1.4603642597794533)" xml:space="preserve" style="stroke: var(--text-color); fill: var(--text-color)" class="astro-mYHAcGzO">TS</text></g></svg></a><div class="right astro-mYHAcGzO"><astro-root uid="N"></astro-root>
-<script type="module">
-import setup from '/_astro_frontend/hydrate/only.js';
-setup("N", {}, async () => {
-  
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("/_astro/src/components/ThemeSwitch/Switch.js"), import("/_snowpack/pkg/@astrojs.renderer-preact.client.v0.2.1.js")]);
-  return (el, children) => hydrate(el)(Component, {}, children);
+<!DOCTYPE html><html lang="en" class="astro-7CIAHWF2"><head>
+    
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
-});
-</script></div></header><div class="layout astro-eZ0V7RoP"><header class="astro-eZ0V7RoP"><p class="publish-date astro-eZ0V7RoP">Wednesday, 28 April 2021</p><h1 class="title astro-eZ0V7RoP">Does Python need types?</h1><img src="/images/python-types.jpg" alt="Does Python need types?" class="astro-eZ0V7RoP"><div class="author astro-vgbcRyj4"><p class="astro-vgbcRyj4"><a href="https://tusharsadhwani.dev" class="astro-vgbcRyj4">@tusharsadhwani</a></p></div></header><article class="content astro-eZ0V7RoP"><main class="astro-eZ0V7RoP"><p>I’m a huge fan of Python. It’s by far the simplest general purpose language, that you can just pick up and start building amazing things with.</p><p>But for the past year or so, I’ve been working on frontend projects, and I’ve really enjoyed using <a href="https://www.typescriptlang.org">Typescript</a>. It’s essentially JavaScript, but with fancy features built on top of it like <em>Static Type checking</em> and <em>Null safety</em>, and it was <em>awesome</em> how much it helped in writing robust, bug free code.</p><p>So I went out to find if Python has such an equivalent, and sure enough, there was.</p><p>It’s called <a href="https://mypy-lang.org">mypy</a>, and it is amazing. It works so well in-fact, that I can never go back to writing plain Python now — and this article will be your introduction to it.</p><p><strong>But before all that</strong>, let’s figure out what’s the deal with <em>Types</em>.</p><h2 id="why-types"><a aria-hidden="true" tabindex="-1" href="#why-types"><span class="icon icon-link"></span></a>Why types?</h2><p>What it essentially means is if you have a type system, <strong>every variable has a pre-decided type associated with it</strong>.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fdmzm8gner72499j5i3h.png" alt="image"></p><figcaption>Untyped vs. typed Python code</figcaption><blockquote><p>Note that, while this might not look like it, the typed version is perfectly valid Python code.</p></blockquote><hr><p>What it also means, is you can’t pass values of the wrong type anywhere. The type checker doesn’t let you.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cgam11h9xoxqyhizstw2.png" alt="image"></p><p>Which is extremely valuable if you think about it - I’ve lost count how many <code>TypeError</code>’s I’ve seen in Python over the years!</p><p>Just having the confidence that there’s no such place in your code where accidentally passed a <code>str</code> where an <code>int</code> was expected, eliminates an entire class of bugs from your codebase.</p><hr><p>Not only that - you get a bunch of other benefits, namely:</p><ul><li>Self-documenting code</li><li><code>None</code>-awareness</li><li>Better autocompletion and IDE support</li></ul><p>I’ll go over all these points in detail.</p><h3 id="self-documenting-code"><a aria-hidden="true" tabindex="-1" href="#self-documenting-code"><span class="icon icon-link"></span></a>Self-documenting code</h3><p>Imagine you have this piece of code:</p><pre class=""><code class="language-python"><span class="token keyword">def</span> <span class="token function">add_orders</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> orders<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<!-- Primary Meta Tags -->
+<title>Does Python need types?</title>
+<meta name="title" content="Does Python need types?">
+<meta name="description" content="Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sadh.life">
+<meta property="og:title" content="Does Python need types?">
+<meta property="og:description" content="Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?">
+<meta property="og:image" content="https://sadh.life/images/python-types.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://sadh.life">
+<meta property="twitter:title" content="Does Python need types?">
+<meta property="twitter:description" content="Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?">
+<meta property="twitter:image" content="https://sadh.life/images/python-types.jpg">
+
+<link rel="stylesheet" href="/style/global.css">
+<link rel="stylesheet" href="/style/merged-themes.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.9f423efd.css">
+
+
+
+
+<script type="module" src="../../assets/does-python-need-types.309a7439.js"></script>
+</head>
+  
+
+  <body id="top">
+    <header class="astro-D64JDZG7">
+  <a href="/" class="astro-D64JDZG7">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-D64JDZG7">
+      <g class="astro-D64JDZG7">
+        <rect width="380" height="380" x="10" y="10" stroke="var(--text-color)" stroke-width="18" rx="18" fill-opacity="0" class="astro-D64JDZG7"></rect>
+        <text x="52.5" y="357.427" font-family="sans-serif" font-size="250" font-weight="bold" text-anchor="start" transform="matrix(0.946786642074585,0,0,1.0035842657089233,19.687279514968395,-1.4603642597794533)" xml:space="preserve" style="stroke: var(--text-color); fill: var(--text-color)" class="astro-D64JDZG7">TS</text>
+      </g>
+    </svg>
+
+  </a>
+  <div class="right astro-D64JDZG7">
+    <astro-root uid="rve9A"></astro-root>
+  </div>
+</header>
+
+
+
+    <div class="layout astro-ERN4UYHG">
+  <header class="astro-ERN4UYHG">
+    <p class="publish-date astro-ERN4UYHG">Wednesday, 28 April 2021</p>
+    <h1 class="title astro-ERN4UYHG">Does Python need types?</h1>
+    <img src="/images/python-types.jpg" alt="Does Python need types?" class="astro-ERN4UYHG">
+    
+<div class="author astro-BL6UQIAR">
+  <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
+</div>
+
+  </header>
+  <article class="content astro-ERN4UYHG">
+    <main class="astro-ERN4UYHG">
+      <p>I'm a huge fan of Python. It's by far the simplest general purpose language, that you can just pick up and start building amazing things with.</p><p>But for the past year or so, I've been working on frontend projects, and I've really enjoyed using <a href="https://www.typescriptlang.org">Typescript</a>. It's essentially JavaScript, but with fancy features built on top of it like <em>Static Type checking</em> and <em>Null safety</em>, and it was <em>awesome</em> how much it helped in writing robust, bug free code.</p><p>So I went out to find if Python has such an equivalent, and sure enough, there was.</p><p>It's called <a href="https://mypy-lang.org">mypy</a>, and it is amazing. It works so well in-fact, that I can never go back to writing plain Python now — and this article will be your introduction to it.</p><p><strong>But before all that</strong>, let's figure out what's the deal with <em>Types</em>.</p><h2 id="why-types">Why types?</h2><p>What it essentially means is if you have a type system, <strong>every variable has a pre-decided type associated with it</strong>.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fdmzm8gner72499j5i3h.png" alt="image"></p><figcaption>Untyped vs. typed Python code</figcaption><blockquote>
+<p>Note that, while this might not look like it, the typed version is perfectly valid Python code.</p>
+</blockquote><hr><p>What it also means, is you can't pass values of the wrong type anywhere. The type checker doesn't let you.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cgam11h9xoxqyhizstw2.png" alt="image"></p><p>Which is extremely valuable if you think about it - I've lost count how many <code data-astro-raw="">TypeError</code>'s I've seen in Python over the years!</p><p>Just having the confidence that there's no such place in your code where accidentally passed a <code data-astro-raw="">str</code> where an <code data-astro-raw="">int</code> was expected, eliminates an entire class of bugs from your codebase.</p><hr><p>Not only that - you get a bunch of other benefits, namely:</p><ul>
+<li>Self-documenting code</li>
+<li><code data-astro-raw="">None</code>-awareness</li>
+<li>Better autocompletion and IDE support</li>
+</ul><p>I'll go over all these points in detail.</p><h3 id="self-documenting-code">Self-documenting code</h3><p>Imagine you have this piece of code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">add_orders</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> orders<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">for</span> order <span class="token keyword">in</span> orders<span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>pending_ids<span class="token punctuation">.</span>add<span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token builtin">id</span><span class="token punctuation">)</span>
-</code></pre><p>Seems rather simple, doesn’t it? We seem to have a list of <code>order</code>’s, and we add each order’s id to a set called <code>pending_ids</code>.</p><p>But what are <code>order</code>’s here…</p><p>It’s hard to tell. In a large codebase, you might have to search pretty hard to find out which part of the code is calling <code>add_orders</code>, and where the data in that is coming from, to eventually find out that it’s supposed to be just a <code>namedtuple</code>.</p><p>How about this instead:</p><pre class=""><code class="language-python"><span class="token keyword">from</span> models <span class="token keyword">import</span> Order
+        self<span class="token punctuation">.</span>pending_ids<span class="token punctuation">.</span>add<span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token builtin">id</span><span class="token punctuation">)</span></code></pre><p>Seems rather simple, doesn't it? We seem to have a list of <code data-astro-raw="">order</code>'s, and we add each order's id to a set called <code data-astro-raw="">pending_ids</code>.</p><p>But what are <code data-astro-raw="">order</code>'s here...</p><p>It's hard to tell. In a large codebase, you might have to search pretty hard to find out which part of the code is calling <code data-astro-raw="">add_orders</code>, and where the data in that is coming from, to eventually find out that it's supposed to be just a <code data-astro-raw="">namedtuple</code>.</p><p>How about this instead:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">from</span> models <span class="token keyword">import</span> Order
 
 <span class="token keyword">def</span> <span class="token function">add_orders</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> orders<span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span>Order<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
     <span class="token keyword">for</span> order <span class="token keyword">in</span> orders<span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>pending_ids<span class="token punctuation">.</span>add<span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token builtin">id</span><span class="token punctuation">)</span>
-</code></pre><p>Now it’s instantly clear, that everywhere <code>add_orders</code> is used, it’s going to be exactly of that type.</p><h3 id="none-awareness"><a aria-hidden="true" tabindex="-1" href="#none-awareness"><span class="icon icon-link"></span></a><code>None</code>-awareness</h3><p>What I mean by this, is that not only can you not pass wrong types of values around, you also can’t pass values that could be <code>None</code>, to places that don’t expect the value to be possibly <code>None</code>.</p><p>Here’s an example:</p><pre class=""><code class="language-python">User <span class="token operator">=</span> namedtuple<span class="token punctuation">(</span><span class="token string">'User'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">,</span> <span class="token string">'favorites'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>pending_ids<span class="token punctuation">.</span>add<span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token builtin">id</span><span class="token punctuation">)</span></code></pre><p>Now it's instantly clear, that everywhere <code data-astro-raw="">add_orders</code> is used, it's going to be exactly of that type.</p><h3 id="none-awareness"><code data-astro-raw="">None</code>-awareness</h3><p>What I mean by this, is that not only can you not pass wrong types of values around, you also can't pass values that could be <code data-astro-raw="">None</code>, to places that don't expect the value to be possibly <code data-astro-raw="">None</code>.</p><p>Here's an example:</p><pre class="language-python"><code data-astro-raw="" class="language-python">User <span class="token operator">=</span> namedtuple<span class="token punctuation">(</span><span class="token string">'User'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">,</span> <span class="token string">'favorites'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
 <span class="token keyword">def</span> <span class="token function">fetch_users</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     users <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
@@ -68,8 +100,7 @@ setup("N", {}, async () => {
         <span class="token keyword">print</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>favorites<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'color'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
 users <span class="token operator">=</span> fetch_users<span class="token punctuation">(</span><span class="token punctuation">)</span>
-print_favorite_colors<span class="token punctuation">(</span>users<span class="token punctuation">)</span>
-</code></pre><p>… and on first glance, this looks fine. We’re using <code>.get</code> so we shouldn’t get a <code>KeyError</code> anywhere, so we should be fine, right?</p><p>Now here’s the typed version of the same code:</p><pre class=""><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">(</span>NamedTuple<span class="token punctuation">)</span><span class="token punctuation">:</span>
+print_favorite_colors<span class="token punctuation">(</span>users<span class="token punctuation">)</span></code></pre><p>... and on first glance, this looks fine. We're using <code data-astro-raw="">.get</code> so we shouldn't get a <code data-astro-raw="">KeyError</code> anywhere, so we should be fine, right?</p><p>Now here's the typed version of the same code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">(</span>NamedTuple<span class="token punctuation">)</span><span class="token punctuation">:</span>
     name<span class="token punctuation">:</span> <span class="token builtin">str</span>
     favorites<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">dict</span><span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
 
@@ -92,14 +123,51 @@ print_favorite_colors<span class="token punctuation">(</span>users<span class="t
 
 
 users <span class="token operator">=</span> fetch_users<span class="token punctuation">(</span><span class="token punctuation">)</span>
-print_favorite_colors<span class="token punctuation">(</span>users<span class="token punctuation">)</span>
-</code></pre><p>And as soon as you add types, you see one error:</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fcmm87dc0gdnwr7k45j1.png" alt="image"></p><p>You forgot that <code>user.favorites</code> could be None, which would crash your entire application.</p><p>Good thing mypy caught it before your clients did.</p><h3 id="better-autocompletion-and-ide-support"><a aria-hidden="true" tabindex="-1" href="#better-autocompletion-and-ide-support"><span class="icon icon-link"></span></a>Better autocompletion and IDE support</h3><p>This is honestly my favorite part of working with typed Python. The amount of autocompletion static types give me is awesome, and it increases my productivity ten-fold, because I rarely have to open the documentation anymore.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/af50k2xhu0n7oz5w3f83.png" alt="image"></p><h2 id="where-can-i-use-it"><a aria-hidden="true" tabindex="-1" href="#where-can-i-use-it"><span class="icon icon-link"></span></a>Where can I use it?</h2><p>Now I can hear you saying, “All of this sounds very cool. But where can I use this mypy-thing in my Python codebase?”</p><p>And turns out, <strong>you can start gradually adding types to your existing Python codebase</strong>, one function and one class at a time. It will infer as much information as it can from the amount of type information it has, and will reduce your bugs no matter how small you start.</p><hr><h2 id="conclusion"><a aria-hidden="true" tabindex="-1" href="#conclusion"><span class="icon icon-link"></span></a>Conclusion</h2><p>So, this was my introduction to you, to the world of static type checking in Python. Are you interested in learning more about it? I’ll be dropping a detailed guide to mypy very soon, so stay tuned.</p><blockquote><p>UPDATE: <a href="/post/mypy-guide">It’s out!</a></p></blockquote><p>I’d also love to hear your thoughs on this article, so let me know what you think about mypy down in the comments.</p></main></article></div><hr class="astro-ziW8fDF5"><div class="centered astro-ziW8fDF5"><astro-root uid="M"></astro-root>
-<script type="module">
-import setup from '/_astro_frontend/hydrate/only.js';
-setup("M", {}, async () => {
-  
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("/_astro/src/components/Newsletter/Newsletter.js"), import("/_snowpack/pkg/@astrojs.renderer-preact.client.v0.2.1.js")]);
-  return (el, children) => hydrate(el)(Component, {}, children);
+print_favorite_colors<span class="token punctuation">(</span>users<span class="token punctuation">)</span></code></pre><p>And as soon as you add types, you see one error:</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fcmm87dc0gdnwr7k45j1.png" alt="image"></p><p>You forgot that <code data-astro-raw="">user.favorites</code> could be None, which would crash your entire application.</p><p>Good thing mypy caught it before your clients did.</p><h3 id="better-autocompletion-and-ide-support">Better autocompletion and IDE support</h3><p>This is honestly my favorite part of working with typed Python. The amount of autocompletion static types give me is awesome, and it increases my productivity ten-fold, because I rarely have to open the documentation anymore.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/af50k2xhu0n7oz5w3f83.png" alt="image"></p><h2 id="where-can-i-use-it">Where can I use it?</h2><p>Now I can hear you saying, "All of this sounds very cool. But where can I use this mypy-thing in my Python codebase?"</p><p>And turns out, <strong>you can start gradually adding types to your existing Python codebase</strong>, one function and one class at a time. It will infer as much information as it can from the amount of type information it has, and will reduce your bugs no matter how small you start.</p><hr><h2 id="conclusion">Conclusion</h2><p>So, this was my introduction to you, to the world of static type checking in Python. Are you interested in learning more about it? I'll be dropping a detailed guide to mypy very soon, so stay tuned.</p><blockquote>
+<p>UPDATE: <a href="/post/mypy-guide">It's out!</a></p>
+</blockquote><p>I'd also love to hear your thoughs on this article, so let me know what you think about mypy down in the comments.</p>
+    </main>
+  </article>
+</div>
 
-});
-</script></div><div class="back-to-top-wrapper astro-ziW8fDF5"><a href="#top" class="back-to-top-link astro-ziW8fDF5" aria-label="Scroll to Top"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-ziW8fDF5" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-ziW8fDF5"></path></svg></a></div><script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async=""></script><hr class="astro-n31rkg6Y"><footer class="astro-n31rkg6Y"><a href="https://twitter.com/sadhlife" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">Follow for Python tips</p></a><a href="https://discord.gg/XjAQ53YbpE" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M20.222 0c1.406 0 2.54 1.137 2.607 2.475V24l-2.677-2.273-1.47-1.338-1.604-1.398.67 2.205H3.71c-1.402 0-2.54-1.065-2.54-2.476V2.48C1.17 1.142 2.31.003 3.715.003h16.5L20.222 0zm-6.118 5.683h-.03l-.202.2c2.073.6 3.076 1.537 3.076 1.537-1.336-.668-2.54-1.002-3.744-1.137-.87-.135-1.74-.064-2.475 0h-.2c-.47 0-1.47.2-2.81.735-.467.203-.735.336-.735.336s1.002-1.002 3.21-1.537l-.135-.135s-1.672-.064-3.477 1.27c0 0-1.805 3.144-1.805 7.02 0 0 1 1.74 3.743 1.806 0 0 .4-.533.805-1.002-1.54-.468-2.14-1.404-2.14-1.404s.134.066.335.2h.06c.03 0 .044.015.06.03v.006c.016.016.03.03.06.03.33.136.66.27.93.4.466.202 1.065.403 1.8.536.93.135 1.996.2 3.21 0 .6-.135 1.2-.267 1.8-.535.39-.2.87-.4 1.397-.737 0 0-.6.936-2.205 1.404.33.466.795 1 .795 1 2.744-.06 3.81-1.8 3.87-1.726 0-3.87-1.815-7.02-1.815-7.02-1.635-1.214-3.165-1.26-3.435-1.26l.056-.02zm.168 4.413c.703 0 1.27.6 1.27 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334.002-.74.573-1.338 1.27-1.338zm-4.543 0c.7 0 1.266.6 1.266 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334 0-.74.57-1.338 1.27-1.338z" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">Join the community</p></a><a href="https://github.com/tusharsadhwani/blog" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">Check source code</p></a><a href="https://tusharsadhwani.dev" class="astro-n31rkg6Y"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-n31rkg6Y"><path fill="currentColor" d="M14.31.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.83l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.23l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05L0 11.97l.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.24l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05 1.07.13zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09-.33.22zM21.1 6.11l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01.21.03zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08-.33.23z" class="astro-n31rkg6Y"></path></svg><p class="astro-n31rkg6Y">View the main site</p></a></footer><noscript><img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-ziW8fDF5"></noscript><script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script></body></html>
+
+
+    <hr class="astro-7CIAHWF2">
+    <div class="centered astro-7CIAHWF2">
+      <astro-root uid="ZwUM0Q"></astro-root>
+    </div>
+    <div class="back-to-top-wrapper astro-7CIAHWF2">
+      <a href="#top" class="back-to-top-link astro-7CIAHWF2" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-7CIAHWF2" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-7CIAHWF2"></path>
+        </svg>
+      </a>
+    </div>
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    </script>
+  <hr class="astro-ZUKZCZIV">
+<footer class="astro-ZUKZCZIV">
+  <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">Follow for Python tips</p>
+  </a>
+  <a href="https://discord.gg/XjAQ53YbpE" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M20.222 0c1.406 0 2.54 1.137 2.607 2.475V24l-2.677-2.273-1.47-1.338-1.604-1.398.67 2.205H3.71c-1.402 0-2.54-1.065-2.54-2.476V2.48C1.17 1.142 2.31.003 3.715.003h16.5L20.222 0zm-6.118 5.683h-.03l-.202.2c2.073.6 3.076 1.537 3.076 1.537-1.336-.668-2.54-1.002-3.744-1.137-.87-.135-1.74-.064-2.475 0h-.2c-.47 0-1.47.2-2.81.735-.467.203-.735.336-.735.336s1.002-1.002 3.21-1.537l-.135-.135s-1.672-.064-3.477 1.27c0 0-1.805 3.144-1.805 7.02 0 0 1 1.74 3.743 1.806 0 0 .4-.533.805-1.002-1.54-.468-2.14-1.404-2.14-1.404s.134.066.335.2h.06c.03 0 .044.015.06.03v.006c.016.016.03.03.06.03.33.136.66.27.93.4.466.202 1.065.403 1.8.536.93.135 1.996.2 3.21 0 .6-.135 1.2-.267 1.8-.535.39-.2.87-.4 1.397-.737 0 0-.6.936-2.205 1.404.33.466.795 1 .795 1 2.744-.06 3.81-1.8 3.87-1.726 0-3.87-1.815-7.02-1.815-7.02-1.635-1.214-3.165-1.26-3.435-1.26l.056-.02zm.168 4.413c.703 0 1.27.6 1.27 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334.002-.74.573-1.338 1.27-1.338zm-4.543 0c.7 0 1.266.6 1.266 1.335 0 .74-.57 1.34-1.27 1.34-.7 0-1.27-.6-1.27-1.334 0-.74.57-1.338 1.27-1.338z" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">Join the community</p>
+  </a>
+  <a href="https://github.com/tusharsadhwani/blog" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">Check source code</p>
+  </a>
+  <a href="https://tusharsadhwani.dev" class="astro-ZUKZCZIV">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M14.31.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.83l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.23l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05L0 11.97l.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.24l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05 1.07.13zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09-.33.22zM21.1 6.11l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01.21.03zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08-.33.23z" class="astro-ZUKZCZIV"></path></svg>
+    <p class="astro-ZUKZCZIV">View the main site</p>
+  </a>
+</footer>
+
+
+  <noscript>
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+  </noscript>
+  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</body></html>
