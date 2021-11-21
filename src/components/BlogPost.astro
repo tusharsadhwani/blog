@@ -14,7 +14,7 @@ const { title, author, publishDate, heroImage, alt } = Astro.props;
   <header>
     <p class="publish-date">{publishDate}</p>
     <h1 class="title">{title}</h1>
-    <img src="{heroImage}" alt="{title}">
+    <img src={heroImage} alt={title}>
     <Author name="@tusharsadhwani" href="https://tusharsadhwani.dev" />
   </header>
   <article class="content">

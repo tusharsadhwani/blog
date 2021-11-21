@@ -92,7 +92,7 @@ You can start to see the somewhat repetitive nature of source code. There's bloc
 
 ```text
                  (program)
-                /          \\
+                /          \
   (area_of_circle r)       (main)
   /           |               |
 define    calculate        run area_of_circle

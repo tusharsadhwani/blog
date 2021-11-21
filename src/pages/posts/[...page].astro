@@ -6,7 +6,7 @@ import BlogPostPreview from '../../components/BlogPostPreview.astro';
 import Pagination from '../../components/Pagination.astro';
 import Newsletter from '../../components/Newsletter/Newsletter.jsx'
 
-let title = 'Tushar&#39;s Blog';  // TODO: remove html escape
+let title = 'Tushar\'s Blog';
 let description = 'My thoughts and learnings.';
 
 export async function getStaticPaths({paginate, rss}) {
@@ -57,7 +57,7 @@ const { page } = Astro.props;
       </section>
       <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
       <div class="centered">
-        <Newsletter client:only />
+        <Newsletter client:only="preact" />
       </div>
     </main>
     <Footer />
