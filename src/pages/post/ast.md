@@ -95,24 +95,53 @@ Python has a builtin `ast` module, which has a rich set of features to create, m
 
 ### All the `Node`s
 
-There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: Literals, Variables, Statements and Expressions. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.
+There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: **Literals**, **Variables**, **Statements** and **Expressions**. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.
+
+The role of a node is to concretely represent the features of a language.
+
+It does so by:
+
+- Storing the attributes specific to itself, (for example, an `If` node that represents a for loop might need a `condition` attribute, that is an expression that evaluates to `true` or `false`. The if statement's body will only run when `condition` ends up being `true`.
+- Defining what children the node can have. (In our `If` node's case, it should have a `body`, that is a list of statements.)
+
+Let's see the concrete example of this if statement, in Python's AST representation.
+
+For this source code:
+
+```python
+if answer == 42:
+    print('Correct answer!')
+```
+
+The AST looks like this:
+
+```python
+Module(
+  body=[
+    If(
+      test=Compare(
+        left=Name(id='answer', ctx=Load()),
+        ops=[Eq()],
+        comparators=[Constant(value=42)]
+      ),
+      body=[
+        Expr(
+          value=Call(
+            func=Name(id='print', ctx=Load()),
+            args=[Constant(value='Correct answer!')],
+            keywords=[]
+          )
+        )
+      ],
+      orelse=[]
+    )
+  ],
+  type_ignores=[]
+)
+```
 
 > PENDING
 
-- what's a node, what does it have?
-  A Python AST looks like this:
-
-  ```python
-  Module(
-    body=[
-      Statement(
-        ...
-      )
-    ]
-  )
-  ```
-
-- types of nodes: statements, expressions, operators, are there more?
 - More examples of source codes and their corresponding ASTs.
 
 ~~ somewhere in here, the idea of visitors is to be explained.
