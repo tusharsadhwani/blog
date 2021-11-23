@@ -91,20 +91,6 @@ area_of_circle<span class="token punctuation">(</span><span class="token number"
 <span class="token comment">; Output: 78.5</span></code></pre>
 </li>
 <li>
-<p>C</p>
-<pre class="language-c"><code data-astro-raw="" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-
-<span class="token keyword">float</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span><span class="token keyword">float</span> radius<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">float</span> pi <span class="token operator">=</span> <span class="token number">3.14</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> pi <span class="token operator">*</span> radius <span class="token operator">*</span> radius<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%f"</span><span class="token punctuation">,</span> <span class="token function">area_of_circle</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token comment">// Output: 78.500000</span></code></pre>
-</li>
-<li>
 <p>Go</p>
 <pre class="language-go"><code data-astro-raw="" class="language-go"><span class="token keyword">package</span> main
 
@@ -121,43 +107,49 @@ area_of_circle<span class="token punctuation">(</span><span class="token number"
 </ul><p>We're doing essentially the same thing in all of these, and I'll break it down piece by piece:</p><ul>
 <li>
 <p>We're defining our source code as a block of statements. In our case, there are two statements at the top-level of our source code: one statement that defines our <code data-astro-raw="">area_of_circle</code> function, and another statement that runs this function with the value "5".</p>
-<blockquote>
-<p>In some languages like C and Go, you need to define the <code data-astro-raw="">main</code> function as the entry-point of the program. In those cases, this second statement is inside the main function.</p>
-</blockquote>
 </li>
 <li>
 <p>The definition of the <code data-astro-raw="">area_of_circle</code> function has two parts: the input parameters (the radius, in our case), and the body, which itself is a block of statements. There's two statements inside <code data-astro-raw="">area_of_circle</code> to be specific: the first one defines <code data-astro-raw="">pi</code>, and the second one uses it to calculate the area, and returns it.</p>
 </li>
 <li>
-<p>For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing more statements, like one that prints out the value of <code data-astro-raw="">area_of_circle</code> called with the radius of 5.</p>
+<p>For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing <em>more statements</em>, like one that prints out the value of <code data-astro-raw="">area_of_circle</code> called with the radius of 5.</p>
 </li>
 </ul><p>You can start to see the somewhat repetitive nature of source code. There's blocks of statements, and sometimes within those statements there can be more statements, and so on. If you imagine each statement to be a "node", then you can think of each of these nodes being composed of one or more other "nodes". You can properly define this kind of structure as a "tree":</p><pre class="language-text"><code data-astro-raw="" class="language-text">                 (program)
-                /          \
-  (area_of_circle r)       (main)
-  /           |               |
+                /         \
+  (area_of_circle r)      (main)
+  /           |             |
 define    calculate        run area_of_circle
-  pi        area             with r = "5"
+  pi        area             with r = 5
            /   |
-     multiply  (pi, r, r)</code></pre><p>The nodes here can be anything, from statements, to expressions, to any other construct that the language defines. Once the code is in this tree structure, computers can start to make sense of it, such as traversing its nodes one by one and generate the appropriate machine code.</p><p>Essentially, all your code represents a tree of data. And that tree is called the <strong>Abstract Syntax Tree</strong>. Each programming language has its own AST representation, but the idea is always the same.</p><p>And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.</p><h2 id="the-ast-module">The <code data-astro-raw="">ast</code> module</h2><p>Python has a builtin <code data-astro-raw="">ast</code> module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let's take a look at what all the <code data-astro-raw="">ast</code> module gives us, and try to do something interesting with it:</p><h3 id="all-the-nodes">All the <code data-astro-raw="">Node</code>s</h3><p>There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: Literals, Variables, Statements and Expressions. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.</p><blockquote>
+     multiply  (pi, r, r)</code></pre><p>The nodes here can be anything, from statements, to expressions, to any other construct that the language defines. Once the code is in this tree structure, computers can start to make sense of it, such as traversing its nodes one by one and generate the appropriate machine code.</p><p>Essentially, all your code represents a tree of data. And that tree is called the <strong>Abstract Syntax Tree</strong>. Each programming language has its own AST representation, but the idea is always the same.</p><p>And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.</p><h2 id="pythons-ast-module">Python's <code data-astro-raw="">ast</code> module</h2><p>Python has a builtin <code data-astro-raw="">ast</code> module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let's take a look at what all the <code data-astro-raw="">ast</code> module gives us, and try to do something interesting with it:</p><h3 id="all-the-nodes">All the <code data-astro-raw="">Node</code>s</h3><p>There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: <strong>Literals</strong>, <strong>Variables</strong>, <strong>Statements</strong> and <strong>Expressions</strong>. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.</p><p>The role of a node is to concretely represent the features of a language.</p><p>It does so by:</p><ul>
+<li>Storing the attributes specific to itself, (for example, an <code data-astro-raw="">If</code> node that represents a for loop might need a <code data-astro-raw="">condition</code> attribute, that is an expression that evaluates to <code data-astro-raw="">true</code> or <code data-astro-raw="">false</code>. The if statement's body will only run when <code data-astro-raw="">condition</code> ends up being <code data-astro-raw="">true</code>.</li>
+<li>Defining what children the node can have. (In our <code data-astro-raw="">If</code> node's case, it should have a <code data-astro-raw="">body</code>, that is a list of statements.)</li>
+</ul><p>Let's see the concrete example of this if statement, in Python's AST representation.</p><p>For this source code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">if</span> answer <span class="token operator">==</span> <span class="token number">42</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Correct answer!'</span><span class="token punctuation">)</span></code></pre><p>The AST looks like this:</p><pre class="language-python"><code data-astro-raw="" class="language-python">Module<span class="token punctuation">(</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    If<span class="token punctuation">(</span>
+      test<span class="token operator">=</span>Compare<span class="token punctuation">(</span>
+        left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'answer'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        ops<span class="token operator">=</span><span class="token punctuation">[</span>Eq<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        comparators<span class="token operator">=</span><span class="token punctuation">[</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+      <span class="token punctuation">)</span><span class="token punctuation">,</span>
+      body<span class="token operator">=</span><span class="token punctuation">[</span>
+        Expr<span class="token punctuation">(</span>
+          value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+            func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            args<span class="token operator">=</span><span class="token punctuation">[</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">'Correct answer!'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+          <span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      orelse<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre><blockquote>
 <p>PENDING</p>
 </blockquote><ul>
-<li>
-<p>what's a node, what does it have?
-A Python AST looks like this:</p>
-<pre class="language-python"><code data-astro-raw="" class="language-python">Module<span class="token punctuation">(</span>
-  body<span class="token operator">=</span><span class="token punctuation">[</span>
-    Statement<span class="token punctuation">(</span>
-      <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">)</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">)</span></code></pre>
-</li>
-<li>
-<p>types of nodes: statements, expressions, operators, are there more?</p>
-</li>
-<li>
-<p>More examples of source codes and their corresponding ASTs.</p>
-</li>
+<li>More examples of source codes and their corresponding ASTs.</li>
 </ul><p>~~ somewhere in here, the idea of visitors is to be explained.</p><h3 id="whats-a-ctx">What's a <code data-astro-raw="">ctx</code>?</h3><p>~~ Explain how everything that has a value (variables, attributes, indices, slices, etc.) can either be used to access its value or to store a new value in it.</p><h2 id="the-power-of-ast-manipulation">The power of AST manipulation</h2><p>Some really bizarre examples of modifying your code's runtime behaviour go here.</p><p>~~ explain transformers here?</p><h3 id="ast-utilities">AST utilities</h3><p>~~ fix missing locations, literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
 Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p>
