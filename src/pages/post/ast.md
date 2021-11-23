@@ -46,22 +46,6 @@ I know that the theory is hard to understand if you've never heard of these term
   ; Output: 78.5
   ```
 
-- C
-
-  ```c
-  #include <stdio.h>
-
-  float area_of_circle(float radius) {
-    float pi = 3.14;
-    return pi * radius * radius;
-  }
-
-  int main() {
-    printf("%f", area_of_circle(5));
-  }
-  // Output: 78.500000
-  ```
-
 - Go
 
   ```go
@@ -82,21 +66,19 @@ We're doing essentially the same thing in all of these, and I'll break it down p
 
 - We're defining our source code as a block of statements. In our case, there are two statements at the top-level of our source code: one statement that defines our `area_of_circle` function, and another statement that runs this function with the value "5".
 
-  > In some languages like C and Go, you need to define the `main` function as the entry-point of the program. In those cases, this second statement is inside the main function.
-
 - The definition of the `area_of_circle` function has two parts: the input parameters (the radius, in our case), and the body, which itself is a block of statements. There's two statements inside `area_of_circle` to be specific: the first one defines `pi`, and the second one uses it to calculate the area, and returns it.
 
-- For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing more statements, like one that prints out the value of `area_of_circle` called with the radius of 5.
+- For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing *more statements*, like one that prints out the value of `area_of_circle` called with the radius of 5.
 
 You can start to see the somewhat repetitive nature of source code. There's blocks of statements, and sometimes within those statements there can be more statements, and so on. If you imagine each statement to be a "node", then you can think of each of these nodes being composed of one or more other "nodes". You can properly define this kind of structure as a "tree":
 
 ```text
                  (program)
-                /          \
-  (area_of_circle r)       (main)
-  /           |               |
+                /         \
+  (area_of_circle r)      (main)
+  /           |             |
 define    calculate        run area_of_circle
-  pi        area             with r = "5"
+  pi        area             with r = 5
            /   |
      multiply  (pi, r, r)
 ```
@@ -107,7 +89,7 @@ Essentially, all your code represents a tree of data. And that tree is called th
 
 And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.
 
-## The `ast` module
+## Python's `ast` module
 
 Python has a builtin `ast` module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let's take a look at what all the `ast` module gives us, and try to do something interesting with it:
 
