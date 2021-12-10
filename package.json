@@ -7,9 +7,7 @@
     "build": "astro build"
   },
   "devDependencies": {
-    "astro": "^0.21.0"
-  },
-  "dependencies": {
+    "astro": "^0.21.12",
     "rehype-autolink-headings": "^6.1.0"
   }
 }
