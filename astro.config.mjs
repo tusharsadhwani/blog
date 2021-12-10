@@ -14,6 +14,11 @@ export default {
   },
   renderers: ["@astrojs/renderer-preact"],
   markdownOptions: {
-    rehypePlugins: ["rehype-autolink-headings"],
+    render: [
+      "@astrojs/markdown-remark",
+      {
+        rehypePlugins: ["rehype-autolink-headings"],
+      },
+    ],
   },
 };
