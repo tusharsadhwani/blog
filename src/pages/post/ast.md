@@ -68,7 +68,7 @@ We're doing essentially the same thing in all of these, and I'll break it down p
 
 - The definition of the `area_of_circle` function has two parts: the input parameters (the radius, in our case), and the body, which itself is a block of statements. There's two statements inside `area_of_circle` to be specific: the first one defines `pi`, and the second one uses it to calculate the area, and returns it.
 
-- For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing *more statements*, like one that prints out the value of `area_of_circle` called with the radius of 5.
+- For the languages that have a main funciton, the definition of the main function itself is a statement. Inside that statement we are writing _more statements_, like one that prints out the value of `area_of_circle` called with the radius of 5.
 
 You can start to see the somewhat repetitive nature of source code. There's blocks of statements, and sometimes within those statements there can be more statements, and so on. If you imagine each statement to be a "node", then you can think of each of these nodes being composed of one or more other "nodes". You can properly define this kind of structure as a "tree":
 
@@ -139,6 +139,96 @@ Module(
   type_ignores=[]
 )
 ```
+
+Let's break this down:
+
+Ignoring the details for now, the overall structure of the AST looks like this:
+
+```python
+Module(
+  body=[
+    If(
+      test=Compare(...),
+      body=[
+        ...
+      ],
+    )
+  ],
+)
+```
+
+At the top level, is a `Module`. All Python files are compiled as "modules" when making the AST. Modules have a very specific meaning: anything that can be run by Python classifies as a module. So by definition, our Python file is a module.
+
+It has a body, which is a list. Specifically, a list of **statements**. All Python files are just that: a list of statements. Every Python program that you've ever written, read or run -- just that.
+
+In our case, we have just one statement in the module's body: an `If`-statement. The if-statement has two components: a `test`, and a `body`. The `test` part holds the _condition expression_, and the `body` holds the block of code that's inside the if.
+
+Let's look at the `test` "expression" first:
+
+```python
+If(
+  test=Compare(
+    left=Name(id='answer', ctx=Load()),
+    ops=[Eq()],
+    comparators=[Constant(value=42)]
+  ),
+  ...
+```
+
+In our case, we have a `Compare` expression -- which makes sense. Python defines comparisons [quite thoroughly](https://docs.python.org/3/reference/expressions.html#comparisons) in its reference, and if you read it, you'll find that Python supports _comparison chaining_.
+
+From the docs:
+
+> Python's comparison expressions support this syntax:
+>
+> `a op1 b op2 c ...`
+>
+> Which is equivalent to:
+>
+> `a op1 b and b op2 c and ...`
+
+In human terms, this means that Python can support stuff like this:
+
+```python
+x = get_number()
+if 0 < x < 10:
+    print('Your number is a single digit!')
+```
+
+And `0 < x < 10` is the same as asking `0 < x and x < 10`.
+
+Here's the important part: for Python to support this, the _AST needs to support this_. And Python's AST supports comparison chaining by storing the operators and the comparators (variables) inside **lists**. You can look at it in the REPL itself:
+
+```python
+>>> def get_ast(code):
+...     print(ast.dump(ast.parse(code), indent=2))
+...
+>>> get_ast('a < b > c > d')
+Module(
+  body=[
+    Expr(
+      value=Compare(
+        left=Name(id='a', ctx=Load()),
+        ops=[Lt(), Gt(), Gt()],
+        comparators=[
+          Name(id='b', ctx=Load()),
+          Name(id='c', ctx=Load()),
+          Name(id='d', ctx=Load())]))],
+  type_ignores=[])
+```
+
+You can see that the operators `<`, `>` and `>` are stored as `ops=[Lt(), Gt(), Gt()]` inside the `Compare` object. The four values are stored a bit more peculiarly: The variable `a` is stored in a separate field called `left`, and then every other variable is stored in a list called `comparators`:
+
+```python
+comparators=[
+  Name(id='b', ctx=Load()),
+  Name(id='c', ctx=Load()),
+  Name(id='d', ctx=Load()),
+],
+...
+```
+
+In other words: the leftmost variable is stored in `left`, and every variable on the right of each operator is stored in the respective index of `comparators`.
 
 > PENDING
 
