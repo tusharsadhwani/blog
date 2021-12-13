@@ -200,6 +200,7 @@ And `0 < x < 10` is the same as asking `0 < x and x < 10`.
 Here's the important part: for Python to support this, the _AST needs to support this_. And Python's AST supports comparison chaining by storing the operators and the comparators (variables) inside **lists**. You can look at it in the REPL itself:
 
 ```python
+>>> import ast
 >>> def get_ast(code):
 ...     print(ast.dump(ast.parse(code), indent=2))
 ...
