@@ -472,6 +472,7 @@ It's useful for many use-cases, one of them being searching through a list:
 
 ```python
 items = ['Bag', 'Purse', 'Phone', 'Wallet']
+
 for item in items:
     if item == 'Phone':
         print('Phone was found in items!')
