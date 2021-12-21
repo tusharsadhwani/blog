@@ -523,21 +523,27 @@ For(
 
 Pretty straightforward. Also, `If` statements have the exact same `orelse` property as for loops.
 
-> PENDING
-
-- More examples of source codes and their corresponding ASTs.
-
-~~ somewhere in here, the idea of visitors is to be explained.
-
 ### What's a `ctx`?
 
 ~~ Explain how everything that has a value (variables, attributes, indices, slices, etc.) can either be used to access its value or to store a new value in it.
+
+## Walking the Syntax Trees with Visitors
+
+> PENDING
+
+~~ Explain how tree traversal works, what that means in terms of an AST, and explain how you can use traversal as a way of finding code patterns and issues. Don't go into too much detail right away, we'll dive deeper during the building linter part.
 
 ## The power of AST manipulation
 
 Some really bizarre examples of modifying your code's runtime behaviour go here.
 
 ~~ explain transformers here?
+
+> Quote from docs: "Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the `generic_visit()` method for the node first."
+
+~~ A good, meaningful example of a transformer here would be great, as we're only building a linter later on.
+
+~~ Mention zxpy :)
 
 ### AST utilities
 
