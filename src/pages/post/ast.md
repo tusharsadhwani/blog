@@ -161,7 +161,7 @@ At the top level, is a `Module`. All Python files are compiled as "modules" when
 
 It has a body, which is a list. Specifically, a list of **statements**. All Python files are just that: a list of statements. Every Python program that you've ever written, read or run -- just that.
 
-In our case, we have just one statement in the module's body: an `If`-statement. The if-statement has two components: a `test`, and a `body`. The `test` part holds the _condition expression_, and the `body` holds the block of code that's inside the if.
+In our case, we have just one statement in the module's body: an `If`-statement. The if-statement has two components: a `test`, and a `body`. The `test` part holds the _condition expression_, and the `body` holds the block of statements that's inside the if.
 
 Let's look at the `test` "expression" first:
 
@@ -230,6 +230,297 @@ comparators=[
 ```
 
 In other words: the leftmost variable is stored in `left`, and every variable on the right of each operator is stored in the respective index of `comparators`.
+
+Hopefully that clarifies what the `test` expression in our example code:
+
+```python
+If(
+  test=Compare(
+    left=Name(id='answer', ctx=Load()),
+    ops=[Eq()],
+    comparators=[Constant(value=42)]
+  ),
+  ...
+```
+
+`left` is the `Name` node 'answer' (basically, a variable), and we have just one comparison going on: `Eq` being applied on the constant value `42`. Essentially it is the `answer == 42` part of the code.
+
+Now let's look at the body:
+
+```python
+    If(
+      test=...,
+      body=[
+        Expr(
+          value=Call(
+            func=Name(id='print', ctx=Load()),
+            args=[Constant(value='Correct answer!')],
+            keywords=[]
+          )
+        )
+      ],
+      orelse=[]
+    )
+```
+
+The body in our case is a single `Expr`-ession. Note that, when I said that a block or module always contains a list of statements, I wasn't lying. This `Expr` right hereis actually an **expression-statement**. Yeah, I'm not making this up, it will make sense in a bit.
+
+### Aside: Expressions vs. Statements
+
+Statements are pretty easy to define. They're kind of like the building blocks of your code. Each statement does something that you can properly define. Such as:
+
+- Creating a variable
+
+  ```python
+  x = 5
+  ```
+
+  This one becomes an `Assign` statement:
+
+  ```python
+  Assign(
+    targets=[
+      Name(id='x', ctx=Store())
+    ],
+    value=Constant(value=5)
+  )
+  ```
+
+  Pretty straightforward, the node stores a target and a value. `targets` here is a list because you can also do multiple assignments: `a = b = 5`. There will only be one value, though.
+
+- Importing a module
+
+  ```python
+  import random
+  ```
+
+  This one becomes an `Import` statement:
+
+  ```python
+  Import(
+    names=[
+      alias(name='random')
+    ]
+  )
+  ```
+
+- Asserting some property
+
+  ```python
+  assert False
+  ```
+
+  Becomes:
+
+  ```python
+  Assert(
+    test=Compare(
+      left=Name(id='a', ctx=Load()),
+      ops=[Eq()],
+      comparators=[
+        Name(id='b', ctx=Load())
+      ]
+    )
+  )
+  ```
+
+- Doing absolutely nothing
+
+  ```python
+  pass
+  ```
+
+  Becomes:
+
+  ```python
+  Pass()
+  ```
+
+On the other hand, an expression is basically anything that evaluates to a value. Any piece of syntax that ends up turning into a "value", such as a number, a string, an object, even a class or function. As long as it returns a value to us, it is an expression.
+
+This includes:
+
+- Identity checks
+
+  This refers to the `is` expression:
+
+  ```python
+  >>> a = 5
+  >>> b = a
+  >>> b
+  5
+  >>> a is b
+  True
+  ```
+
+  Clearly, `a is b` returns either `True` or `False`, just like any other conditional check. And since it returns a value, it is an expression.
+
+  Here's its AST:
+
+  ```python
+  Compare(
+    left=Name(id='a', ctx=Load()),
+    ops=[Is()],
+    comparators=[
+      Name(id='b', ctx=Load())
+    ]
+  )
+  ```
+
+  And it really is just like conditionals. Turns out `is` is treated just as a special operator (like `<`, `==` and so on) inside a `Compare` object when talking about ASTs.
+
+- Function calls
+
+  Function calls return a value. That makes them the most obvious example of an expression:
+
+  ```python
+  >>> from os import getpid
+  >>> getpid()
+  15206
+  ```
+
+  Here's what the AST for `getpid()` looks like, it'se essrntially just a `Call`:
+
+  ```python
+  Call(
+    func=Name(id='getpid', ctx=Load()),
+    args=[],
+    keywords=[]
+  )
+  ```
+
+  `print('Hello')` would look like this, it has one argument:
+
+  ```python
+  Call(
+    func=Name(id='print', ctx=Load()),
+    args=[Constant(value='hello')],
+    keywords=[]
+  )
+  ```
+
+- Lambdas
+
+  Lambdas themselves are expressions. When you create a lambda function, you usually pass it directly as an argument to another function, or assign it to a variable. Here's some examples:
+
+  ```python
+  >>> lambda: 5
+  <function <lambda> at 0x7f684169cb80>
+  >>> returns_five = lambda: 5
+  >>> returns_five()
+  5
+  >>> is_even = lambda num: num % 2 == 0
+  >>> list(filter(is_even, [1, 2, 3, 4, 5]))
+  [2, 4]
+  >>> list(filter(lambda num: num % 2, [1, 2, 3, 4, 5]))
+  [1, 3, 5]
+  ```
+
+  And there's the `Lambda` expression for `lambda: 5` in the AST:
+
+  ```python
+  Lambda(
+    args=arguments(
+      posonlyargs=[],
+      args=[],
+      kwonlyargs=[],
+      kw_defaults=[],
+      defaults=[]
+    ),
+    body=Constant(value=5)
+  )
+  ```
+
+Now, if you think about it, a call to `print()` in a regular code, it's technically a statement, right?
+
+```python
+def greet():
+    print('Hello world!')
+```
+
+As I've said before, blocks of code are essentially just a list of statements. And we also know, that calling `print` is technically an expression (it even returns `None`!). So what's going on here?
+
+The answer is simple: Python lets you treat any expression as a standalone statement. The expression is going to return some value, but that value just gets discarded.
+
+Getting back to our original AST:
+
+```python
+    If(
+      test=...,
+      body=[
+        Expr(
+          value=Call(
+            func=Name(id='print', ctx=Load()),
+            args=[Constant(value='Correct answer!')],
+            keywords=[]
+          )
+        )
+      ],
+      orelse=[]
+    )
+```
+
+We have an `Expr` in our body, which is Python's way of saying "This is an expression that's being used as a statement. The actual expression is inside it, a `Call` to `print`.
+
+The last thing left in this example AST is the last line: `orelse=[]`. `orelse` refers to `else:` blocks anywhere in the AST. The name `orelse` was chosen because `else` itself is a keyword and can't be used as attribute names.
+
+Oh, did you know that `for` loops in Python can have an else clause?
+
+`for`-`else` is really interesting. The `else` in for loops is run whenever the loop runs to its entirety. In other words, it is _not_ run, when you break out of the loop before it finishes.
+
+It's useful for many use-cases, one of them being searching through a list:
+
+```python
+items = ['Bag', 'Purse', 'Phone', 'Wallet']
+for item in items:
+    if item == 'Phone':
+        print('Phone was found in items!')
+        break
+
+else:
+    print('Phone was not found in items :(')
+```
+
+If we had an `else`-clause on our for loop, like:
+
+```python
+for item in items:
+    print(item)
+else:
+    print('All done')
+```
+
+The AST would look more interesting:
+
+```python
+For(
+  target=Name(id='item', ctx=Store()),
+  iter=Name(id='items', ctx=Load()),
+  body=[
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Name(id='item', ctx=Load())],
+        keywords=[]
+      )
+    )
+  ],
+  orelse=[
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Constant(value='All done')
+        ],
+        keywords=[]
+      )
+    )
+  ]
+)
+```
+
+Pretty straightforward. Also, `If` statements have the exact same `orelse` property as for loops.
 
 > PENDING
 
