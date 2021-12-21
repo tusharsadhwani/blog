@@ -155,7 +155,7 @@ define    calculate        run area_of_circle
       <span class="token punctuation">]</span><span class="token punctuation">,</span>
     <span class="token punctuation">)</span>
   <span class="token punctuation">]</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span></code></pre><p>At the top level, is a <code data-astro-raw="">Module</code>. All Python files are compiled as "modules" when making the AST. Modules have a very specific meaning: anything that can be run by Python classifies as a module. So by definition, our Python file is a module.</p><p>It has a body, which is a list. Specifically, a list of <strong>statements</strong>. All Python files are just that: a list of statements. Every Python program that you've ever written, read or run -- just that.</p><p>In our case, we have just one statement in the module's body: an <code data-astro-raw="">If</code>-statement. The if-statement has two components: a <code data-astro-raw="">test</code>, and a <code data-astro-raw="">body</code>. The <code data-astro-raw="">test</code> part holds the <em>condition expression</em>, and the <code data-astro-raw="">body</code> holds the block of code that's inside the if.</p><p>Let's look at the <code data-astro-raw="">test</code> "expression" first:</p><pre class="language-python"><code data-astro-raw="" class="language-python">If<span class="token punctuation">(</span>
+<span class="token punctuation">)</span></code></pre><p>At the top level, is a <code data-astro-raw="">Module</code>. All Python files are compiled as "modules" when making the AST. Modules have a very specific meaning: anything that can be run by Python classifies as a module. So by definition, our Python file is a module.</p><p>It has a body, which is a list. Specifically, a list of <strong>statements</strong>. All Python files are just that: a list of statements. Every Python program that you've ever written, read or run -- just that.</p><p>In our case, we have just one statement in the module's body: an <code data-astro-raw="">If</code>-statement. The if-statement has two components: a <code data-astro-raw="">test</code>, and a <code data-astro-raw="">body</code>. The <code data-astro-raw="">test</code> part holds the <em>condition expression</em>, and the <code data-astro-raw="">body</code> holds the block of statements that's inside the if.</p><p>Let's look at the <code data-astro-raw="">test</code> "expression" first:</p><pre class="language-python"><code data-astro-raw="" class="language-python">If<span class="token punctuation">(</span>
   test<span class="token operator">=</span>Compare<span class="token punctuation">(</span>
     left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'answer'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
     ops<span class="token operator">=</span><span class="token punctuation">[</span>Eq<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
@@ -188,7 +188,180 @@ Module<span class="token punctuation">(</span>
   Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'c'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
   Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'d'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
 <span class="token punctuation">]</span><span class="token punctuation">,</span>
-<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>In other words: the leftmost variable is stored in <code data-astro-raw="">left</code>, and every variable on the right of each operator is stored in the respective index of <code data-astro-raw="">comparators</code>.</p><blockquote>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>In other words: the leftmost variable is stored in <code data-astro-raw="">left</code>, and every variable on the right of each operator is stored in the respective index of <code data-astro-raw="">comparators</code>.</p><p>Hopefully that clarifies what the <code data-astro-raw="">test</code> expression in our example code:</p><pre class="language-python"><code data-astro-raw="" class="language-python">If<span class="token punctuation">(</span>
+  test<span class="token operator">=</span>Compare<span class="token punctuation">(</span>
+    left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'answer'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    ops<span class="token operator">=</span><span class="token punctuation">[</span>Eq<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    comparators<span class="token operator">=</span><span class="token punctuation">[</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p><code data-astro-raw="">left</code> is the <code data-astro-raw="">Name</code> node 'answer' (basically, a variable), and we have just one comparison going on: <code data-astro-raw="">Eq</code> being applied on the constant value <code data-astro-raw="">42</code>. Essentially it is the <code data-astro-raw="">answer == 42</code> part of the code.</p><p>Now let's look at the body:</p><pre class="language-python"><code data-astro-raw="" class="language-python">    If<span class="token punctuation">(</span>
+      test<span class="token operator">=</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span>
+      body<span class="token operator">=</span><span class="token punctuation">[</span>
+        Expr<span class="token punctuation">(</span>
+          value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+            func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            args<span class="token operator">=</span><span class="token punctuation">[</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">'Correct answer!'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+          <span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      orelse<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span></code></pre><p>The body in our case is a single <code data-astro-raw="">Expr</code>-ession. Note that, when I said that a block or module always contains a list of statements, I wasn't lying. This <code data-astro-raw="">Expr</code> right hereis actually an <strong>expression-statement</strong>. Yeah, I'm not making this up, it will make sense in a bit.</p><h3 id="aside-expressions-vs-statements">Aside: Expressions vs. Statements</h3><p>Statements are pretty easy to define. They're kind of like the building blocks of your code. Each statement does something that you can properly define. Such as:</p><ul>
+<li>
+<p>Creating a variable</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">x <span class="token operator">=</span> <span class="token number">5</span></code></pre>
+<p>This one becomes an <code data-astro-raw="">Assign</code> statement:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Assign<span class="token punctuation">(</span>
+  targets<span class="token operator">=</span><span class="token punctuation">[</span>
+    Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Store<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  value<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span></code></pre>
+<p>Pretty straightforward, the node stores a target and a value. <code data-astro-raw="">targets</code> here is a list because you can also do multiple assignments: <code data-astro-raw="">a = b = 5</code>. There will only be one value, though.</p>
+</li>
+<li>
+<p>Importing a module</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">import</span> random</code></pre>
+<p>This one becomes an <code data-astro-raw="">Import</code> statement:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Import<span class="token punctuation">(</span>
+  names<span class="token operator">=</span><span class="token punctuation">[</span>
+    alias<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'random'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre>
+</li>
+<li>
+<p>Asserting some property</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">assert</span> <span class="token boolean">False</span></code></pre>
+<p>Becomes:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Assert<span class="token punctuation">(</span>
+  test<span class="token operator">=</span>Compare<span class="token punctuation">(</span>
+    left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    ops<span class="token operator">=</span><span class="token punctuation">[</span>Eq<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    comparators<span class="token operator">=</span><span class="token punctuation">[</span>
+      Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'b'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">)</span></code></pre>
+</li>
+<li>
+<p>Doing absolutely nothing</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">pass</span></code></pre>
+<p>Becomes:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Pass<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+</li>
+</ul><p>On the other hand, an expression is basically anything that evaluates to a value. Any piece of syntax that ends up turning into a "value", such as a number, a string, an object, even a class or function. As long as it returns a value to us, it is an expression.</p><p>This includes:</p><ul>
+<li>
+<p>Identity checks</p>
+<p>This refers to the <code data-astro-raw="">is</code> expression:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a <span class="token operator">=</span> <span class="token number">5</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b <span class="token operator">=</span> a
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> b
+<span class="token number">5</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a <span class="token keyword">is</span> b
+<span class="token boolean">True</span></code></pre>
+<p>Clearly, <code data-astro-raw="">a is b</code> returns either <code data-astro-raw="">True</code> or <code data-astro-raw="">False</code>, just like any other conditional check. And since it returns a value, it is an expression.</p>
+<p>Here's its AST:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Compare<span class="token punctuation">(</span>
+  left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  ops<span class="token operator">=</span><span class="token punctuation">[</span>Is<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  comparators<span class="token operator">=</span><span class="token punctuation">[</span>
+    Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'b'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre>
+<p>And it really is just like conditionals. Turns out <code data-astro-raw="">is</code> is treated just as a special operator (like <code data-astro-raw="">&lt;</code>, <code data-astro-raw="">==</code> and so on) inside a <code data-astro-raw="">Compare</code> object when talking about ASTs.</p>
+</li>
+<li>
+<p>Function calls</p>
+<p>Function calls return a value. That makes them the most obvious example of an expression:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">from</span> os <span class="token keyword">import</span> getpid
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> getpid<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token number">15206</span></code></pre>
+<p>Here's what the AST for <code data-astro-raw="">getpid()</code> looks like, it'se essrntially just a <code data-astro-raw="">Call</code>:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Call<span class="token punctuation">(</span>
+  func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'getpid'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  args<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre>
+<p><code data-astro-raw="">print('Hello')</code> would look like this, it has one argument:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Call<span class="token punctuation">(</span>
+  func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  args<span class="token operator">=</span><span class="token punctuation">[</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">'hello'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre>
+</li>
+<li>
+<p>Lambdas</p>
+<p>Lambdas themselves are expressions. When you create a lambda function, you usually pass it directly as an argument to another function, or assign it to a variable. Here's some examples:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> <span class="token number">5</span>
+<span class="token operator">&lt;</span>function <span class="token operator">&lt;</span><span class="token keyword">lambda</span><span class="token operator">&gt;</span> at <span class="token number">0x7f684169cb80</span><span class="token operator">&gt;</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> returns_five <span class="token operator">=</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> <span class="token number">5</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> returns_five<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token number">5</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> is_even <span class="token operator">=</span> <span class="token keyword">lambda</span> num<span class="token punctuation">:</span> num <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">filter</span><span class="token punctuation">(</span>is_even<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">filter</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> num<span class="token punctuation">:</span> num <span class="token operator">%</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span></code></pre>
+<p>And there's the <code data-astro-raw="">Lambda</code> expression for <code data-astro-raw="">lambda: 5</code> in the AST:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python">Lambda<span class="token punctuation">(</span>
+  args<span class="token operator">=</span>arguments<span class="token punctuation">(</span>
+    posonlyargs<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    args<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    kwonlyargs<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    kw_defaults<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    defaults<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token punctuation">)</span><span class="token punctuation">,</span>
+  body<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span></code></pre>
+</li>
+</ul><p>Now, if you think about it, a call to <code data-astro-raw="">print()</code> in a regular code, it's technically a statement, right?</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Hello world!'</span><span class="token punctuation">)</span></code></pre><p>As I've said before, blocks of code are essentially just a list of statements. And we also know, that calling <code data-astro-raw="">print</code> is technically an expression (it even returns <code data-astro-raw="">None</code>!). So what's going on here?</p><p>The answer is simple: Python lets you treat any expression as a standalone statement. The expression is going to return some value, but that value just gets discarded.</p><p>Getting back to our original AST:</p><pre class="language-python"><code data-astro-raw="" class="language-python">    If<span class="token punctuation">(</span>
+      test<span class="token operator">=</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span>
+      body<span class="token operator">=</span><span class="token punctuation">[</span>
+        Expr<span class="token punctuation">(</span>
+          value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+            func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            args<span class="token operator">=</span><span class="token punctuation">[</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">'Correct answer!'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+          <span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      orelse<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span></code></pre><p>We have an <code data-astro-raw="">Expr</code> in our body, which is Python's way of saying "This is an expression that's being used as a statement. The actual expression is inside it, a <code data-astro-raw="">Call</code> to <code data-astro-raw="">print</code>.</p><p>The last thing left in this example AST is the last line: <code data-astro-raw="">orelse=[]</code>. <code data-astro-raw="">orelse</code> refers to <code data-astro-raw="">else:</code> blocks anywhere in the AST. The name <code data-astro-raw="">orelse</code> was chosen because <code data-astro-raw="">else</code> itself is a keyword and can't be used as attribute names.</p><p>Oh, did you know that <code data-astro-raw="">for</code> loops in Python can have an else clause?</p><p><code data-astro-raw="">for</code>-<code data-astro-raw="">else</code> is really interesting. The <code data-astro-raw="">else</code> in for loops is run whenever the loop runs to its entirety. In other words, it is <em>not</em> run, when you break out of the loop before it finishes.</p><p>It's useful for many use-cases, one of them being searching through a list:</p><pre class="language-python"><code data-astro-raw="" class="language-python">items <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'Bag'</span><span class="token punctuation">,</span> <span class="token string">'Purse'</span><span class="token punctuation">,</span> <span class="token string">'Phone'</span><span class="token punctuation">,</span> <span class="token string">'Wallet'</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> item <span class="token keyword">in</span> items<span class="token punctuation">:</span>
+    <span class="token keyword">if</span> item <span class="token operator">==</span> <span class="token string">'Phone'</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Phone was found in items!'</span><span class="token punctuation">)</span>
+        <span class="token keyword">break</span>
+
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Phone was not found in items :('</span><span class="token punctuation">)</span></code></pre><p>If we had an <code data-astro-raw="">else</code>-clause on our for loop, like:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">for</span> item <span class="token keyword">in</span> items<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'All done'</span><span class="token punctuation">)</span></code></pre><p>The AST would look more interesting:</p><pre class="language-python"><code data-astro-raw="" class="language-python">For<span class="token punctuation">(</span>
+  target<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'item'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Store<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token builtin">iter</span><span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'items'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    Expr<span class="token punctuation">(</span>
+      value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+        func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        args<span class="token operator">=</span><span class="token punctuation">[</span>
+          Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'item'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  orelse<span class="token operator">=</span><span class="token punctuation">[</span>
+    Expr<span class="token punctuation">(</span>
+      value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+        func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        args<span class="token operator">=</span><span class="token punctuation">[</span>
+          Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">'All done'</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre><p>Pretty straightforward. Also, <code data-astro-raw="">If</code> statements have the exact same <code data-astro-raw="">orelse</code> property as for loops.</p><blockquote>
 <p>PENDING</p>
 </blockquote><ul>
 <li>More examples of source codes and their corresponding ASTs.</li>
