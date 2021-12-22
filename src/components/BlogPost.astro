@@ -6,6 +6,7 @@ export interface Props {
   author: string;
   publishDate: string;
   heroImage: string;
+  alt: string;
 }
 
 const { title, author, publishDate, heroImage, alt } = Astro.props;
@@ -14,7 +15,7 @@ const { title, author, publishDate, heroImage, alt } = Astro.props;
   <header>
     <p class="publish-date">{publishDate}</p>
     <h1 class="title">{title}</h1>
-    <img src={heroImage} alt={title}>
+    <img src={heroImage} title={alt} alt={alt}>
     <Author name="@tusharsadhwani" href="https://tusharsadhwani.dev" />
   </header>
   <article class="content">
