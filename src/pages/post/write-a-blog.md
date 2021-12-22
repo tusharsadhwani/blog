@@ -18,8 +18,8 @@ I found a great example of this today, an article by Amos from 9 years ago, on [
 
 It reminded me of my first ever blogpost, which I wrote after painstakingly figuring out [how to setup postgres on my distro](/post/setup-postgres).
 
-Learned something about a library that isn't clearly mentioned in its documentation? Write it down. Figured out some tricky steps in setting up a project? Write it down. Not only will it help you in the future, it might just help a newcomer enough to avoid them quitting their passion project.
+Learned something about a library that isn't clearly mentioned in its documentation? _Write it down._ Figured out some tricky steps in setting up a project? _Write it down._ Not only will it help you in the future, it might just help a newcomer enough to avoid them quitting their passion project.
 
-**Write it down.**
+Write it down.
 
-P.S. If you don't want to spend time customizing your own blog, use a [hugo template], they're really easy to setup. If you don't want to care about hosting, domains, or anything else, [dev.to](https://dev.to/) will do all of it for you. It doesn't really matter where, as long as you write it down.
+P.S. If you don't want to spend time customizing your own blog, use a [hugo template](https://gohugo.io/templates/), they're really easy to setup. If you don't want to care about hosting, domains, or anything else, [dev.to](https://dev.to/) will do all of it for you. It doesn't really matter where, as long as you write it down.
