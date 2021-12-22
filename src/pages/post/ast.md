@@ -525,7 +525,123 @@ Pretty straightforward. Also, `If` statements have the exact same `orelse` prope
 
 ### What's a `ctx`?
 
-~~ Explain how everything that has a value (variables, attributes, indices, slices, etc.) can either be used to access its value or to store a new value in it.
+Ideally, I want you to leave from this article understanding every single aspect of Python's ASTs. And if you're one of the few super observant readers, you might have noticed that we glanced over a very small thing in the AST examples shown. You can see it in this code snippet:
+
+```python
+Compare(
+  left=Name(id='a', ctx=Load()),
+  ops=[Eq()],
+  comparators=[
+    Name(id='b', ctx=Load())
+  ]
+)
+```
+
+We've talked about `Compare`, we've talked about what the `left`, `ops` and `comparators` fields represent, we've also talked about `Name` nodes. The only thing left is `ctx=Load()`. What exactly does that mean?
+
+If you check all the code snippets we've seen so far, we've actually seen 27 instances of `Name` nodes in the examples. Out of the 27, 25 have had the property `ctx=Load()`, but two of them have a different value: `ctx=Store()`. Like this one:
+
+```python
+Assign(
+  targets=[
+    Name(id='x', ctx=Store())
+  ],
+  value=Constant(value=5)
+)
+```
+
+`ctx` (short for "context") is an essential concept of Python (and many other programming languages), and it is related to the whole concept of "variables".
+
+If I were to ask you "what's a variable?" You might say something like "It can store values which you can use later.", and give some example like:
+
+```python
+age = 21    # Here `age` is being used to store data
+print(age)  # The stored data is being taken out here
+```
+
+And that's exactly what it is. If you look at the AST for this code:
+
+```python
+>>> def get_ast(code):
+...      print(ast.dump(ast.parse(code), indent=2))
+...
+>>> get_ast('''
+... age = 21
+... print(age)
+... ''')
+Module(
+  body=[
+    Assign(
+      targets=[
+        Name(id='age', ctx=Store())
+      ],
+      value=Constant(value=21)),
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Name(id='age', ctx=Load())
+        ],
+        keywords=[]
+      )
+    )
+  ],
+  type_ignores=[]
+)
+>>>
+```
+
+So the first statement is an `Assign`, and the variable `age` is in the "Store" context (because a new value is being stored into it), and in the second statement it is in "Load" context. Interestingly, `print` itself is a variable that's being loaded in this statement. Which makes sense, print is essentially a function somewhere in memory, which is accessible by us using the name `print`.
+
+Let's look at a couple more. What about this?
+
+```python
+age = age + 1
+```
+
+The AST looks like this:
+
+```python
+Assign(
+  targets=[
+    Name(id='age', ctx=Store())
+  ],
+  value=BinOp(
+    left=Name(id='age', ctx=Load()),
+    op=Add(),
+    right=Constant(value=1)
+  )
+)
+```
+
+The `age` on the right is in "Load" mode and the one on the left is in "Store" mode: that's why this line of code makes sense. This should probably help in explaining that line of code to a newbie programmer in the future.
+
+One more interesting example is this:
+
+```python
+x[5] = y
+```
+
+The AST looks like this:
+
+```python
+Assign(
+  targets=[
+    Subscript(
+      value=Name(id='x', ctx=Load()),
+      slice=Constant(value=5),
+      ctx=Store()
+    )
+  ],
+  value=Name(id='y', ctx=Load())
+)
+```
+
+Here, `x` is actually in "Load" mode even though it's on the left side of the assignment. And if you think about it, it makes sense. We need to load `x`, and then modify one of its indices. It's not `x` which is being assigned to, only one _index_ of it is being assigned. So the part of the AST that is in `Store` context is the `Subscript`, i.e. it is `x[5]` is what's being assigned a new value.
+
+Hopefully this explains _why_ we explicitly need to tell each variable whether it is in a load or store context in the AST.
+
+For the sake of completion, I should mention that there's only three AST nodes in Python that have a `ctx` property, which is `Name` (as we have seen so many times now), `Subscript` (which refers to the `x[y]` syntax, i.e. indices of a list, dictionary, etc.), and `Attribute` which is what's used to represent members inside an object, like `obj.x`. This means there's exactly 3 constructs in the language that can be used to store values.
 
 ## Walking the Syntax Trees with Visitors
 
