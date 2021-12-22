@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.9f423efd.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
 
 
 
@@ -56,19 +56,19 @@
 
 
 
-    <div class="layout astro-ERN4UYHG">
-  <header class="astro-ERN4UYHG">
-    <p class="publish-date astro-ERN4UYHG">Wednesday, 28 April 2021</p>
-    <h1 class="title astro-ERN4UYHG">Does Python need types?</h1>
-    <img src="/images/python-types.jpg" alt="Does Python need types?" class="astro-ERN4UYHG">
+    <div class="layout astro-A2RTLENG">
+  <header class="astro-A2RTLENG">
+    <p class="publish-date astro-A2RTLENG">Wednesday, 28 April 2021</p>
+    <h1 class="title astro-A2RTLENG">Does Python need types?</h1>
+    <img src="/images/python-types.jpg" title="Does Python need types?" alt="Does Python need types?" class="astro-A2RTLENG">
     
 <div class="author astro-BL6UQIAR">
   <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
 </div>
 
   </header>
-  <article class="content astro-ERN4UYHG">
-    <main class="astro-ERN4UYHG">
+  <article class="content astro-A2RTLENG">
+    <main class="astro-A2RTLENG">
       <p>I'm a huge fan of Python. It's by far the simplest general purpose language, that you can just pick up and start building amazing things with.</p><p>But for the past year or so, I've been working on frontend projects, and I've really enjoyed using <a href="https://www.typescriptlang.org">Typescript</a>. It's essentially JavaScript, but with fancy features built on top of it like <em>Static Type checking</em> and <em>Null safety</em>, and it was <em>awesome</em> how much it helped in writing robust, bug free code.</p><p>So I went out to find if Python has such an equivalent, and sure enough, there was.</p><p>It's called <a href="https://mypy-lang.org">mypy</a>, and it is amazing. It works so well in-fact, that I can never go back to writing plain Python now — and this article will be your introduction to it.</p><p><strong>But before all that</strong>, let's figure out what's the deal with <em>Types</em>.</p><h2 id="why-types">Why types?</h2><p>What it essentially means is if you have a type system, <strong>every variable has a pre-decided type associated with it</strong>.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fdmzm8gner72499j5i3h.png" alt="image"></p><figcaption>Untyped vs. typed Python code</figcaption><blockquote>
 <p>Note that, while this might not look like it, the typed version is perfectly valid Python code.</p>
 </blockquote><hr><p>What it also means, is you can't pass values of the wrong type anywhere. The type checker doesn't let you.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cgam11h9xoxqyhizstw2.png" alt="image"></p><p>Which is extremely valuable if you think about it - I've lost count how many <code data-astro-raw="">TypeError</code>'s I've seen in Python over the years!</p><p>Just having the confidence that there's no such place in your code where accidentally passed a <code data-astro-raw="">str</code> where an <code data-astro-raw="">int</code> was expected, eliminates an entire class of bugs from your codebase.</p><hr><p>Not only that - you get a bunch of other benefits, namely:</p><ul>
