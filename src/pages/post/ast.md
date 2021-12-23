@@ -18,11 +18,11 @@ In programmer terms, "ASTs are a programmatic way to understand the structure of
 
 The programs that you and I write in our language of choice is usually called the "source code", and I'll be referring to it as such in this article.
 
-On the other end, computer chips can only understand "machine code", which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers in this "machine code" are instructions, which tell the CPU a simple task to perform, like "add the numbers stored in these two places", or "jump 10 numbers down and continue running code from there". The instructions in machine code are run one by one, and they dictate the flow of the program.
+On the other end, computer chips can only understand "machine code", which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers are _instructions_, which tell the CPU a simple task to perform, like "add the numbers stored in these two places", or "jump 10 numbers down and continue running code from there". The instructions run one by one, and they dictate the flow of the program.
 
-And similarly, in all the languages that I know of, you define your programs as a set of "statements", with each statement being an analogue to the instructions in the machine code. These statements also run one-by-one, and define the behaviour of your software.
+Similarly, you define your programs as a set of "statements", with each statement being one thing that you want your code to do. They're sort of a more human-friendly version of the CPU instructions, that we can write and reason with more easily.
 
-I know that the theory is hard to understand if you've never heard of these terms before, so I'm going to go through a bunch of examples. So let's write the same code in many languages:
+Now, I know that theory can get boring really quick, so I'm going to go through a bunch of examples. Let's write the same piece of code in many languages, and notice the similarities:
 
 - Python
 
@@ -214,8 +214,13 @@ Module(
         comparators=[
           Name(id='b', ctx=Load()),
           Name(id='c', ctx=Load()),
-          Name(id='d', ctx=Load())]))],
-  type_ignores=[])
+          Name(id='d', ctx=Load())
+        ]
+      )
+    )
+  ],
+  type_ignores=[]
+)
 ```
 
 You can see that the operators `<`, `>` and `>` are stored as `ops=[Lt(), Gt(), Gt()]` inside the `Compare` object. The four values are stored a bit more peculiarly: The variable `a` is stored in a separate field called `left`, and then every other variable is stored in a list called `comparators`:
@@ -466,6 +471,9 @@ The last thing left in this example AST is the last line: `orelse=[]`. `orelse` 
 
 Oh, did you know that `for` loops in Python can have an else clause?
 
+<details>
+<summary> Extras: The for-else clause </summary>
+
 `for`-`else` is really interesting. The `else` in for loops is run whenever the loop runs to its entirety. In other words, it is _not_ run, when you break out of the loop before it finishes.
 
 It's useful for many use-cases, one of them being searching through a list:
@@ -521,7 +529,9 @@ For(
 )
 ```
 
-Pretty straightforward. Also, `If` statements have the exact same `orelse` property as for loops.
+Pretty straightforward. Also, `If` statements have the exact same `orelse` property as for loops when it comes to ASTs.
+
+</details>
 
 ### What's a `ctx`?
 
