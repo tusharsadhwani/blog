@@ -223,6 +223,8 @@ Module(
 )
 ```
 
+> If you actually run this code, you might notice that the output here has different whitespace compared to what I have in my blog. It's just personal preference, if you find an output similar to mine more readable you can install `astpretty` from pip, and use `astpretty.pprint(node, show_offsets=False, indent=2)`
+
 You can see that the operators `<`, `>` and `>` are stored as `ops=[Lt(), Gt(), Gt()]` inside the `Compare` object. The four values are stored a bit more peculiarly: The variable `a` is stored in a separate field called `left`, and then every other variable is stored in a list called `comparators`:
 
 ```python
@@ -533,6 +535,8 @@ Pretty straightforward. Also, `If` statements have the exact same `orelse` prope
 
 </details>
 
+If you want a detailed reference of all the Nodes that we have in a Python AST, and the corresponding syntax it belongs to, you can either head on to the [docs here](https://docs.python.org/3/library/ast.html#node-classes), or just use `ast.dump` on a line of code to try and find out for yourself.
+
 ### What's a `ctx`?
 
 Ideally, I want you to leave from this article understanding every single aspect of Python's ASTs. And if you're one of the few super observant readers, you might have noticed that we glanced over a very small thing in the AST examples shown. You can see it in this code snippet:
@@ -655,9 +659,78 @@ For the sake of completion, I should mention that there's only three AST nodes i
 
 ## Walking the Syntax Trees with Visitors
 
+So now we know that our AST represents code using nested Nodes, a structure that is called a "tree". We also know that in a tree structure, a node can have as many children nodes inside it as needed. With all that, comes the question of how does one "read" the tree.
+
+The most obvious way would be to read it top to bottom, the way it appears in the AST dump that we've seen so many times:
+
+```python
+>>> get_ast('''
+... age = 21
+... print(age)
+... ''')
+Module(
+  body=[
+    Assign(
+      targets=[
+        Name(id='age', ctx=Store())
+      ],
+      value=Constant(value=21)),
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Name(id='age', ctx=Load())
+        ],
+        keywords=[]
+      )
+    )
+  ],
+  type_ignores=[]
+)
+```
+
+We have a `Module`, which has two nodes in its body: an `Assign` which has a `Name` and a `Constant`, and an `Expr` which has a `Call` with a couple `Name` nodes.
+
+This way of reading from parent node to child node, in the sequence they appear, is called a pre-order traversal of the tree. And for most intents and purposes, it is what you need.
+
+To implement this sort of traversal of an AST, Python provides you the `NodeVisitor` class, which you can use like this:
+
+```python
+import ast
+
+class MyVisitor(ast.NodeVisitor):
+    def generic_visit(self, node):
+        print(f'entering {node.__class__.__name__}')
+        super().generic_visit(node)
+
+visitor = MyVisitor()
+
+tree = ast.parse('''
+age = 21
+print(age)
+''')
+visitor.visit(tree)
+```
+
+This outputs the following:
+
+```python
+entering Module
+entering Assign
+entering Name
+entering Store
+entering Constant
+entering Expr
+entering Call
+entering Name
+entering Load
+entering Name
+entering Load
+```
+
 > PENDING
 
-~~ Explain how tree traversal works, what that means in terms of an AST, and explain how you can use traversal as a way of finding code patterns and issues. Don't go into too much detail right away, we'll dive deeper during the building linter part.
+~~Give an example of what we could use pre order for, and for post-order. Then mention in-order being useful for code generation.
 
 ## The power of AST manipulation
 
