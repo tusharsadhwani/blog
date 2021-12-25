@@ -817,9 +817,49 @@ entering Name
 entering Load
 ```
 
+To make this output slightly more detailed, let's not just print the class name, but the entire node. Since this will output a lot of stuff, let's simplify the source code as well:
+
+```python
+import ast
+
+class MyVisitor(ast.NodeVisitor):
+    def generic_visit(self, node):
+        print(f'entering {ast.dump(node)}')
+        super().generic_visit(node)
+
+visitor = MyVisitor()
+
+tree = ast.parse('x = 5')
+visitor.visit(tree)
+```
+
+There's a lot more output, but it should help:
+
+```python
+entering Module(body=[Assign(targets=[Name(id='x', ctx=Store())], value=Constant(value=5))], type_ignores=[])
+entering Assign(targets=[Name(id='x', ctx=Store())], value=Constant(value=5))
+entering Name(id='x', ctx=Store())
+entering Store()
+entering Constant(value=5)
+```
+
+We'll look closer at the code inside `MyVisitor` very soon, but let's examine this properly first.
+
+You can imagine this "visitor" moving from up to down, left to right in this tree structure:
+
+```text
+           Module
+             |
+           Assign
+          /      \
+Name(id='x')    Constant(value=5)
+    |
+  Store()
+```
+
 > PENDING
 
-~~Give an example of what we could use pre order for, and for post-order. Then mention in-order being useful for code generation.
+~~Give an example of what we could use pre order for, and for post-order. Then mention in-order being useful for code generation (actually, maybe not, maybe pre-order does this as well).
 
 ## The power of AST manipulation
 
