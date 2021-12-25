@@ -223,7 +223,12 @@ Module(
 )
 ```
 
-> If you actually run this code, you might notice that the output here has different whitespace compared to what I have in my blog. It's just personal preference, if you find an output similar to mine more readable you can install `astpretty` from pip, and use `astpretty.pprint(node, show_offsets=False, indent=2)`
+> If you actually run this code, you might notice that the output here has different whitespace compared to what I have in my blog. It's just personal preference, if you find an output similar to mine more readable you can install `astpretty` from pip, and use:
+>
+> ```python
+> def get_ast(code):
+>     astpretty.pprint(ast.parse(code), show_offsets=False, indent=2)
+> ```
 
 You can see that the operators `<`, `>` and `>` are stored as `ops=[Lt(), Gt(), Gt()]` inside the `Compare` object. The four values are stored a bit more peculiarly: The variable `a` is stored in a separate field called `left`, and then every other variable is stored in a list called `comparators`:
 
