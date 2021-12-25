@@ -803,7 +803,7 @@ visitor.visit(tree)
 
 This outputs the following:
 
-```python
+```text
 entering Module
 entering Assign
 entering Name
@@ -817,7 +817,7 @@ entering Name
 entering Load
 ```
 
-To make this output slightly more detailed, let's not just print the class name, but the entire node. Since this will output a lot of stuff, let's simplify the source code as well:
+To make this output slightly more detailed, let's not just print the class name, but the entire node:
 
 ```python
 import ast
@@ -829,37 +829,190 @@ class MyVisitor(ast.NodeVisitor):
 
 visitor = MyVisitor()
 
-tree = ast.parse('x = 5')
+tree = ast.parse('''
+x = 5
+print(x)
+''')
 visitor.visit(tree)
 ```
 
-There's a lot more output, but it should help:
+There's a lot more output, but it might help to look at it:
 
 ```python
-entering Module(body=[Assign(targets=[Name(id='x', ctx=Store())], value=Constant(value=5))], type_ignores=[])
+entering Module(body=[Assign(targets=[Name(id='x', ctx=Store())], value=Constant(value=5)), Expr(value=Call(func=Name(id='print', ctx=Load()), args=[Name(id='x', ctx=Load())], keywords=[]))], type_ignores=[])
 entering Assign(targets=[Name(id='x', ctx=Store())], value=Constant(value=5))
 entering Name(id='x', ctx=Store())
 entering Store()
 entering Constant(value=5)
+entering Expr(value=Call(func=Name(id='print', ctx=Load()), args=[Name(id='x', ctx=Load())], keywords=[]))
+entering Call(func=Name(id='print', ctx=Load()), args=[Name(id='x', ctx=Load())], keywords=[])
+entering Name(id='print', ctx=Load())
+entering Load()
+entering Name(id='x', ctx=Load())
+entering Load()
 ```
 
-We'll look closer at the code inside `MyVisitor` very soon, but let's examine this properly first.
+We'll look closer at the code inside `MyVisitor` very soon, but let's examine this output properly first.
 
 You can imagine this "visitor" moving from up to down, left to right in this tree structure:
 
 ```text
-           Module
-             |
-           Assign
-          /      \
-Name(id='x')    Constant(value=5)
-    |
-  Store()
+               <----Module---->
+              /                \
+         Assign                 Expr
+        /      \                 |
+ Name('x')   Constant(5)        Call
+  |                            /    \
+Store()            Name('print')    Name('x')
+                    |                |
+                   Load()           Load()
 ```
 
-> PENDING
+It starts from the `Module`, then for each child it visits, it visits the entirety of one of its children before going to the next child. As in, it visits the entirety of the `Assign` sub-tree before moving on to `Expr` part of the tree, and so on.
 
-~~Give an example of what we could use pre order for, and for post-order. Then mention in-order being useful for code generation (actually, maybe not, maybe pre-order does this as well).
+How it does this, is all hidden in our `generic_visit()` implementation. Let's start tweaking it to see what results we get. Here's a simpler example:
+
+```python
+class MyVisitor(ast.NodeVisitor):
+    def generic_visit(self, node):
+        print(f'entering {node.__class__.__name__}')
+        super().generic_visit(node)
+
+visitor = MyVisitor()
+
+tree = ast.parse('x = 5')
+visitor.visit(tree)
+```
+
+```text
+entering Module
+entering Assign
+entering Name
+entering Store
+entering Constant
+```
+
+Now let's move the `print` statement to below the `super` call, see what happens:
+
+```python
+class MyVisitor(ast.NodeVisitor):
+    def generic_visit(self, node):
+        super().generic_visit(node)
+        print(f'leaving {node.__class__.__name__}')
+
+visitor = MyVisitor()
+
+tree = ast.parse('x = 5')
+visitor.visit(tree)
+```
+
+```text
+leaving Store
+leaving Name
+leaving Constant
+leaving Assign
+leaving Module
+```
+
+Interesting. So now the prints suddenly happen in sort-of "reverse" order. It's not actually reversed though, but now every child appears before the parent. This bottom-to-top, left-to-right traversal is called post-order traversal.
+
+So how about if we do both prints together?
+
+```python
+class MyVisitor(ast.NodeVisitor):
+    def generic_visit(self, node):
+        print(f'entering {node.__class__.__name__}')
+        super().generic_visit(node)
+        print(f'leaving {node.__class__.__name__}')
+
+visitor = MyVisitor()
+
+tree = ast.parse('x = 5')
+visitor.visit(tree)
+```
+
+```text
+entering Module
+entering Assign
+entering Name
+entering Store
+leaving Store
+leaving Name
+entering Constant
+leaving Constant
+leaving Assign
+leaving Module
+```
+
+If you follow the enter and leave commands one by one, you'll see how this traversal is happening. I've added the corresponding line numbers for each node in an `[enter, leave]` pair in this graph, and you can follow the traversal from 1 through 10:
+
+```text
+           Module [1, 10]
+             |
+           Assign [2, 9]
+          /         \
+ Name('x') [3, 6]    Constant(5) [7, 8]
+   |
+Store() [4, 5]
+```
+
+You can keep this in mind, that anything that comes before the `super()` call is being done in pre-order, and anything that comes after the `super()` call is being done in post-order.
+
+Let's say that for some reason I wanted to find how many statements exist inside all the `for` loops in my code. To do that, I'd need to do the following:
+
+- Traverse through the code to find all `For` nodes. We're already sorted with that.
+- Each time we see a `For` node, we need to start our count from zero.
+- We must keep counting until we see this same `For` node again during post-order traversal.
+- For every node we find below the `For` node, check if it's a statement, and increment count.
+
+The code for that would look like this:
+
+```python
+import ast
+
+class ForStmtCounter(ast.NodeVisitor):
+    current_for_node = None
+    stmt_count = 0
+
+    def generic_visit(self, node):
+        if self.current_for_node is not None:
+            # Count statements
+            if isinstance(node, ast.stmt):
+                self.stmt_count += 1
+
+        elif isinstance(node, ast.For):
+            # Start the count
+            self.current_for_node = node
+            self.stmt_count = 0
+
+        super().generic_visit(node)
+
+        # This runs when coming back up from the children
+        if node is self.current_for_node:
+            # We're done counting this node
+            print(f'For node contains {self.stmt_count} statements')
+            self.current_for_node = None
+
+for_statement_counter = ForStmtCounter()
+
+tree = ast.parse('''
+for i in range(10):
+    print(i)
+
+for item in items:
+    if item == 42:
+        print('Magic item found!')
+        break
+''')
+for_statement_counter.visit(tree)
+```
+
+And this is the output:
+
+```text
+For node contains 1 statements
+For node contains 3 statements
+```
 
 ## The power of AST manipulation
 
