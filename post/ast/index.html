@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/setup-postgres.30c1d388.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
 
 
 
@@ -531,9 +531,29 @@ entering Call
 entering Name
 entering Load
 entering Name
-entering Load</code></pre><blockquote>
+entering Load</code></pre><p>To make this output slightly more detailed, let's not just print the class name, but the entire node. Since this will output a lot of stuff, let's simplify the source code as well:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">import</span> ast
+
+<span class="token keyword">class</span> <span class="token class-name">MyVisitor</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>NodeVisitor<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">generic_visit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'entering </span><span class="token interpolation"><span class="token punctuation">{</span>ast<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+
+visitor <span class="token operator">=</span> MyVisitor<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span><span class="token string">'x = 5'</span><span class="token punctuation">)</span>
+visitor<span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span></code></pre><p>There's a lot more output, but it should help:</p><pre class="language-python"><code data-astro-raw="" class="language-python">entering Module<span class="token punctuation">(</span>body<span class="token operator">=</span><span class="token punctuation">[</span>Assign<span class="token punctuation">(</span>targets<span class="token operator">=</span><span class="token punctuation">[</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Store<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> value<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+entering Assign<span class="token punctuation">(</span>targets<span class="token operator">=</span><span class="token punctuation">[</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Store<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> value<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+entering Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Store<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+entering Store<span class="token punctuation">(</span><span class="token punctuation">)</span>
+entering Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span></code></pre><p>We'll look closer at the code inside <code data-astro-raw="">MyVisitor</code> very soon, but let's examine this properly first.</p><p>You can imagine this "visitor" moving from up to down, left to right in this tree structure:</p><pre class="language-text"><code data-astro-raw="" class="language-text">           Module
+             |
+           Assign
+          /      \
+Name(id='x')    Constant(value=5)
+    |
+  Store()</code></pre><blockquote>
 <p>PENDING</p>
-</blockquote><p>~~Give an example of what we could use pre order for, and for post-order. Then mention in-order being useful for code generation.</p><h2 id="the-power-of-ast-manipulation">The power of AST manipulation</h2><p>Some really bizarre examples of modifying your code's runtime behaviour go here.</p><p>~~ explain transformers here?</p><blockquote>
+</blockquote><p>~~Give an example of what we could use pre order for, and for post-order. Then mention in-order being useful for code generation (actually, maybe not, maybe pre-order does this as well).</p><h2 id="the-power-of-ast-manipulation">The power of AST manipulation</h2><p>Some really bizarre examples of modifying your code's runtime behaviour go here.</p><p>~~ explain transformers here?</p><blockquote>
 <p>Quote from docs: "Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the <code data-astro-raw="">generic_visit()</code> method for the node first."</p>
 </blockquote><p>~~ A good, meaningful example of a transformer here would be great, as we're only building a linter later on.</p><p>~~ Mention zxpy :)</p><h3 id="ast-utilities">AST utilities</h3><p>~~ fix missing locations, literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
