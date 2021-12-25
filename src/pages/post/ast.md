@@ -660,7 +660,91 @@ Here, `x` is actually in "Load" mode even though it's on the left side of the as
 
 Hopefully this explains _why_ we explicitly need to tell each variable whether it is in a load or store context in the AST.
 
-For the sake of completion, I should mention that there's only three AST nodes in Python that have a `ctx` property, which is `Name` (as we have seen so many times now), `Subscript` (which refers to the `x[y]` syntax, i.e. indices of a list, dictionary, etc.), and `Attribute` which is what's used to represent members inside an object, like `obj.x`. This means there's exactly 3 constructs in the language that can be used to store values.
+> For the sake of completion, I should mention that there's only three AST nodes in Python that have a `ctx` property, which is `Name` (as we have seen so many times now), `Subscript` (which refers to the `x[y]` syntax, i.e. indices of a list, dictionary, etc.), and `Attribute` which is what's used to represent members inside an object, like `obj.x`. This means there's exactly 3 constructs in the language that can be used to store values.
+
+Now unless you're super familiar with Python, you'd think that `Load` and `Store` cover everything that the language needs, but weirdly enough there's a third possible `ctx` value, `Del`:
+
+```python
+>>> get_ast('del x')
+Module(
+  body=[
+    Delete(
+      targets=[Name(id='x', ctx=Del())]
+    )
+  ],
+  type_ignores=[]
+)
+```
+
+<details>
+<summary> Extras: why `del` exists </summary>
+
+So Python is a _reference-counted, garbage collected language_. What that means is that there's a very clear distinction between variables and values. Values are essentially just objects floating around in memory, and variables are just names that point to the said objects in memory.
+
+Each variable that points to a value (a.k.a "references" that value), the reference count of that value is increased. For example:
+
+```python
+x = 'some string'  # This string has a ref. count of 1
+y = x              # Now it has a ref. count of 2
+```
+
+When a value in memory reaches a reference count of zero, that value is no longer used anywhere in the program. Once that happens, the value is deleted from memory (garbage collected). There's a few reasons why a value can get to zero reference counts, like a function returning:
+
+```python
+def f():
+    x = 'some string'  # Ref count 1
+    print(x)
+    # Now, when this function returns, `x` is deleted
+    # making the string's ref count to zero.
+
+f()
+```
+
+Or, if you explicitly delete it:
+
+```python
+x = 'some string'  # Count 1
+del x              # Count 0. That string is gone forever.
+```
+
+Note that re-assigning a variable is the same as deleting it and then assigning it:
+
+```python
+x = 'some string'   # Count 1
+x = 'other string'  # Old string's count goes to 0.
+```
+
+is the same as:
+
+```python
+x = 'some string'  # Count 1
+del x              # Count goes to 0.
+x = 'other string'
+```
+
+If you want more examples of this, there's a [much more in-depth video by Anthony](https://www.youtube.com/watch?v=GGKerIMqHCk).
+
+</details>
+
+And just like `Store`, you can also `Del` an attribute or an index, and it behaves similarly:
+
+```python
+>>> get_ast('del x[y]')
+Module(
+  body=[
+    Delete(
+      targets=[
+        Subscript(
+          value=Name(id='x', ctx=Load()),
+          slice=Name(id='y', ctx=Load()),
+          ctx=Del()
+        )
+      ]
+    )
+  ],
+  type_ignores=[]
+)
+```
 
 ## Walking the Syntax Trees with Visitors
 
