@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/mypy-guide.216b748d.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
 
 
 
@@ -679,9 +679,171 @@ The <code data-astro-raw="">compile</code> function takes in the AST, a file nam
 <li>The third step is to run the <code data-astro-raw="">exec()</code> on this code object, which runs this bytecode in the interpreter. It provides the bytecode with all the values present in the local and global scopes, and lets the code run. In our case, this makes the object print out <code data-astro-raw="">hello</code>.</li>
 </ul><blockquote>
 <p>If you want a more in-depth explanation of this, I have an entire section on it in my <a href="/post/builtins#compile-exec-and-eval-how-the-code-works">builtins</a> blog.</p>
-</blockquote><p>~~ explain transformers here?</p><blockquote>
-<p>Quote from docs: "Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the <code data-astro-raw="">generic_visit()</code> method for the node first."</p>
-</blockquote><p>~~ A good, meaningful example of a transformer here would be great, as we're only building a linter later on.</p><p>~~ Mention zxpy :)</p><h3 id="ast-utilities">AST utilities</h3><p>~~ fix missing locations, literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
+</blockquote><p>Now since we have the AST in step 1 of this part, we can simply <em>modify the AST</em>, before we run the compile and execute steps, and the output of the program will be different. How cool is that!</p><p>Let's just jump into it with a few simple examples, before we do something really awesome with this.</p><p>Let's write one that changes all numbers in our code to become <code data-astro-raw="">42</code>, because why not. Here's our test code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token number">13</span><span class="token punctuation">)</span>  <span class="token comment"># definitely not 42</span>
+
+num <span class="token operator">=</span> <span class="token number">28</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+
+output <span class="token operator">=</span> add<span class="token punctuation">(</span>num<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span></code></pre><p>Running this, we get:</p><pre class="language-text"><code data-astro-raw="" class="language-text">13
+28
+3
+128</code></pre><p>Now, if all numbers in this code were 42, our output would be:</p><pre class="language-text"><code data-astro-raw="" class="language-text">42
+42
+42
+42
+42
+84</code></pre><p>The last <code data-astro-raw="">84</code> is from 42 + 42 (instead of 28 + 100).</p><p>So, how would you do this? It's quite straightforward actually. What we do is define a <code data-astro-raw="">NodeTransformer</code> class. The difference between this and a <code data-astro-raw="">NodeVisitor</code> is that a <code data-astro-raw="">Transformer</code> actually returns a node on every visit, which replaces the old node:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">import</span> ast
+
+<span class="token keyword">class</span> <span class="token class-name">NumberChanger</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>NodeTransformer<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Changes all number literals to 42."""</span>
+    <span class="token keyword">def</span> <span class="token function">generic_visit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># if it isn't an int constant, do nothing with the node</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Constant<span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>value<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> node
+
+        <span class="token keyword">return</span> ast<span class="token punctuation">.</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span></code></pre><p>Let's run it and see our output:</p><pre class="language-python"><code data-astro-raw="" class="language-python">$ python <span class="token operator">-</span>i code<span class="token punctuation">.</span>py
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code <span class="token operator">=</span> <span class="token triple-quoted-string string">'''
+... print(13)  # definitely not 42
+...
+... num = 28
+... print(num)
+...
+... for i in [1, 2, 3]:
+...     print(i)
+...
+... output = add(num, 100)
+... print(output)
+... '''</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> modified_tree <span class="token operator">=</span> NumberChanger<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token builtin">compile</span><span class="token punctuation">(</span>modified_tree<span class="token punctuation">,</span> <span class="token string">'&lt;my ast&gt;'</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre><p>And, as expected, the output is:</p><pre class="language-text"><code data-astro-raw="" class="language-text">13
+28
+3
+128</code></pre><p>... wait. That's not right. Something's definitely not right.</p><p>And with that, we are going to talk about something that's really important when it comes to playing around with ASTs: Sometimes, it can be quite hard to get right.</p><p>A tutorial can make any topic seem easy and obvious, but often times it misses out on the whole learning process of making mistakes, discovering new edge cases, and actually understanding how to debug some of these things.</p><p>Okay, mini-rant over. Let's try and debug this thing. To do that, the first thing that we should do is head to the docs:</p><p><a href="https://docs.python.org/3/library/ast.html#ast.NodeTransformer"><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/m9rahn5ut20dcpo3jaqu.png" alt="ast.NodeTransformer Docs"></a></p><p>The first line below a code example says:</p><blockquote>
+<p>"Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the <code data-astro-raw="">generic_visit()</code> method for the node first."</p>
+</blockquote><p>Ah, yes, we forgot the <code data-astro-raw="">super()</code> call. But why does that matter?</p><p>The <code data-astro-raw="">super()</code> call is what propagates the tree traversal down the tree. If you don't call that, the visit method will stop on that specific node, and never visit the node's children. So, let's fix this:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">import</span> ast
+
+<span class="token keyword">class</span> <span class="token class-name">NumberChanger</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>NodeTransformer<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Changes all number literals to 42."""</span>
+    <span class="token keyword">def</span> <span class="token function">generic_visit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>  <span class="token comment"># Added this line</span>
+
+        <span class="token comment"># if it isn't an int constant, do nothing with the node</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Constant<span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>value<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> node
+
+        <span class="token keyword">return</span> ast<span class="token punctuation">.</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span></code></pre><p>Let's run it again:</p><pre class="language-python"><code data-astro-raw="" class="language-python">$ python <span class="token operator">-</span>i code<span class="token punctuation">.</span>py
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code <span class="token operator">=</span> <span class="token triple-quoted-string string">'''
+... print(13)  # definitely not 42
+...
+... num = 28
+... print(num)
+...
+... for i in [1, 2, 3]:
+...     print(i)
+...
+... output = add(num, 100)
+... print(output)
+... '''</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> modified_tree <span class="token operator">=</span> NumberChanger<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token builtin">compile</span><span class="token punctuation">(</span>modified_tree<span class="token punctuation">,</span> <span class="token string">'&lt;my ast&gt;'</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+Traceback <span class="token punctuation">(</span>most recent call last<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  File <span class="token string">"&lt;stdin&gt;"</span><span class="token punctuation">,</span> line <span class="token number">1</span><span class="token punctuation">,</span> <span class="token keyword">in</span> <span class="token operator">&lt;</span>module<span class="token operator">&gt;</span>
+TypeError<span class="token punctuation">:</span> required field <span class="token string">"lineno"</span> missing <span class="token keyword">from</span> expr</code></pre><p>Uh oh. Another error. Welp, back to the docs.</p><p>This is what the rest of the section on <code data-astro-raw="">NodeTransformer</code> says:</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fuy4bsireiy58qunpjom.png" alt="There's a section about fix_missing_locations"></p><p>That's exactly what we need to do, run <code data-astro-raw="">fix_missing_locations</code>. Always read the entirety of the docs, folks. Let's run it again:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> modified_tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>fix_missing_locations<span class="token punctuation">(</span>modified_tree<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token builtin">compile</span><span class="token punctuation">(</span>modified_tree<span class="token punctuation">,</span> <span class="token string">'&lt;my ast&gt;'</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token number">42</span>
+<span class="token number">42</span>
+<span class="token number">42</span>
+<span class="token number">42</span>
+<span class="token number">42</span>
+<span class="token number">84</span></code></pre><p>Finally! We were able to modify and run our AST 🎉</p><p>Let's go a little more in depth. This article is super long already, might as well add some more interesting stuff.</p><p>Since it's very common for AST modifications to deal with a specific kind of node, and nothing else (We've already seen a few examples where that would've been useful, such as turning every number into <code data-astro-raw="">42</code>), The <code data-astro-raw="">NodeVisitor</code> and <code data-astro-raw="">NodeTransformer</code> classes both let you define Node-specific visitor methods.</p><p>You define a node-specific visitor method by defining a <code data-astro-raw="">visit_&lt;NodeName&gt;</code> method, just as <code data-astro-raw="">visit_For</code> to just visit for-loops.</p><p>Here's a somewhat wacky example, which lets you run a program that outputs to the terminal, and make it so that it outputs to a file instead. To do that, we're going to rewrite every <code data-astro-raw="">print</code> call, and add an attribute, <code data-astro-raw="">file=...</code>, which will make it print to that file instead.</p><p>Let's see what the AST looks like, for a <code data-astro-raw="">print()</code> call with and without a <code data-astro-raw="">file=...</code> attribute.</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> get_ast<span class="token punctuation">(</span><span class="token string">'print(x)'</span><span class="token punctuation">)</span>
+Module<span class="token punctuation">(</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    Expr<span class="token punctuation">(</span>
+      value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+        func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        args<span class="token operator">=</span><span class="token punctuation">[</span>
+          Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span>
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> get_ast<span class="token punctuation">(</span><span class="token string">'print(x, file=myfile)'</span><span class="token punctuation">)</span>
+Module<span class="token punctuation">(</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    Expr<span class="token punctuation">(</span>
+      value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+        func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        args<span class="token operator">=</span><span class="token punctuation">[</span>
+          Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        keywords<span class="token operator">=</span><span class="token punctuation">[</span>
+          keyword<span class="token punctuation">(</span>
+            arg<span class="token operator">=</span><span class="token string">'file'</span><span class="token punctuation">,</span>
+            value<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'myfile'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">)</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre><p>So we need to find every <code data-astro-raw="">Call</code> with the <code data-astro-raw="">func</code> attribute being <code data-astro-raw="">Name(id='print')</code>, and add a <code data-astro-raw="">file</code> property to the <code data-astro-raw="">Call</code>'s <code data-astro-raw="">keywords</code>.</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">import</span> ast
+
+<span class="token keyword">class</span> <span class="token class-name">FileWriter</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>NodeTransformer<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">visit_Call</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>func<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Name<span class="token punctuation">)</span> <span class="token keyword">and</span> node<span class="token punctuation">.</span>func<span class="token punctuation">.</span><span class="token builtin">id</span> <span class="token operator">==</span> <span class="token string">"print"</span><span class="token punctuation">:</span>
+            node<span class="token punctuation">.</span>keywords<span class="token punctuation">.</span>append<span class="token punctuation">(</span>
+                ast<span class="token punctuation">.</span>keyword<span class="token punctuation">(</span>
+                    arg<span class="token operator">=</span><span class="token string">"file"</span><span class="token punctuation">,</span>
+                    value<span class="token operator">=</span>ast<span class="token punctuation">.</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">"myfile"</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>ast<span class="token punctuation">.</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token punctuation">)</span>
+            <span class="token punctuation">)</span>
+
+        <span class="token comment"># Remember to return the node</span>
+        <span class="token keyword">return</span> node</code></pre><p>Time to test this:</p><p>This is what it outputs:</p><pre class="language-python"><code data-astro-raw="" class="language-python">$ python <span class="token operator">-</span>i code<span class="token punctuation">.</span>py
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'*'</span> <span class="token operator">*</span> i<span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token operator">*</span>
+<span class="token operator">**</span>
+<span class="token operator">**</span><span class="token operator">*</span>
+<span class="token operator">**</span><span class="token operator">**</span>
+<span class="token operator">**</span><span class="token operator">**</span><span class="token operator">*</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> ast
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code <span class="token operator">=</span> <span class="token triple-quoted-string string">'''
+... for i in range(1, 6):
+...     print('*' * i)
+... '''</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> new_tree <span class="token operator">=</span> FileWriter<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> new_tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>fix_missing_locations<span class="token punctuation">(</span>new_tree<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'output.txt'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> myfile<span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">exec</span><span class="token punctuation">(</span><span class="token builtin">compile</span><span class="token punctuation">(</span>new_tree<span class="token punctuation">,</span> <span class="token string">'&lt;ast&gt;'</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> exit<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+$ cat output<span class="token punctuation">.</span>txt
+<span class="token operator">*</span>
+<span class="token operator">**</span>
+<span class="token operator">**</span><span class="token operator">*</span>
+<span class="token operator">**</span><span class="token operator">**</span>
+<span class="token operator">**</span><span class="token operator">**</span><span class="token operator">*</span></code></pre><p>A nice exercise would be to re-write every <code data-astro-raw="">generic_visit</code> based code we have written so far, and simplify it using <code data-astro-raw="">visit_X</code> methods instead.</p><p>I'd love to talk a lot more in depth about all the insane stuff you can do in Python by modifying and executing ASTs. But unfortunately there's not enough space in this blog post for that. Trust me.</p><blockquote>
+<p>If you really want to look into more examples of this, you can check out the source code of <a href="https://github.com/tusharsadhwani/zxpy">zxpy</a> after reading this article. It is a library that essentially adds new syntax to Python strings, to seamlessly execute shell code within Python. It is mind-bending stuff though.</p>
+</blockquote><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
 Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p>
     </main>
