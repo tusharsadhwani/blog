@@ -773,6 +773,8 @@ Module(
 )
 ```
 
+If you want to learn more about mypy and type checkers, I have a [super long blog](/post/mypy-guide) on that.
+
 </details>
 
 ## Walking the Syntax Trees with Visitors
