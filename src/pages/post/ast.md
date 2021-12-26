@@ -1051,17 +1051,287 @@ hello
 
 > If you want a more in-depth explanation of this, I have an entire section on it in my [builtins](/post/builtins#compile-exec-and-eval-how-the-code-works) blog.
 
-~~ explain transformers here?
+Now since we have the AST in step 1 of this part, we can simply _modify the AST_, before we run the compile and execute steps, and the output of the program will be different. How cool is that!
 
-> Quote from docs: "Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the `generic_visit()` method for the node first."
+Let's just jump into it with a few simple examples, before we do something really awesome with this.
 
-~~ A good, meaningful example of a transformer here would be great, as we're only building a linter later on.
+Let's write one that changes all numbers in our code to become `42`, because why not. Here's our test code:
 
-~~ Mention zxpy :)
+```python
+print(13)  # definitely not 42
+
+num = 28
+print(num)
+
+def add(x, y):
+    return x + y
+
+for i in [1, 2, 3]:
+    print(i)
+
+output = add(num, 100)
+print(output)
+```
+
+Running this, we get:
+
+```text
+13
+28
+3
+128
+```
+
+Now, if all numbers in this code were 42, our output would be:
+
+```text
+42
+42
+42
+42
+42
+84
+```
+
+The last `84` is from 42 + 42 (instead of 28 + 100).
+
+So, how would you do this? It's quite straightforward actually. What we do is define a `NodeTransformer` class. The difference between this and a `NodeVisitor` is that a `Transformer` actually returns a node on every visit, which replaces the old node:
+
+```python
+import ast
+
+class NumberChanger(ast.NodeTransformer):
+    """Changes all number literals to 42."""
+    def generic_visit(self, node):
+        # if it isn't an int constant, do nothing with the node
+        if not isinstance(node, ast.Constant) or not isinstance(node.value, int):
+            return node
+
+        return ast.Constant(value=42)
+```
+
+Let's run it and see our output:
+
+```python
+$ python -i code.py
+>>> code = '''
+... print(13)  # definitely not 42
+...
+... num = 28
+... print(num)
+...
+... for i in [1, 2, 3]:
+...     print(i)
+...
+... output = add(num, 100)
+... print(output)
+... '''
+>>> tree = ast.parse(code)
+>>> modified_tree = NumberChanger().visit(tree)
+>>> exec(compile(modified_tree, '<my ast>', 'exec'))
+```
+
+And, as expected, the output is:
+
+```text
+13
+28
+3
+128
+```
+
+... wait. That's not right. Something's definitely not right.
+
+And with that, we are going to talk about something that's really important when it comes to playing around with ASTs: Sometimes, it can be quite hard to get right.
+
+A tutorial can make any topic seem easy and obvious, but often times it misses out on the whole learning process of making mistakes, discovering new edge cases, and actually understanding how to debug some of these things.
+
+Okay, mini-rant over. Let's try and debug this thing. To do that, the first thing that we should do is head to the docs:
+
+[![ast.NodeTransformer Docs](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/m9rahn5ut20dcpo3jaqu.png)](https://docs.python.org/3/library/ast.html#ast.NodeTransformer)
+
+The first line below a code example says:
+
+> "Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the `generic_visit()` method for the node first."
+
+Ah, yes, we forgot the `super()` call. But why does that matter?
+
+The `super()` call is what propagates the tree traversal down the tree. If you don't call that, the visit method will stop on that specific node, and never visit the node's children. So, let's fix this:
+
+```python
+import ast
+
+class NumberChanger(ast.NodeTransformer):
+    """Changes all number literals to 42."""
+    def generic_visit(self, node):
+        super().generic_visit(node)  # Added this line
+
+        # if it isn't an int constant, do nothing with the node
+        if not isinstance(node, ast.Constant) or not isinstance(node.value, int):
+            return node
+
+        return ast.Constant(value=42)
+```
+
+Let's run it again:
+
+```python
+$ python -i code.py
+>>> code = '''
+... print(13)  # definitely not 42
+...
+... num = 28
+... print(num)
+...
+... for i in [1, 2, 3]:
+...     print(i)
+...
+... output = add(num, 100)
+... print(output)
+... '''
+>>> tree = ast.parse(code)
+>>> modified_tree = NumberChanger().visit(tree)
+>>> exec(compile(modified_tree, '<my ast>', 'exec'))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: required field "lineno" missing from expr
+```
+
+Uh oh. Another error. Welp, back to the docs.
+
+This is what the rest of the section on `NodeTransformer` says:
+
+![There's a section about `fix_missing_locations`](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fuy4bsireiy58qunpjom.png)
+
+That's exactly what we need to do, run `fix_missing_locations`. Always read the entirety of the docs, folks. Let's run it again:
+
+```python
+>>> modified_tree = ast.fix_missing_locations(modified_tree)
+>>> exec(compile(modified_tree, '<my ast>', 'exec'))
+42
+42
+42
+42
+42
+84
+```
+
+Finally! We were able to modify and run our AST 🎉
+
+Let's go a little more in depth. This article is super long already, might as well add some more interesting stuff.
+
+Since it's very common for AST modifications to deal with a specific kind of node, and nothing else (We've already seen a few examples where that would've been useful, such as turning every number into `42`), The `NodeVisitor` and `NodeTransformer` classes both let you define Node-specific visitor methods.
+
+You define a node-specific visitor method by defining a `visit_<NodeName>` method, just as `visit_For` to just visit for-loops.
+
+Here's a somewhat wacky example, which lets you run a program that outputs to the terminal, and make it so that it outputs to a file instead. To do that, we're going to rewrite every `print` call, and add an attribute, `file=...`, which will make it print to that file instead.
+
+Let's see what the AST looks like, for a `print()` call with and without a `file=...` attribute.
+
+```python
+>>> get_ast('print(x)')
+Module(
+  body=[
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Name(id='x', ctx=Load())
+        ],
+        keywords=[]
+      )
+    )
+  ],
+  type_ignores=[]
+)
+
+>>> get_ast('print(x, file=myfile)')
+Module(
+  body=[
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Name(id='x', ctx=Load())
+        ],
+        keywords=[
+          keyword(
+            arg='file',
+            value=Name(id='myfile', ctx=Load())
+          )
+        ]
+      )
+    )
+  ],
+  type_ignores=[]
+)
+```
+
+So we need to find every `Call` with the `func` attribute being `Name(id='print')`, and add a `file` property to the `Call`'s `keywords`.
+
+```python
+import ast
+
+class FileWriter(ast.NodeTransformer):
+    def visit_Call(self, node):
+        super().generic_visit(node)
+
+        if isinstance(node.func, ast.Name) and node.func.id == "print":
+            node.keywords.append(
+                ast.keyword(
+                    arg="file",
+                    value=ast.Name(id="myfile", ctx=ast.Load()),
+                )
+            )
+
+        # Remember to return the node
+        return node
+```
+
+Time to test this:
+
+This is what it outputs:
+
+```python
+$ python -i code.py
+>>> for i in range(1, 6):
+...     print('*' * i)
+...
+*
+**
+***
+****
+*****
+>>> import ast
+>>> code = '''
+... for i in range(1, 6):
+...     print('*' * i)
+... '''
+>>> tree = ast.parse(code)
+>>> new_tree = FileWriter().visit(tree)
+>>> new_tree = ast.fix_missing_locations(new_tree)
+>>> with open('output.txt', 'w') as myfile:
+...     exec(compile(new_tree, '<ast>', 'exec'))
+...
+>>> exit()
+
+$ cat output.txt
+*
+**
+***
+****
+*****
+```
+
+A nice exercise would be to re-write every `generic_visit` based code we have written so far, and simplify it using `visit_X` methods instead.
+
+I'd love to talk a lot more in depth about all the insane stuff you can do in Python by modifying and executing ASTs. But unfortunately there's not enough space in this blog post for that. Trust me.
+
+> If you really want to look into more examples of this, you can check out the source code of [zxpy](https://github.com/tusharsadhwani/zxpy) after reading this article. It is a library that essentially adds new syntax to Python strings, to seamlessly execute shell code within Python. It is mind-bending stuff though.
 
 ### AST utilities
 
-~~ fix missing locations, literal eval, parse/unparse, and walk
+~~ literal eval, parse/unparse, and walk
 
 ## Let's build: A simple linter
 
