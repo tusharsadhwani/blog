@@ -681,7 +681,7 @@ Module(
 
 So Python is a _reference-counted, garbage collected language_. What that means is that there's a very clear distinction between variables and values. Values are essentially just objects floating around in memory, and variables are just names that point to the said objects in memory.
 
-Each variable that points to a value (a.k.a "references" that value), the reference count of that value is increased. For example:
+For each variable that points to a value (a.k.a "references" that value), the reference count of that value is increased. For example:
 
 ```python
 x = 'some string'  # This string has a ref. count of 1
@@ -695,7 +695,7 @@ def f():
     x = 'some string'  # Ref count 1
     print(x)
     # Now, when this function returns, `x` is deleted
-    # making the string's ref count to zero.
+    # making the string's reference count zero.
 
 f()
 ```
@@ -707,14 +707,14 @@ x = 'some string'  # Count 1
 del x              # Count 0. That string is gone forever.
 ```
 
-Note that re-assigning a variable is the same as deleting it and then assigning it:
+Note that re-assigning a variable is the same as deleting it and then assigning it. Which means this:
 
 ```python
 x = 'some string'   # Count 1
 x = 'other string'  # Old string's count goes to 0.
 ```
 
-is the same as:
+... is the same as this:
 
 ```python
 x = 'some string'  # Count 1
