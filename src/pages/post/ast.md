@@ -87,7 +87,7 @@ The nodes here can be anything, from statements, to expressions, to any other co
 
 Essentially, all your code represents a tree of data. And that tree is called the **Abstract Syntax Tree**. Each programming language has its own AST representation, but the idea is always the same.
 
-And to be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through find items or patterns inside the code and act on it.
+To be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through the code, find items or patterns inside the code, and act on them.
 
 ## Python's `ast` module
 
@@ -101,7 +101,7 @@ The role of a node is to concretely represent the features of a language.
 
 It does so by:
 
-- Storing the attributes specific to itself, (for example, an `If` node that represents a for loop might need a `condition` attribute, that is an expression that evaluates to `true` or `false`. The if statement's body will only run when `condition` ends up being `true`.
+- Storing the attributes specific to itself, (for example, an `If` node that represents an if-statement might need a `condition` attribute, which is an expression that evaluates to `true` or `false`. The if statement's body will only run when `condition` ends up being `true`.
 - Defining what children the node can have. (In our `If` node's case, it should have a `body`, that is a list of statements.)
 
 Let's see the concrete example of this if statement, in Python's AST representation.
