@@ -1321,8 +1321,6 @@ class FileWriter(ast.NodeTransformer):
 
 Time to test this:
 
-This is what it outputs:
-
 ```python
 $ python -i code.py
 >>> for i in range(1, 6):
