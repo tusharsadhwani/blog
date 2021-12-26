@@ -243,7 +243,7 @@ comparators=[
 
 In other words: the leftmost variable is stored in `left`, and every variable on the right of each operator is stored in the respective index of `comparators`.
 
-Hopefully that clarifies what the `test` expression in our example code:
+Hopefully that clarifies what the `test` expression means in our example code:
 
 ```python
 If(
@@ -275,9 +275,9 @@ Now let's look at the body:
     )
 ```
 
-The body in our case is a single `Expr`-ession. Note that, when I said that a block or module always contains a list of statements, I wasn't lying. This `Expr` right hereis actually an **expression-statement**. Yeah, I'm not making this up, it will make sense in a bit.
+The body in our case is a single `Expr`-ession. Note that, when I said that a block or module always contains a list of statements, I wasn't lying. This `Expr` right here is actually an **expression-statement**. Yeah, I'm not making this up, it will make sense in a bit.
 
-### Aside: Expressions vs. Statements
+### Expressions vs. Statements
 
 Statements are pretty easy to define. They're kind of like the building blocks of your code. Each statement does something that you can properly define. Such as:
 
@@ -472,9 +472,9 @@ Getting back to our original AST:
     )
 ```
 
-We have an `Expr` in our body, which is Python's way of saying "This is an expression that's being used as a statement. The actual expression is inside it, a `Call` to `print`.
+We have an `Expr` in our body, which is Python's way of saying "This is an expression that's being used as a statement". The actual expression is inside it, a `Call` to `print`.
 
-The last thing left in this example AST is the last line: `orelse=[]`. `orelse` refers to `else:` blocks anywhere in the AST. The name `orelse` was chosen because `else` itself is a keyword and can't be used as attribute names.
+The last thing left in this example AST is the last line: `orelse=[]`. `orelse` refers to `else:` blocks anywhere in the AST. The name `orelse` was chosen because `else` itself is a keyword and can't be used as an attribute name.
 
 Oh, did you know that `for` loops in Python can have an else clause?
 
@@ -633,7 +633,9 @@ Assign(
 )
 ```
 
-The `age` on the right is in "Load" mode and the one on the left is in "Store" mode: that's why this line of code makes sense. This should probably help in explaining that line of code to a newbie programmer in the future.
+The `age` on the right is in "Load" mode and the one on the left is in "Store" mode. That's why this line of code makes sense: we are Loading the old value, adding 1 to it, and then Storing it.
+
+This should probably help in explaining how this kind of self-assigning code _really works_ to a newbie programmer in the future.
 
 One more interesting example is this:
 
@@ -656,7 +658,7 @@ Assign(
 )
 ```
 
-Here, `x` is actually in "Load" mode even though it's on the left side of the assignment. And if you think about it, it makes sense. We need to load `x`, and then modify one of its indices. It's not `x` which is being assigned to, only one _index_ of it is being assigned. So the part of the AST that is in `Store` context is the `Subscript`, i.e. it is `x[5]` is what's being assigned a new value.
+Here, `x` is actually in "Load" mode even though it's on the left side of the assignment. And if you think about it, it makes sense. We need to load `x`, and then modify one of its indices. It's not `x` which is being assigned to, only one _index_ of it is being assigned. So the part of the AST that is in `Store` context is the `Subscript`, i.e. it is `x[5]` that's being assigned a new value.
 
 Hopefully this explains _why_ we explicitly need to tell each variable whether it is in a load or store context in the AST.
 
