@@ -484,7 +484,28 @@ Module<span class="token punctuation">(</span>
     <span class="token punctuation">)</span>
   <span class="token punctuation">]</span><span class="token punctuation">,</span>
   type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
-<span class="token punctuation">)</span></code></pre><h2 id="walking-the-syntax-trees-with-visitors">Walking the Syntax Trees with Visitors</h2><p>So now we know that our AST represents code using nested Nodes, a structure that is called a "tree". We also know that in a tree structure, a node can have as many children nodes inside it as needed. With all that, comes the question of how does one "read" the tree.</p><p>The most obvious way would be to read it top to bottom, the way it appears in the AST dump that we've seen so many times:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> get_ast<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+<span class="token punctuation">)</span></code></pre><details>
+<summary> Extras: type_ignores </summary>
+<p>We also haven't talked about the <code data-astro-raw="">type_ignores=[]</code> thing present at the bottom of every <code data-astro-raw="">Module</code> we output have seen so far.</p>
+<p>It's a topic related to Python's type hints. More specifically, it refers to <code data-astro-raw=""># type: ignore</code> comments present in source code. They're not normally parsed by the AST, but you can pass a flag to the parsing step to tell it to check for these comments. Type checkers like <a href="https://github.com/python/mypy">mypy</a> will use this to get type more information. Take a look at this:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>   ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span><span class="token string">'x = 5 # type: ignore'</span><span class="token punctuation">,</span> type_comments<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>   indent<span class="token operator">=</span><span class="token number">2</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">)</span><span class="token punctuation">)</span>
+Module<span class="token punctuation">(</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    Assign<span class="token punctuation">(</span>
+      targets<span class="token operator">=</span><span class="token punctuation">[</span>
+        Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'x'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Store<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      value<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  type_ignores<span class="token operator">=</span><span class="token punctuation">[</span>
+    TypeIgnore<span class="token punctuation">(</span>lineno<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> tag<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">)</span></code></pre>
+</details><h2 id="walking-the-syntax-trees-with-visitors">Walking the Syntax Trees with Visitors</h2><p>So now we know that our AST represents code using nested Nodes, a structure that is called a "tree". We also know that in a tree structure, a node can have as many children nodes inside it as needed. With all that, comes the question of how does one "read" the tree.</p><p>The most obvious way would be to read it top to bottom, the way it appears in the AST dump that we've seen so many times:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> get_ast<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
 ... age = 21
 ... print(age)
 ... '''</span><span class="token punctuation">)</span>
