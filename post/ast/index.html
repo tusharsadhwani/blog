@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
+  <link rel="stylesheet" href="../../assets/mypy-guide.216b748d.css">
 
 
 
@@ -652,7 +652,34 @@ for item in items:
         break
 '''</span><span class="token punctuation">)</span>
 for_statement_counter<span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span></code></pre><p>And this is the output:</p><pre class="language-text"><code data-astro-raw="" class="language-text">For node contains 1 statements
-For node contains 3 statements</code></pre><h2 id="the-power-of-ast-manipulation">The power of AST manipulation</h2><p>Some really bizarre examples of modifying your code's runtime behaviour go here.</p><p>~~ explain transformers here?</p><blockquote>
+For node contains 3 statements</code></pre><h2 id="the-power-of-ast-manipulation">The power of AST manipulation</h2><p>The real power of ASTs comes from the fact that you can edit an AST, and then compile and run it, to modify your source code's behaviour at runtime.</p><p>To get into all of that, let me explain a little bit about how Python runs your source code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> ast
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code <span class="token operator">=</span> <span class="token string">'print("hello")'</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>tree<span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+Module<span class="token punctuation">(</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    Expr<span class="token punctuation">(</span>
+      value<span class="token operator">=</span>Call<span class="token punctuation">(</span>
+        func<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'print'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        args<span class="token operator">=</span><span class="token punctuation">[</span>
+          Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">'hello'</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        keywords<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code_object <span class="token operator">=</span> <span class="token builtin">compile</span><span class="token punctuation">(</span>tree<span class="token punctuation">,</span> <span class="token string">'&lt;my ast&gt;'</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">exec</span><span class="token punctuation">(</span>code_object<span class="token punctuation">)</span>
+hello</code></pre><ul>
+<li>The first step is to parse the source code. This actually involves two steps, converting the source code into tokens, and then converting the tokens into a valid AST. Python neatly exposes these two parts of the compilation step with the <code data-astro-raw="">ast.parse</code> function. You can examine the AST produced in the output above.</li>
+<li>The next step is to "compile" the given AST into a code object. Code objects are objects that contain compliled pieces of Python "bytecode", the variable names present in the bytecode, and the locations of each part in the actual source.
+The <code data-astro-raw="">compile</code> function takes in the AST, a file name (which we set to <code data-astro-raw="">'&lt;my ast&gt;'</code> in our case), and a mode, which we set to <code data-astro-raw="">'exec'</code>, which tells compile that we want an executable code object to come out.</li>
+<li>The third step is to run the <code data-astro-raw="">exec()</code> on this code object, which runs this bytecode in the interpreter. It provides the bytecode with all the values present in the local and global scopes, and lets the code run. In our case, this makes the object print out <code data-astro-raw="">hello</code>.</li>
+</ul><blockquote>
+<p>If you want a more in-depth explanation of this, I have an entire section on it in my <a href="/post/builtins#compile-exec-and-eval-how-the-code-works">builtins</a> blog.</p>
+</blockquote><p>~~ explain transformers here?</p><blockquote>
 <p>Quote from docs: "Keep in mind that if the node you’re operating on has child nodes you must either transform the child nodes yourself or call the <code data-astro-raw="">generic_visit()</code> method for the node first."</p>
 </blockquote><p>~~ A good, meaningful example of a transformer here would be great, as we're only building a linter later on.</p><p>~~ Mention zxpy :)</p><h3 id="ast-utilities">AST utilities</h3><p>~~ fix missing locations, literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
