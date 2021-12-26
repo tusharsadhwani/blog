@@ -746,6 +746,35 @@ Module(
 )
 ```
 
+<details>
+<summary> Extras: type_ignores </summary>
+
+We also haven't talked about the `type_ignores=[]` thing present at the bottom of every `Module` we output have seen so far.
+
+It's a topic related to Python's type hints. More specifically, it refers to `# type: ignore` comments present in source code. They're not normally parsed by the AST, but you can pass a flag to the parsing step to tell it to check for these comments. Type checkers like [mypy](https://github.com/python/mypy) will use this to get type more information. Take a look at this:
+
+```python
+>>> print(ast.dump(
+...   ast.parse('x = 5 # type: ignore', type_comments=True),
+...   indent=2
+... ))
+Module(
+  body=[
+    Assign(
+      targets=[
+        Name(id='x', ctx=Store())
+      ],
+      value=Constant(value=5)
+    )
+  ],
+  type_ignores=[
+    TypeIgnore(lineno=1, tag='')
+  ]
+)
+```
+
+</details>
+
 ## Walking the Syntax Trees with Visitors
 
 So now we know that our AST represents code using nested Nodes, a structure that is called a "tree". We also know that in a tree structure, a node can have as many children nodes inside it as needed. With all that, comes the question of how does one "read" the tree.
