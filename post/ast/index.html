@@ -29,12 +29,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
+  <link rel="stylesheet" href="../../assets/setup-postgres.30c1d388.css">
 
 
 
 
-<script type="module" src="../../assets/ast.e02f5e4a.js"></script>
+<script type="module" src="../../assets/ast.cbc7e545.js"></script>
 </head>
   
 
@@ -861,7 +861,7 @@ $ cat output<span class="token punctuation">.</span>txt
 <span class="token operator">**</span>
 <span class="token operator">**</span><span class="token operator">*</span>
 <span class="token operator">**</span><span class="token operator">**</span>
-<span class="token operator">**</span><span class="token operator">**</span><span class="token operator">*</span></code></pre><p>A nice exercise would be to re-write every <code data-astro-raw="">generic_visit</code> based code we have written so far, and simplify it using <code data-astro-raw="">visit_X</code> methods instead.</p><p>I'd love to talk a lot more in depth about all the insane stuff you can do in Python by modifying and executing ASTs. But unfortunately there's not enough space in this blog post for that. Trust me.</p><blockquote>
+<span class="token operator">**</span><span class="token operator">**</span><span class="token operator">*</span></code></pre><p>If you want to, a nice exercise for checking your understanding would be to re-write every <code data-astro-raw="">generic_visit</code> based code we have written so far, and simplify it using <code data-astro-raw="">visit_X</code> methods instead.</p><p>I'd love to talk a lot more in depth about all the insane stuff you can do in Python by modifying and executing ASTs. But unfortunately there's not enough space in this blog post for that. Trust me.</p><blockquote>
 <p>If you really want to look into more examples of this, you can check out the source code of <a href="https://github.com/tusharsadhwani/zxpy">zxpy</a> after reading this article. It is a library that essentially adds new syntax to Python strings, to seamlessly execute shell code within Python. It is mind-bending stuff though.</p>
 </blockquote><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
