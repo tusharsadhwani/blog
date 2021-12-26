@@ -448,7 +448,7 @@ Module<span class="token punctuation">(</span>
 <span class="token punctuation">)</span></code></pre><details>
 <summary> Extras: why `del` exists </summary>
 <p>So Python is a <em>reference-counted, garbage collected language</em>. What that means is that there's a very clear distinction between variables and values. Values are essentially just objects floating around in memory, and variables are just names that point to the said objects in memory.</p>
-<p>Each variable that points to a value (a.k.a "references" that value), the reference count of that value is increased. For example:</p>
+<p>For each variable that points to a value (a.k.a "references" that value), the reference count of that value is increased. For example:</p>
 <pre class="language-python"><code data-astro-raw="" class="language-python">x <span class="token operator">=</span> <span class="token string">'some string'</span>  <span class="token comment"># This string has a ref. count of 1</span>
 y <span class="token operator">=</span> x              <span class="token comment"># Now it has a ref. count of 2</span></code></pre>
 <p>When a value in memory reaches a reference count of zero, that value is no longer used anywhere in the program. Once that happens, the value is deleted from memory (garbage collected). There's a few reasons why a value can get to zero reference counts, like a function returning:</p>
@@ -456,16 +456,16 @@ y <span class="token operator">=</span> x              <span class="token commen
     x <span class="token operator">=</span> <span class="token string">'some string'</span>  <span class="token comment"># Ref count 1</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
     <span class="token comment"># Now, when this function returns, `x` is deleted</span>
-    <span class="token comment"># making the string's ref count to zero.</span>
+    <span class="token comment"># making the string's reference count zero.</span>
 
 f<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
 <p>Or, if you explicitly delete it:</p>
 <pre class="language-python"><code data-astro-raw="" class="language-python">x <span class="token operator">=</span> <span class="token string">'some string'</span>  <span class="token comment"># Count 1</span>
 <span class="token keyword">del</span> x              <span class="token comment"># Count 0. That string is gone forever.</span></code></pre>
-<p>Note that re-assigning a variable is the same as deleting it and then assigning it:</p>
+<p>Note that re-assigning a variable is the same as deleting it and then assigning it. Which means this:</p>
 <pre class="language-python"><code data-astro-raw="" class="language-python">x <span class="token operator">=</span> <span class="token string">'some string'</span>   <span class="token comment"># Count 1</span>
 x <span class="token operator">=</span> <span class="token string">'other string'</span>  <span class="token comment"># Old string's count goes to 0.</span></code></pre>
-<p>is the same as:</p>
+<p>... is the same as this:</p>
 <pre class="language-python"><code data-astro-raw="" class="language-python">x <span class="token operator">=</span> <span class="token string">'some string'</span>  <span class="token comment"># Count 1</span>
 <span class="token keyword">del</span> x              <span class="token comment"># Count goes to 0.</span>
 x <span class="token operator">=</span> <span class="token string">'other string'</span></code></pre>
