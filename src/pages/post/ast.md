@@ -1016,7 +1016,40 @@ For node contains 3 statements
 
 ## The power of AST manipulation
 
-Some really bizarre examples of modifying your code's runtime behaviour go here.
+The real power of ASTs comes from the fact that you can edit an AST, and then compile and run it, to modify your source code's behaviour at runtime.
+
+To get into all of that, let me explain a little bit about how Python runs your source code:
+
+```python
+>>> import ast
+>>> code = 'print("hello")'
+>>> tree = ast.parse(code)
+>>> print(ast.dump(tree, indent=2))
+Module(
+  body=[
+    Expr(
+      value=Call(
+        func=Name(id='print', ctx=Load()),
+        args=[
+          Constant(value='hello')
+        ],
+        keywords=[]
+      )
+    )
+  ],
+  type_ignores=[]
+)
+>>> code_object = compile(tree, '<my ast>', 'exec')
+>>> exec(code_object)
+hello
+```
+
+- The first step is to parse the source code. This actually involves two steps, converting the source code into tokens, and then converting the tokens into a valid AST. Python neatly exposes these two parts of the compilation step with the `ast.parse` function. You can examine the AST produced in the output above.
+- The next step is to "compile" the given AST into a code object. Code objects are objects that contain compliled pieces of Python "bytecode", the variable names present in the bytecode, and the locations of each part in the actual source.
+  The `compile` function takes in the AST, a file name (which we set to `'<my ast>'` in our case), and a mode, which we set to `'exec'`, which tells compile that we want an executable code object to come out.
+- The third step is to run the `exec()` on this code object, which runs this bytecode in the interpreter. It provides the bytecode with all the values present in the local and global scopes, and lets the code run. In our case, this makes the object print out `hello`.
+
+> If you want a more in-depth explanation of this, I have an entire section on it in my [builtins](/post/builtins#compile-exec-and-eval-how-the-code-works) blog.
 
 ~~ explain transformers here?
 
