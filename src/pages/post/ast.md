@@ -1354,7 +1354,7 @@ $ cat output.txt
 *****
 ```
 
-A nice exercise would be to re-write every `generic_visit` based code we have written so far, and simplify it using `visit_X` methods instead.
+If you want to, a nice exercise for checking your understanding would be to re-write every `generic_visit` based code we have written so far, and simplify it using `visit_X` methods instead.
 
 I'd love to talk a lot more in depth about all the insane stuff you can do in Python by modifying and executing ASTs. But unfortunately there's not enough space in this blog post for that. Trust me.
 
