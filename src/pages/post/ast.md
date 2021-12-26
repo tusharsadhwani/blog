@@ -662,8 +662,6 @@ Here, `x` is actually in "Load" mode even though it's on the left side of the as
 
 Hopefully this explains _why_ we explicitly need to tell each variable whether it is in a load or store context in the AST.
 
-> For the sake of completion, I should mention that there's only three AST nodes in Python that have a `ctx` property, which is `Name` (as we have seen so many times now), `Subscript` (which refers to the `x[y]` syntax, i.e. indices of a list, dictionary, etc.), and `Attribute` which is what's used to represent members inside an object, like `obj.x`. This means there's exactly 3 constructs in the language that can be used to store values.
-
 Now unless you're super familiar with Python, you'd think that `Load` and `Store` cover everything that the language needs, but weirdly enough there's a third possible `ctx` value, `Del`:
 
 ```python
