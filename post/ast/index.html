@@ -505,6 +505,7 @@ Module<span class="token punctuation">(</span>
     TypeIgnore<span class="token punctuation">(</span>lineno<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> tag<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span>
   <span class="token punctuation">]</span>
 <span class="token punctuation">)</span></code></pre>
+<p>If you want to learn more about mypy and type checkers, I have a <a href="/post/mypy-guide">super long blog</a> on that.</p>
 </details><h2 id="walking-the-syntax-trees-with-visitors">Walking the Syntax Trees with Visitors</h2><p>So now we know that our AST represents code using nested Nodes, a structure that is called a "tree". We also know that in a tree structure, a node can have as many children nodes inside it as needed. With all that, comes the question of how does one "read" the tree.</p><p>The most obvious way would be to read it top to bottom, the way it appears in the AST dump that we've seen so many times:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> get_ast<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
 ... age = 21
 ... print(age)
