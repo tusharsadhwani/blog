@@ -987,9 +987,9 @@ If you follow the enter and leave commands one by one, you'll see how this trave
 Store() [4, 5]
 ```
 
-You can keep this in mind, that anything that comes before the `super()` call is being done in pre-order, and anything that comes after the `super()` call is being done in post-order.
+> You can keep this in mind, that anything that comes before the `super()` call is being done in pre-order, and anything that comes after the `super()` call is being done in post-order.
 
-Let's say that for some reason I wanted to find how many statements exist inside all the `for` loops in my code. To do that, I'd need to do the following:
+So let's say that for some reason I wanted to find how many statements exist inside all the `for` loops in my code. To do that, I'd need to do the following:
 
 - Traverse through the code to find all `For` nodes. We're already sorted with that.
 - Each time we see a `For` node, we need to start our count from zero.
@@ -1006,13 +1006,13 @@ class ForStmtCounter(ast.NodeVisitor):
     stmt_count = 0
 
     def generic_visit(self, node):
+        # If we are inside a for node, count statements
         if self.current_for_node is not None:
-            # Count statements
             if isinstance(node, ast.stmt):
                 self.stmt_count += 1
 
+        # If we just found a new for node, start counting
         elif isinstance(node, ast.For):
-            # Start the count
             self.current_for_node = node
             self.stmt_count = 0
 
@@ -1020,7 +1020,7 @@ class ForStmtCounter(ast.NodeVisitor):
 
         # This runs when coming back up from the children
         if node is self.current_for_node:
-            # We're done counting this node
+            # We're done counting this node. Print it out
             print(f'For node contains {self.stmt_count} statements')
             self.current_for_node = None
 
