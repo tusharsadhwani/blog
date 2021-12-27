@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
+  <link rel="stylesheet" href="../../assets/slices.8393ac99.css">
 
 
 
@@ -630,7 +630,9 @@ leaving Module</code></pre><p>If you follow the enter and leave commands one by 
           /         \
  Name('x') [3, 6]    Constant(5) [7, 8]
    |
-Store() [4, 5]</code></pre><p>You can keep this in mind, that anything that comes before the <code data-astro-raw="">super()</code> call is being done in pre-order, and anything that comes after the <code data-astro-raw="">super()</code> call is being done in post-order.</p><p>Let's say that for some reason I wanted to find how many statements exist inside all the <code data-astro-raw="">for</code> loops in my code. To do that, I'd need to do the following:</p><ul>
+Store() [4, 5]</code></pre><blockquote>
+<p>You can keep this in mind, that anything that comes before the <code data-astro-raw="">super()</code> call is being done in pre-order, and anything that comes after the <code data-astro-raw="">super()</code> call is being done in post-order.</p>
+</blockquote><p>So let's say that for some reason I wanted to find how many statements exist inside all the <code data-astro-raw="">for</code> loops in my code. To do that, I'd need to do the following:</p><ul>
 <li>Traverse through the code to find all <code data-astro-raw="">For</code> nodes. We're already sorted with that.</li>
 <li>Each time we see a <code data-astro-raw="">For</code> node, we need to start our count from zero.</li>
 <li>We must keep counting until we see this same <code data-astro-raw="">For</code> node again during post-order traversal.</li>
@@ -642,13 +644,13 @@ Store() [4, 5]</code></pre><p>You can keep this in mind, that anything that come
     stmt_count <span class="token operator">=</span> <span class="token number">0</span>
 
     <span class="token keyword">def</span> <span class="token function">generic_visit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># If we are inside a for node, count statements</span>
         <span class="token keyword">if</span> self<span class="token punctuation">.</span>current_for_node <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
-            <span class="token comment"># Count statements</span>
             <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>stmt<span class="token punctuation">)</span><span class="token punctuation">:</span>
                 self<span class="token punctuation">.</span>stmt_count <span class="token operator">+=</span> <span class="token number">1</span>
 
+        <span class="token comment"># If we just found a new for node, start counting</span>
         <span class="token keyword">elif</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>For<span class="token punctuation">)</span><span class="token punctuation">:</span>
-            <span class="token comment"># Start the count</span>
             self<span class="token punctuation">.</span>current_for_node <span class="token operator">=</span> node
             self<span class="token punctuation">.</span>stmt_count <span class="token operator">=</span> <span class="token number">0</span>
 
@@ -656,7 +658,7 @@ Store() [4, 5]</code></pre><p>You can keep this in mind, that anything that come
 
         <span class="token comment"># This runs when coming back up from the children</span>
         <span class="token keyword">if</span> node <span class="token keyword">is</span> self<span class="token punctuation">.</span>current_for_node<span class="token punctuation">:</span>
-            <span class="token comment"># We're done counting this node</span>
+            <span class="token comment"># We're done counting this node. Print it out</span>
             <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'For node contains </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>stmt_count<span class="token punctuation">}</span></span><span class="token string"> statements'</span></span><span class="token punctuation">)</span>
             self<span class="token punctuation">.</span>current_for_node <span class="token operator">=</span> <span class="token boolean">None</span>
 
