@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/slices.8393ac99.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
 
 
 
@@ -124,7 +124,9 @@ define    calculate        run area_of_circle
      multiply  (pi, r, r)</code></pre><p>The nodes here can be anything, from statements, to expressions, to any other construct that the language defines. Once the code is in this tree structure, computers can start to make sense of it, such as traversing its nodes one by one and generate the appropriate machine code.</p><p>Essentially, all your code represents a tree of data. And that tree is called the <strong>Abstract Syntax Tree</strong>. Each programming language has its own AST representation, but the idea is always the same.</p><p>To be able to create tools that do things like auto-format your code, or find subtle bugs automatically, you need ASTs to be able to meaningfully read through the code, find items or patterns inside the code, and act on them.</p><h2 id="pythons-ast-module">Python's <code data-astro-raw="">ast</code> module</h2><p>Python has a builtin <code data-astro-raw="">ast</code> module, which has a rich set of features to create, modify and run ASTs from Python code. Not all languages provide easy access to their syntax trees, so Python is already pretty good in that regard. Let's take a look at what all the <code data-astro-raw="">ast</code> module gives us, and try to do something interesting with it:</p><h3 id="all-the-nodes">All the <code data-astro-raw="">Node</code>s</h3><p>There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: <strong>Literals</strong>, <strong>Variables</strong>, <strong>Statements</strong> and <strong>Expressions</strong>. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.</p><p>The role of a node is to concretely represent the features of a language.</p><p>It does so by:</p><ul>
 <li>Storing the attributes specific to itself, (for example, an <code data-astro-raw="">If</code> node that represents an if-statement might need a <code data-astro-raw="">condition</code> attribute, which is an expression that evaluates to <code data-astro-raw="">true</code> or <code data-astro-raw="">false</code>. The if statement's body will only run when <code data-astro-raw="">condition</code> ends up being <code data-astro-raw="">true</code>.</li>
 <li>Defining what children the node can have. (In our <code data-astro-raw="">If</code> node's case, it should have a <code data-astro-raw="">body</code>, that is a list of statements.)</li>
-</ul><p>Let's see the concrete example of this if statement, in Python's AST representation.</p><p>For this source code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">if</span> answer <span class="token operator">==</span> <span class="token number">42</span><span class="token punctuation">:</span>
+</ul><blockquote>
+<p>In Python's case, the AST nodes also hold their exact location in the source code. You can find out from where in the Python file a node came from, by checking the <code data-astro-raw="">lineno</code> and <code data-astro-raw="">col_offset</code> parameters.</p>
+</blockquote><p>Let's see the concrete example of this if statement, in Python's AST representation.</p><p>For this source code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">if</span> answer <span class="token operator">==</span> <span class="token number">42</span><span class="token punctuation">:</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Correct answer!'</span><span class="token punctuation">)</span></code></pre><p>The AST looks like this:</p><pre class="language-python"><code data-astro-raw="" class="language-python">Module<span class="token punctuation">(</span>
   body<span class="token operator">=</span><span class="token punctuation">[</span>
     If<span class="token punctuation">(</span>
@@ -865,7 +867,17 @@ $ cat output<span class="token punctuation">.</span>txt
 <span class="token operator">**</span><span class="token operator">**</span>
 <span class="token operator">**</span><span class="token operator">**</span><span class="token operator">*</span></code></pre><p>If you want to, a nice exercise for checking your understanding would be to re-write every <code data-astro-raw="">generic_visit</code> based code we have written so far, and simplify it using <code data-astro-raw="">visit_X</code> methods instead.</p><p>I'd love to talk a lot more in depth about all the insane stuff you can do in Python by modifying and executing ASTs. But unfortunately there's not enough space in this blog post for that. Trust me.</p><blockquote>
 <p>If you really want to look into more examples of this, you can check out the source code of <a href="https://github.com/tusharsadhwani/zxpy">zxpy</a> after reading this article. It is a library that essentially adds new syntax to Python strings, to seamlessly execute shell code within Python. It is mind-bending stuff though.</p>
-</blockquote><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>ASTs let you examine code patterns as well, they're really nice.</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
+</blockquote><h2 id="lets-build-a-simple-linter">Let's build: A simple linter</h2><p>We've learned all the key components for this, all that's left to do is to put everything together. Let's write our own linter from scratch.</p><p>Here's the idea:</p><ul>
+<li>We're gonna make a <code data-astro-raw="">Linter</code> class, which holds our "lint rules".</li>
+<li>Lint rules are the actual checks that run on the code. They comprise of 3 things:
+<ul>
+<li>A rule "code" that uniquely identifies it,</li>
+<li>A message that explains the rule violation to the user,</li>
+<li>And a <code data-astro-raw="">Checker</code> class, which is an AST visitor that checks which nodes violate this rule in the source code.</li>
+</ul>
+</li>
+<li>Our linter class will register these rules, run them on a file, and print out all violations.</li>
+</ul><p>So let's write down our linter framework:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token comment"># TODO</span></code></pre><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
 Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p>
     </main>
