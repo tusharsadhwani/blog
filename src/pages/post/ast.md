@@ -104,6 +104,8 @@ It does so by:
 - Storing the attributes specific to itself, (for example, an `If` node that represents an if-statement might need a `condition` attribute, which is an expression that evaluates to `true` or `false`. The if statement's body will only run when `condition` ends up being `true`.
 - Defining what children the node can have. (In our `If` node's case, it should have a `body`, that is a list of statements.)
 
+> In Python's case, the AST nodes also hold their exact location in the source code. You can find out from where in the Python file a node came from, by checking the `lineno` and `col_offset` parameters.
+
 Let's see the concrete example of this if statement, in Python's AST representation.
 
 For this source code:
@@ -1358,13 +1360,28 @@ I'd love to talk a lot more in depth about all the insane stuff you can do in Py
 
 > If you really want to look into more examples of this, you can check out the source code of [zxpy](https://github.com/tusharsadhwani/zxpy) after reading this article. It is a library that essentially adds new syntax to Python strings, to seamlessly execute shell code within Python. It is mind-bending stuff though.
 
+## Let's build: A simple linter
+
+We've learned all the key components for this, all that's left to do is to put everything together. Let's write our own linter from scratch.
+
+Here's the idea:
+
+- We're gonna make a `Linter` class, which holds our "lint rules".
+- Lint rules are the actual checks that run on the code. They comprise of 3 things:
+  - A rule "code" that uniquely identifies it,
+  - A message that explains the rule violation to the user,
+  - And a `Checker` class, which is an AST visitor that checks which nodes violate this rule in the source code.
+- Our linter class will register these rules, run them on a file, and print out all violations.
+
+So let's write down our linter framework:
+
+```python
+# TODO
+```
+
 ### AST utilities
 
 ~~ literal eval, parse/unparse, and walk
-
-## Let's build: A simple linter
-
-ASTs let you examine code patterns as well, they're really nice.
 
 ## What about code formatters?
 
