@@ -70,7 +70,7 @@
   <article class="content astro-36S45FQT">
     <main class="astro-36S45FQT">
       <blockquote>
-<p>Hi! Before we start, a word of caution: This is an extremely large article, and it might take multiple hours to finish completely. But I promise it'll be worth it.</p>
+<p>Hi! Before we start, a word of caution: This is an extremely long article, and it might take multiple hours to finish completely. But I promise it'll be worth it.</p>
 <p>Oh, and follow me on <a href="https://twitter.com/sadhlife">twitter</a>, I frequently post Python content there as well.</p>
 </blockquote><h3 id="index">Index</h3><ul>
 <li><a href="#so-what-is-an-ast">So what is an AST?</a></li>
@@ -399,7 +399,7 @@ Module<span class="token punctuation">(</span>
   <span class="token punctuation">]</span>
 <span class="token punctuation">)</span></code></pre>
 <p>Pretty straightforward. Also, <code data-astro-raw="">If</code> statements have the exact same <code data-astro-raw="">orelse</code> property as for loops when it comes to ASTs.</p>
-</details><p>If you want a detailed reference of all the Nodes that we have in a Python AST, and the corresponding syntax it belongs to, you can either head on to the <a href="https://docs.python.org/3/library/ast.html#node-classes">docs here</a>, or just use <code data-astro-raw="">ast.dump</code> on a line of code to try and find out for yourself.</p><h3 id="whats-a-ctx">What's a <code data-astro-raw="">ctx</code>?</h3><p>Ideally, I want you to leave from this article understanding every single aspect of Python's ASTs. And if you're one of the few super observant readers, you might have noticed that we glanced over a very small thing in the AST examples shown. You can see it in this code snippet:</p><pre class="language-python"><code data-astro-raw="" class="language-python">Compare<span class="token punctuation">(</span>
+</details><p>If you want a detailed reference of all the Nodes that we have in a Python AST, and the corresponding syntax it belongs to, you can either head on to the <a href="https://docs.python.org/3/library/ast.html#node-classes">docs here</a>, or just use <code data-astro-raw="">ast.dump</code> on a line of code to try and find out for yourself.</p><h3 id="whats-a-ctx">What's a <code data-astro-raw="">ctx</code>?</h3><p>Ideally, I want you to leave this article understanding every single aspect of Python's ASTs. And if you're one of the few super observant readers, you might have noticed that we glanced over a very small thing in the AST examples shown. You can see it in this code snippet:</p><pre class="language-python"><code data-astro-raw="" class="language-python">Compare<span class="token punctuation">(</span>
   left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
   ops<span class="token operator">=</span><span class="token punctuation">[</span>Eq<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
   comparators<span class="token operator">=</span><span class="token punctuation">[</span>
