@@ -1435,7 +1435,7 @@ Sweet. Now that we have a framework, we can start writing our own checkers. Let'
 class SetDuplicateItemChecker(Checker):
     """Checks if a set in your code has duplicate constants."""
 
-    def visit_Set(self, node: ast.Set):
+    def visit_Set(self, node):
         """Stores all the constants this set holds, and finds duplicates"""
         seen_values = set()
         for element in node.elts:
