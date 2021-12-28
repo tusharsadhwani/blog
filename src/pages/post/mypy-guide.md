@@ -369,7 +369,7 @@ Let's try to do a `reveal_type`:
 ```python
 from typing import Dict
 
-def print_favorite_color(person: Dict[str, str]) -> None:  # added types to funciton definiton
+def print_favorite_color(person: Dict[str, str]) -> None:  # added types to function definiton
     fav_color = person.get('favorite-color')
     reveal_type(fav_color)  # added this line here
     if fav_color is None:
