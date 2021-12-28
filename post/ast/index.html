@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
+  <link rel="stylesheet" href="../../assets/setup-postgres.30c1d388.css">
 
 
 
@@ -877,9 +877,116 @@ $ cat output<span class="token punctuation">.</span>txt
 </ul>
 </li>
 <li>Our linter class will register these rules, run them on a file, and print out all violations.</li>
-</ul><p>So let's write down our linter framework:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token comment"># TODO</span></code></pre><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
+</ul><p>So let's write down our linter framework, <code data-astro-raw="">mylint.py</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">import</span> ast
+<span class="token keyword">import</span> os
+<span class="token keyword">from</span> typing <span class="token keyword">import</span> NamedTuple
+
+
+<span class="token keyword">class</span> <span class="token class-name">Violation</span><span class="token punctuation">(</span>NamedTuple<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    Every rule violation contains a node that breaks the rule,
+    and a message that will be shown to the user.
+    """</span>
+
+    node<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>AST
+    message<span class="token punctuation">:</span> <span class="token builtin">str</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">Checker</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>NodeVisitor<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    A Checker is a Visitor that defines a lint rule, and stores all the
+    nodes that violate that lint rule.
+    """</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> issue_code<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>issue_code <span class="token operator">=</span> issue_code
+        self<span class="token punctuation">.</span>violations <span class="token operator">=</span> <span class="token builtin">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">Linter</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Holds all list rules, and runs them against a source file."""</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>checkers <span class="token operator">=</span> <span class="token builtin">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token decorator annotation punctuation">@staticmethod</span>
+    <span class="token keyword">def</span> <span class="token function">print_violation</span><span class="token punctuation">(</span>file_name<span class="token punctuation">,</span> issue_code<span class="token punctuation">,</span> node<span class="token punctuation">,</span> issue_msg<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>
+            <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">{</span>file_name<span class="token punctuation">}</span></span><span class="token string">:</span><span class="token interpolation"><span class="token punctuation">{</span>node<span class="token punctuation">.</span>lineno<span class="token punctuation">}</span></span><span class="token string">:</span><span class="token interpolation"><span class="token punctuation">{</span>node<span class="token punctuation">.</span>col_offset<span class="token punctuation">}</span></span><span class="token string">: "</span></span>
+            <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">{</span>issue_code<span class="token punctuation">}</span></span><span class="token string">: </span><span class="token interpolation"><span class="token punctuation">{</span>issue_msg<span class="token punctuation">}</span></span><span class="token string">"</span></span>
+        <span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> source_path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""Runs all lints on a source file."""</span>
+        file_name <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>basename<span class="token punctuation">(</span>source_path<span class="token punctuation">)</span>
+
+        <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>source_path<span class="token punctuation">)</span> <span class="token keyword">as</span> source_file<span class="token punctuation">:</span>
+            source_code <span class="token operator">=</span> source_file<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>source_code<span class="token punctuation">)</span>
+        <span class="token keyword">for</span> checker <span class="token keyword">in</span> self<span class="token punctuation">.</span>checkers<span class="token punctuation">:</span>
+            checker<span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+            <span class="token keyword">for</span> violation <span class="token keyword">in</span> checker<span class="token punctuation">.</span>violations<span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>print_violation<span class="token punctuation">(</span>
+                    file_name<span class="token punctuation">,</span>
+                    checker<span class="token punctuation">.</span>issue_code<span class="token punctuation">,</span>
+                    violation<span class="token punctuation">.</span>node<span class="token punctuation">,</span>
+                    violation<span class="token punctuation">.</span>message<span class="token punctuation">,</span>
+                <span class="token punctuation">)</span></code></pre><p>Sweet. Now that we have a framework, we can start writing our own checkers. Let's start with a simple one, one that checks if a set has duplicate items:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">SetDuplicateItemChecker</span><span class="token punctuation">(</span>Checker<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Checks if a set in your code has duplicate constants."""</span>
+
+    <span class="token keyword">def</span> <span class="token function">visit_Set</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>Set<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""Stores all the constants this set holds, and finds duplicates"""</span>
+        seen_values <span class="token operator">=</span> <span class="token builtin">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">for</span> element <span class="token keyword">in</span> node<span class="token punctuation">.</span>elts<span class="token punctuation">:</span>
+            <span class="token comment"># We're only concerned about constant values like ints.</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>element<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Constant<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">continue</span>
+
+            <span class="token comment"># if it's already in seen values, raise a lint violation.</span>
+            value <span class="token operator">=</span> element<span class="token punctuation">.</span>value
+            <span class="token keyword">if</span> value <span class="token keyword">in</span> seen_values<span class="token punctuation">:</span>
+                violation <span class="token operator">=</span> Violation<span class="token punctuation">(</span>
+                    node<span class="token operator">=</span>element<span class="token punctuation">,</span>
+                    message<span class="token operator">=</span><span class="token string-interpolation"><span class="token string">f"Set contains duplicate item: </span><span class="token interpolation"><span class="token punctuation">{</span>value<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">,</span>
+                <span class="token punctuation">)</span>
+                self<span class="token punctuation">.</span>violations<span class="token punctuation">.</span>add<span class="token punctuation">(</span>violation<span class="token punctuation">)</span>
+
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                seen_values<span class="token punctuation">.</span>add<span class="token punctuation">(</span>element<span class="token punctuation">.</span>value<span class="token punctuation">)</span></code></pre><p>The only thing left, is to write a <code data-astro-raw="">main</code> function, that takes the filenames from the commandlint, and runs the linter:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    source_paths <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+
+    linter <span class="token operator">=</span> Linter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    linter<span class="token punctuation">.</span>checkers<span class="token punctuation">.</span>add<span class="token punctuation">(</span>SetDuplicateItemChecker<span class="token punctuation">(</span>issue_code<span class="token operator">=</span><span class="token string">"W001"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> source_path <span class="token keyword">in</span> source_paths<span class="token punctuation">:</span>
+        linter<span class="token punctuation">.</span>run<span class="token punctuation">(</span>source_path<span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><p>That was a lot of code, but hopefully you were able to make sense of all of it. Alright, time to lint some files. I wrote a <code data-astro-raw="">test.py</code> file to test our linter:</p><pre class="language-python"><code data-astro-raw="" class="language-python">$ cat test<span class="token punctuation">.</span>py
+s <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">}</span>
+l <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> item <span class="token keyword">in</span> l<span class="token punctuation">:</span>
+        methods <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">"GET"</span><span class="token punctuation">,</span>
+            <span class="token string">"PUT"</span><span class="token punctuation">,</span>
+            <span class="token string">"POST"</span><span class="token punctuation">,</span>
+            <span class="token string">"DELETE"</span><span class="token punctuation">,</span>
+            <span class="token string">"PUT"</span><span class="token punctuation">,</span>   <span class="token comment"># This is a duplicate</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> item <span class="token keyword">in</span> methods<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+
+s2 <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">}</span>  <span class="token comment"># Has duplicates</span></code></pre><p>Let's run:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ python mylint.py test.py
+test.py:11:12: W001: Set contains duplicate item: <span class="token string">'PUT'</span>
+test.py:16:15: W001: Set contains duplicate item: <span class="token number">1</span></code></pre><p>We've successfully written a linter!</p><p>The real fun starts though, with the really intricate lint rules that you can write. So let's write one of those. <strong>Let's try to write a checker that checks for unused variables.</strong></p><blockquote>
+<p>PENDING</p>
+</blockquote><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
-Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p>
+Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>Read the docs, ast, libcst and and greentreesnakes.</p><pre class="language-null"><code data-astro-raw="" class="language-null"></code></pre>
     </main>
   </article>
 </div>
