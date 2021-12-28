@@ -1525,6 +1525,3 @@ Differentiate between the two, and point towards libcst.
 
 Read the docs, ast, libcst and and greentreesnakes.
 
-```
-
-```
