@@ -1460,13 +1460,12 @@ The only thing left, is to write a `main` function, that takes the filenames fro
 
 ```python
 def main():
-    source_paths = sys.argv[1:]
+    source_path = sys.argv[1]
 
     linter = Linter()
     linter.checkers.add(SetDuplicateItemChecker(issue_code="W001"))
 
-    for source_path in source_paths:
-        linter.run(source_path)
+    linter.run(source_path)
 
 
 if __name__ == "__main__":
@@ -1507,7 +1506,131 @@ We've successfully written a linter!
 
 The real fun starts though, with the really intricate lint rules that you can write. So let's write one of those. **Let's try to write a checker that checks for unused variables.**
 
-> PENDING
+Here's the idea: Every function has a local scope, where you can define new variables. These variables only exist within that function, they have to be created and used all within that function. But, if a variable is defined but isn't used in a function, that's an unused variable.
+
+To detect unused variables, we can visit all `Name` nodes inside a function or class, and see if there's any in `Load` context. If a variable is only ever present in `Store` context, that means it's defined but never used. So let's do that:
+
+```python
+class UnusedVariableInScopeChecker(Checker):
+    """Checks if any variables are unused in this node's scope."""
+
+    def __init__(self, issue_code):
+        super().__init__(issue_code)
+        # unused_names is a dictionary that stores variable names, and
+        # whether or not they've been found in a "Load" context yet.
+        # If it's found to be used, its value is turned to False.
+        self.unused_names = {}
+
+        # name_nodes holds the first occurences of variables.
+        self.name_nodes = {}
+
+    def visit_Name(self, node):
+        """Find all nodes that only exist in `Store` context"""
+        var_name = node.id
+
+        if isinstance(node.ctx, ast.Store):
+            # If it's a new name, save the node for later
+            if var_name not in self.name_nodes:
+                self.name_nodes[var_name] = node
+
+            # If we've never seen it before, it is unused.
+            if var_name not in self.unused_names:
+                self.unused_names[var_name] = True
+
+        else:
+            # It's used somewhere.
+            self.unused_names[var_name] = False
+```
+
+There's just one caveat: We can't just use this visitor on our entire file, as it won't find all unused variables. Here's a quick code example to demonstrate:
+
+```python
+def func():
+    var = 5
+
+var = 10
+print(var)
+```
+
+Here, we would see `var` being used in the global scope. Because of that, the checker won't catch the unused `var` inside `func()`, if we only run it on the entire file. We actually want to run this checker on _every single function and class in the file_.
+
+So that's exactly what we are going to do. We will write a checker that runs this checker inside it. Yeah, my mind was also blown when I realised I can run visitors inside visitors. But here's the plan: For every `ClassDef` and `FunctionDef`, we will run the above checker on them to find unused local variables, and we will also run it on the `Module` to find globally unused variables. Sounds good?
+
+```python
+class UnusedVariableChecker(Checker):
+    def check_for_unused_variables(self, node):
+        """Find unused variables in the local scope of this node."""
+        visitor = UnusedVariableInScopeChecker(self.issue_code)
+        visitor.visit(node)
+
+        # Now the visitor has collected data, and we can use that data
+        for name, unused in visitor.unused_names.items():
+            if unused:
+                node = visitor.name_nodes[name]
+                self.violations.add(Violation(node, f"Unused variable: {name!r}"))
+
+    def visit_Module(self, node):
+        self.check_for_unused_variables(node)
+        super().generic_visit(node)
+
+    def visit_ClassDef(self, node):
+        self.check_for_unused_variables(node)
+        super().generic_visit(node)
+
+    def visit_FunctionDef(self, node):
+        self.check_for_unused_variables(node)
+        super().generic_visit(node)
+```
+
+All that's left now, is to enable this checker in the `main` function:
+
+```python
+def main():
+    source_path = sys.argv[1]
+
+    linter = Linter()
+    linter.checkers.add(SetDuplicateItemChecker(issue_code="W001"))
+    linter.checkers.add(UnusedVariableChecker(issue_code="W002"))
+
+    linter.run(source_path)
+```
+
+I've also prepared a new test file, with some more variables:
+
+```python
+s = {1, 2}  # Unused global
+l = [1, 2, 3, 1, 2, 3]
+
+def main():
+    var = 5  # Unused local
+    for item in l:
+        methods = {
+            "GET",
+            "PUT",
+            "POST",
+            "DELETE",
+            "PUT",  # Duplicate
+        }
+        if item in methods:
+            print(item)
+
+s2 = {1, 2, 3, 1}  # Unused, and has a duplicate
+var = 7
+print(var)
+```
+
+Alright, let's run it!
+
+```bash
+$ python mylint.py test.py
+test.py:1:0: W002: Unused variable: 's'
+test.py:17:0: W002: Unused variable: 's2'
+test.py:5:4: W002: Unused variable: 'var'
+test.py:17:15: W001: Set contains duplicate item: 1
+test.py:12:12: W001: Set contains duplicate item: 'PUT'
+```
+
+It works! We did it, we've built our own linter 🥳
 
 ### AST utilities
 
