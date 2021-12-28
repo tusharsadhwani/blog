@@ -1373,11 +1373,146 @@ Here's the idea:
   - And a `Checker` class, which is an AST visitor that checks which nodes violate this rule in the source code.
 - Our linter class will register these rules, run them on a file, and print out all violations.
 
-So let's write down our linter framework:
+So let's write down our linter framework, `mylint.py`:
 
 ```python
-# TODO
+import ast
+import os
+from typing import NamedTuple
+
+
+class Violation(NamedTuple):
+    """
+    Every rule violation contains a node that breaks the rule,
+    and a message that will be shown to the user.
+    """
+
+    node: ast.AST
+    message: str
+
+
+class Checker(ast.NodeVisitor):
+    """
+    A Checker is a Visitor that defines a lint rule, and stores all the
+    nodes that violate that lint rule.
+    """
+
+    def __init__(self, issue_code):
+        self.issue_code = issue_code
+        self.violations = set()
+
+
+class Linter:
+    """Holds all list rules, and runs them against a source file."""
+
+    def __init__(self):
+        self.checkers = set()
+
+    @staticmethod
+    def print_violation(file_name, issue_code, node, issue_msg):
+        print(
+            f"{file_name}:{node.lineno}:{node.col_offset}: "
+            f"{issue_code}: {issue_msg}"
+        )
+
+    def run(self, source_path):
+        """Runs all lints on a source file."""
+        file_name = os.path.basename(source_path)
+
+        with open(source_path) as source_file:
+            source_code = source_file.read()
+
+        tree = ast.parse(source_code)
+        for checker in self.checkers:
+            checker.visit(tree)
+            for violation in checker.violations:
+                self.print_violation(
+                    file_name,
+                    checker.issue_code,
+                    violation.node,
+                    violation.message,
+                )
 ```
+
+Sweet. Now that we have a framework, we can start writing our own checkers. Let's start with a simple one, one that checks if a set has duplicate items:
+
+```python
+class SetDuplicateItemChecker(Checker):
+    """Checks if a set in your code has duplicate constants."""
+
+    def visit_Set(self, node: ast.Set):
+        """Stores all the constants this set holds, and finds duplicates"""
+        seen_values = set()
+        for element in node.elts:
+            # We're only concerned about constant values like ints.
+            if not isinstance(element, ast.Constant):
+                continue
+
+            # if it's already in seen values, raise a lint violation.
+            value = element.value
+            if value in seen_values:
+                violation = Violation(
+                    node=element,
+                    message=f"Set contains duplicate item: {value!r}",
+                )
+                self.violations.add(violation)
+
+            else:
+                seen_values.add(element.value)
+```
+
+The only thing left, is to write a `main` function, that takes the filenames from the commandlint, and runs the linter:
+
+```python
+def main():
+    source_paths = sys.argv[1:]
+
+    linter = Linter()
+    linter.checkers.add(SetDuplicateItemChecker(issue_code="W001"))
+
+    for source_path in source_paths:
+        linter.run(source_path)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+That was a lot of code, but hopefully you were able to make sense of all of it. Alright, time to lint some files. I wrote a `test.py` file to test our linter:
+
+```python
+$ cat test.py
+s = {1, 2}
+l = [1, 2, 3, 1, 2, 3]
+
+def main():
+    for item in l:
+        methods = {
+            "GET",
+            "PUT",
+            "POST",
+            "DELETE",
+            "PUT",   # This is a duplicate
+        }
+        if item in methods:
+            print(item)
+
+s2 = {1, 2, 3, 1}  # Has duplicates
+```
+
+Let's run:
+
+```bash
+$ python mylint.py test.py
+test.py:11:12: W001: Set contains duplicate item: 'PUT'
+test.py:16:15: W001: Set contains duplicate item: 1
+```
+
+We've successfully written a linter!
+
+The real fun starts though, with the really intricate lint rules that you can write. So let's write one of those. **Let's try to write a checker that checks for unused variables.**
+
+> PENDING
 
 ### AST utilities
 
@@ -1394,3 +1529,7 @@ Differentiate between the two, and point towards libcst.
 ## Where can I learn more?
 
 Read the docs, ast, libcst and and greentreesnakes.
+
+```
+
+```
