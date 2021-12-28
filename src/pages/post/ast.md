@@ -10,6 +10,20 @@ layout: "../../layouts/BlogPost.astro"
 
 > Hi! Before we start, a word of caution: This is an extremely large article, and it might take multiple days to finish completely. But I promise it'll be worth it. Oh, and follow me on [twitter](https://twitter.com/sadhlife), I frequently post Python content there as well.
 
+### Index
+
+- [So what is an AST?](#so-what-is-an-ast)
+- [Python's `ast` module](#pythons-ast-module)
+  - [All the `Node`s](#all-the-nodes)
+  - [Expressions vs. Statements](#expressions-vs-statements)
+  - [What's a `ctx`?](#whats-a-ctx)
+- [Walking the Syntax Trees with Visitors](#walking-the-syntax-trees-with-visitors)
+- [The power of AST manipulation](#the-power-of-ast-manipulation)
+- [Let's build: A simple linter](#lets-build-a-simple-linter)
+- [AST utilities](#ast-utilities)
+- [What about code formatters?](#what-about-code-formatters)
+- [Where can I learn more?](#where-can-i-learn-more)
+
 ## So what is an AST?
 
 In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.
