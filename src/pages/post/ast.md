@@ -8,7 +8,7 @@ alt: "Learn Python ASTs, by building your own linter"
 layout: "../../layouts/BlogPost.astro"
 ---
 
-> Hi! Before we start, a word of caution: This is an extremely large article, and it might take multiple hours to finish completely. But I promise it'll be worth it.
+> Hi! Before we start, a word of caution: This is an extremely long article, and it might take multiple hours to finish completely. But I promise it'll be worth it.
 >
 > Oh, and follow me on [twitter](https://twitter.com/sadhlife), I frequently post Python content there as well.
 
@@ -560,7 +560,7 @@ If you want a detailed reference of all the Nodes that we have in a Python AST, 
 
 ### What's a `ctx`?
 
-Ideally, I want you to leave from this article understanding every single aspect of Python's ASTs. And if you're one of the few super observant readers, you might have noticed that we glanced over a very small thing in the AST examples shown. You can see it in this code snippet:
+Ideally, I want you to leave this article understanding every single aspect of Python's ASTs. And if you're one of the few super observant readers, you might have noticed that we glanced over a very small thing in the AST examples shown. You can see it in this code snippet:
 
 ```python
 Compare(
