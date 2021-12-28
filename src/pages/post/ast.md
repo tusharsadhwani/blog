@@ -1727,9 +1727,9 @@ The AST module gives you a few other useful utility classes:
 
 A little while ago I mentioned that ASTs don't contain certain information like whitespaces, comments, and quote styles. This is because ASTs are meant to be a representation of what the code _means_, not how the code looks. Anything that Python won't need to store to run the code, is stripped out.
 
-Turns out, this is a huge problem if you want to create things like code formatters, which need to be able to produce the exact source code that was used to build the syntax trees. If you don't everytime the code formatter runs on your file, the whole file will look completely different from how you wrote the code.
+Turns out, this is a huge problem if you want to create things like code formatters, which need to be able to produce the exact source code that was used to build the syntax trees. If you don't, everytime the code formatter runs on your file, the whole file will look completely different from how you wrote the code.
 
-For such use cases, we need what is called a `Concrete Syntax Tree`, or CST. A CST is essentially just an AST which contains style information as well, such as where the newlines are, how many spaces are used for indentation, and so on.
+For such use cases, we need what is called a **Concrete Syntax Tree**, or CST. A CST is essentially just an AST which contains style information as well, such as where the newlines are, how many spaces are used for indentation, and so on.
 
 If you need to build a code editor, formatter, or something of that sort for Python, I'll highly recommend [libcst](https://github.com/Instagram/LibCST). It's the best CST library for Python that I know of.
 
