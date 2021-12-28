@@ -1523,5 +1523,6 @@ Differentiate between the two, and point towards libcst.
 
 ## Where can I learn more?
 
-Read the docs, ast, libcst and and greentreesnakes.
+~~ Read the docs, ast, libcst and and greentreesnakes.
 
+One of the craziest parts about the `ast` module is that, even with all the amazing things it lets us do, the entire source code `ast.py` is just 1600 lines of Python code. It's a definite must-read if you want to dive deeper into ASTs.
