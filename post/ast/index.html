@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/dunders.965dcc1c.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
 
 
 
@@ -949,13 +949,12 @@ $ cat output<span class="token punctuation">.</span>txt
 
             <span class="token keyword">else</span><span class="token punctuation">:</span>
                 seen_values<span class="token punctuation">.</span>add<span class="token punctuation">(</span>element<span class="token punctuation">.</span>value<span class="token punctuation">)</span></code></pre><p>The only thing left, is to write a <code data-astro-raw="">main</code> function, that takes the filenames from the commandlint, and runs the linter:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    source_paths <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+    source_path <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
 
     linter <span class="token operator">=</span> Linter<span class="token punctuation">(</span><span class="token punctuation">)</span>
     linter<span class="token punctuation">.</span>checkers<span class="token punctuation">.</span>add<span class="token punctuation">(</span>SetDuplicateItemChecker<span class="token punctuation">(</span>issue_code<span class="token operator">=</span><span class="token string">"W001"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-    <span class="token keyword">for</span> source_path <span class="token keyword">in</span> source_paths<span class="token punctuation">:</span>
-        linter<span class="token punctuation">.</span>run<span class="token punctuation">(</span>source_path<span class="token punctuation">)</span>
+    linter<span class="token punctuation">.</span>run<span class="token punctuation">(</span>source_path<span class="token punctuation">)</span>
 
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
@@ -977,9 +976,91 @@ l <span class="token operator">=</span> <span class="token punctuation">[</span>
 
 s2 <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">}</span>  <span class="token comment"># Has duplicates</span></code></pre><p>Let's run:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ python mylint.py test.py
 test.py:11:12: W001: Set contains duplicate item: <span class="token string">'PUT'</span>
-test.py:16:15: W001: Set contains duplicate item: <span class="token number">1</span></code></pre><p>We've successfully written a linter!</p><p>The real fun starts though, with the really intricate lint rules that you can write. So let's write one of those. <strong>Let's try to write a checker that checks for unused variables.</strong></p><blockquote>
-<p>PENDING</p>
-</blockquote><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
+test.py:16:15: W001: Set contains duplicate item: <span class="token number">1</span></code></pre><p>We've successfully written a linter!</p><p>The real fun starts though, with the really intricate lint rules that you can write. So let's write one of those. <strong>Let's try to write a checker that checks for unused variables.</strong></p><p>Here's the idea: Every function has a local scope, where you can define new variables. These variables only exist within that function, they have to be created and used all within that function. But, if a variable is defined but isn't used in a function, that's an unused variable.</p><p>To detect unused variables, we can visit all <code data-astro-raw="">Name</code> nodes inside a function or class, and see if there's any in <code data-astro-raw="">Load</code> context. If a variable is only ever present in <code data-astro-raw="">Store</code> context, that means it's defined but never used. So let's do that:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">UnusedVariableInScopeChecker</span><span class="token punctuation">(</span>Checker<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Checks if any variables are unused in this node's scope."""</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> issue_code<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span>issue_code<span class="token punctuation">)</span>
+        <span class="token comment"># unused_names is a dictionary that stores variable names, and</span>
+        <span class="token comment"># whether or not they've been found in a "Load" context yet.</span>
+        <span class="token comment"># If it's found to be used, its value is turned to False.</span>
+        self<span class="token punctuation">.</span>unused_names <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+        <span class="token comment"># name_nodes holds the first occurences of variables.</span>
+        self<span class="token punctuation">.</span>name_nodes <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">def</span> <span class="token function">visit_Name</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""Find all nodes that only exist in `Store` context"""</span>
+        var_name <span class="token operator">=</span> node<span class="token punctuation">.</span><span class="token builtin">id</span>
+
+        <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>ctx<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Store<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># If it's a new name, save the node for later</span>
+            <span class="token keyword">if</span> var_name <span class="token keyword">not</span> <span class="token keyword">in</span> self<span class="token punctuation">.</span>name_nodes<span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>name_nodes<span class="token punctuation">[</span>var_name<span class="token punctuation">]</span> <span class="token operator">=</span> node
+
+            <span class="token comment"># If we've never seen it before, it is unused.</span>
+            <span class="token keyword">if</span> var_name <span class="token keyword">not</span> <span class="token keyword">in</span> self<span class="token punctuation">.</span>unused_names<span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>unused_names<span class="token punctuation">[</span>var_name<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">True</span>
+
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token comment"># It's used somewhere.</span>
+            self<span class="token punctuation">.</span>unused_names<span class="token punctuation">[</span>var_name<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span></code></pre><p>There's just one caveat: We can't just use this visitor on our entire file, as it won't find all unused variables. Here's a quick code example to demonstrate:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    var <span class="token operator">=</span> <span class="token number">5</span>
+
+var <span class="token operator">=</span> <span class="token number">10</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span></code></pre><p>Here, we would see <code data-astro-raw="">var</code> being used in the global scope. Because of that, the checker won't catch the unused <code data-astro-raw="">var</code> inside <code data-astro-raw="">func()</code>, if we only run it on the entire file. We actually want to run this checker on <em>every single function and class in the file</em>.</p><p>So that's exactly what we are going to do. We will write a checker that runs this checker inside it. Yeah, my mind was also blown when I realised I can run visitors inside visitors. But here's the plan: For every <code data-astro-raw="">ClassDef</code> and <code data-astro-raw="">FunctionDef</code>, we will run the above checker on them to find unused local variables, and we will also run it on the <code data-astro-raw="">Module</code> to find globally unused variables. Sounds good?</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">UnusedVariableChecker</span><span class="token punctuation">(</span>Checker<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">check_for_unused_variables</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""Find unused variables in the local scope of this node."""</span>
+        visitor <span class="token operator">=</span> UnusedVariableInScopeChecker<span class="token punctuation">(</span>self<span class="token punctuation">.</span>issue_code<span class="token punctuation">)</span>
+        visitor<span class="token punctuation">.</span>visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+
+        <span class="token comment"># Now the visitor has collected data, and we can use that data</span>
+        <span class="token keyword">for</span> name<span class="token punctuation">,</span> unused <span class="token keyword">in</span> visitor<span class="token punctuation">.</span>unused_names<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> unused<span class="token punctuation">:</span>
+                node <span class="token operator">=</span> visitor<span class="token punctuation">.</span>name_nodes<span class="token punctuation">[</span>name<span class="token punctuation">]</span>
+                self<span class="token punctuation">.</span>violations<span class="token punctuation">.</span>add<span class="token punctuation">(</span>Violation<span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token string-interpolation"><span class="token string">f"Unused variable: </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">visit_Module</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>check_for_unused_variables<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">visit_ClassDef</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>check_for_unused_variables<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">visit_FunctionDef</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>check_for_unused_variables<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span></code></pre><p>All that's left now, is to enable this checker in the <code data-astro-raw="">main</code> function:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    source_path <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+    linter <span class="token operator">=</span> Linter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    linter<span class="token punctuation">.</span>checkers<span class="token punctuation">.</span>add<span class="token punctuation">(</span>SetDuplicateItemChecker<span class="token punctuation">(</span>issue_code<span class="token operator">=</span><span class="token string">"W001"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    linter<span class="token punctuation">.</span>checkers<span class="token punctuation">.</span>add<span class="token punctuation">(</span>UnusedVariableChecker<span class="token punctuation">(</span>issue_code<span class="token operator">=</span><span class="token string">"W002"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    linter<span class="token punctuation">.</span>run<span class="token punctuation">(</span>source_path<span class="token punctuation">)</span></code></pre><p>I've also prepared a new test file, with some more variables:</p><pre class="language-python"><code data-astro-raw="" class="language-python">s <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">}</span>  <span class="token comment"># Unused global</span>
+l <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    var <span class="token operator">=</span> <span class="token number">5</span>  <span class="token comment"># Unused local</span>
+    <span class="token keyword">for</span> item <span class="token keyword">in</span> l<span class="token punctuation">:</span>
+        methods <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">"GET"</span><span class="token punctuation">,</span>
+            <span class="token string">"PUT"</span><span class="token punctuation">,</span>
+            <span class="token string">"POST"</span><span class="token punctuation">,</span>
+            <span class="token string">"DELETE"</span><span class="token punctuation">,</span>
+            <span class="token string">"PUT"</span><span class="token punctuation">,</span>  <span class="token comment"># Duplicate</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> item <span class="token keyword">in</span> methods<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+
+s2 <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">}</span>  <span class="token comment"># Unused, and has a duplicate</span>
+var <span class="token operator">=</span> <span class="token number">7</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span></code></pre><p>Alright, let's run it!</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ python mylint.py test.py
+test.py:1:0: W002: Unused variable: <span class="token string">'s'</span>
+test.py:17:0: W002: Unused variable: <span class="token string">'s2'</span>
+test.py:5:4: W002: Unused variable: <span class="token string">'var'</span>
+test.py:17:15: W001: Set contains duplicate item: <span class="token number">1</span>
+test.py:12:12: W001: Set contains duplicate item: <span class="token string">'PUT'</span></code></pre><p>It works! We did it, we've built our own linter 🥳</p><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
 kind of quotes did you use, single or double. for that for most cases.
 Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>~~ Read the docs, ast, libcst and and greentreesnakes.</p><p>One of the craziest parts about the <code data-astro-raw="">ast</code> module is that, even with all the amazing things it lets us do, the entire source code <code data-astro-raw="">ast.py</code> is just 1600 lines of Python code. It's a definite must-read if you want to dive deeper into ASTs.</p>
     </main>
