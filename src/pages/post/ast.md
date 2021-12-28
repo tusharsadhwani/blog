@@ -1,7 +1,7 @@
 ---
 title: "Learn Python ASTs, by building your own linter"
 description: "The only resource you need to read to learn about ASTs in Python, and the superpowers they give you."
-publishDate: "Thursday, 4 November 2000"
+publishDate: "Wednesday, 29 December 2021"
 author: "Tushar Sadhwani"
 heroImage: "/images/ast.jpg"
 alt: "Learn Python ASTs, by building your own linter"
