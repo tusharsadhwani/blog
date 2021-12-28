@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/slices.980f569d.css">
+  <link rel="stylesheet" href="../../assets/what-the-f-strings.6f4f8be7.css">
 
 
 
@@ -230,7 +230,7 @@ NameError: name <span class="token string">'reveal_type'</span> is not defined</
 me <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'Tushar'</span><span class="token punctuation">,</span> <span class="token string">'favorite-color'</span><span class="token punctuation">:</span> <span class="token string">'Purple'</span><span class="token punctuation">}</span>
 print_favorite_color<span class="token punctuation">(</span>me<span class="token punctuation">)</span></code></pre><p>What's the type of <code data-astro-raw="">fav_color</code> in this code?</p><p>Let's try to do a <code data-astro-raw="">reveal_type</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">from</span> typing <span class="token keyword">import</span> Dict
 
-<span class="token keyword">def</span> <span class="token function">print_favorite_color</span><span class="token punctuation">(</span>person<span class="token punctuation">:</span> Dict<span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>  <span class="token comment"># added types to funciton definiton</span>
+<span class="token keyword">def</span> <span class="token function">print_favorite_color</span><span class="token punctuation">(</span>person<span class="token punctuation">:</span> Dict<span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>  <span class="token comment"># added types to function definiton</span>
     fav_color <span class="token operator">=</span> person<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'favorite-color'</span><span class="token punctuation">)</span>
     reveal_type<span class="token punctuation">(</span>fav_color<span class="token punctuation">)</span>  <span class="token comment"># added this line here</span>
     <span class="token keyword">if</span> fav_color <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
