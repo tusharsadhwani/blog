@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
+  <link rel="stylesheet" href="../../assets/setup-postgres.40d5cd13.css">
 
 
 
@@ -56,19 +56,19 @@
 
 
 
-    <div class="layout astro-A2RTLENG">
-  <header class="astro-A2RTLENG">
-    <p class="publish-date astro-A2RTLENG">Saturday, 26 September 2020</p>
-    <h1 class="title astro-A2RTLENG">How to setup PostgreSQL on Manjaro linux / Arch</h1>
-    <img src="/images/postgres.jpg" title="How to setup PostgreSQL on Manjaro linux / Arch" alt="How to setup PostgreSQL on Manjaro linux / Arch" class="astro-A2RTLENG">
+    <div class="layout astro-36S45FQT">
+  <header class="astro-36S45FQT">
+    <p class="publish-date astro-36S45FQT">Saturday, 26 September 2020</p>
+    <h1 class="title astro-36S45FQT">How to setup PostgreSQL on Manjaro linux / Arch</h1>
+    <img src="/images/postgres.jpg" title="How to setup PostgreSQL on Manjaro linux / Arch" alt="How to setup PostgreSQL on Manjaro linux / Arch" class="astro-36S45FQT">
     
 <div class="author astro-BL6UQIAR">
   <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
 </div>
 
   </header>
-  <article class="content astro-A2RTLENG">
-    <main class="astro-A2RTLENG">
+  <article class="content astro-36S45FQT">
+    <main class="astro-36S45FQT">
       <p>This guide is here just because I've messed up the installs on arch before, and turns out it's actually pretty easy to do.</p><h2 id="step-1---install-the-dependencies">Step 1 - Install the dependencies</h2><pre class="language-plaintext"><code data-astro-raw="" class="language-plaintext">sudo pacman -S yay
 yay postgresql pgadmin4</code></pre><p>This should automatically setup your postgres user and group.</p><h2 id="step-2---setup-postgres-service">Step 2 - Setup postgres service</h2><pre class="language-plaintext"><code data-astro-raw="" class="language-plaintext">sudo -u postgres -i # login as postgres
 initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data/'

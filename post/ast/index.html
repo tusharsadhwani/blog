@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.8033388b.css">
+  <link rel="stylesheet" href="../../assets/setup-postgres.40d5cd13.css">
 
 
 
@@ -56,19 +56,19 @@
 
 
 
-    <div class="layout astro-A2RTLENG">
-  <header class="astro-A2RTLENG">
-    <p class="publish-date astro-A2RTLENG">Thursday, 4 November 2000</p>
-    <h1 class="title astro-A2RTLENG">Learn Python ASTs, by building your own linter</h1>
-    <img src="/images/ast.jpg" title="Learn Python ASTs, by building your own linter" alt="Learn Python ASTs, by building your own linter" class="astro-A2RTLENG">
+    <div class="layout astro-36S45FQT">
+  <header class="astro-36S45FQT">
+    <p class="publish-date astro-36S45FQT">Thursday, 4 November 2000</p>
+    <h1 class="title astro-36S45FQT">Learn Python ASTs, by building your own linter</h1>
+    <img src="/images/ast.jpg" title="Learn Python ASTs, by building your own linter" alt="Learn Python ASTs, by building your own linter" class="astro-36S45FQT">
     
 <div class="author astro-BL6UQIAR">
   <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
 </div>
 
   </header>
-  <article class="content astro-A2RTLENG">
-    <main class="astro-A2RTLENG">
+  <article class="content astro-36S45FQT">
+    <main class="astro-36S45FQT">
       <blockquote>
 <p>Hi! Before we start, a word of caution: This is an extremely large article, and it might take multiple days to finish completely. But I promise it'll be worth it. Oh, and follow me on <a href="https://twitter.com/sadhlife">twitter</a>, I frequently post Python content there as well.</p>
 </blockquote><h2 id="so-what-is-an-ast">So what is an AST?</h2><p>In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.</p><p>The programs that you and I write in our language of choice is usually called the "source code", and I'll be referring to it as such in this article.</p><p>On the other end, computer chips can only understand "machine code", which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers are <em>instructions</em>, which tell the CPU a simple task to perform, like "add the numbers stored in these two places", or "jump 10 numbers down and continue running code from there". The instructions run one by one, and they dictate the flow of the program.</p><p>Similarly, you define your programs as a set of "statements", with each statement being one thing that you want your code to do. They're sort of a more human-friendly version of the CPU instructions, that we can write and reason with more easily.</p><p>Now, I know that theory can get boring really quick, so I'm going to go through a bunch of examples. Let's write the same piece of code in many languages, and notice the similarities:</p><ul>
