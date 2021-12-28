@@ -1409,11 +1409,12 @@ class Linter:
         self.checkers = set()
 
     @staticmethod
-    def print_violation(file_name, issue_code, node, issue_msg):
-        print(
-            f"{file_name}:{node.lineno}:{node.col_offset}: "
-            f"{issue_code}: {issue_msg}"
-        )
+    def print_violations(checker, file_name):
+        for node, message in checker.violations:
+            print(
+                f"{file_name}:{node.lineno}:{node.col_offset}: "
+                f"{checker.issue_code}: {message}"
+            )
 
     def run(self, source_path):
         """Runs all lints on a source file."""
@@ -1425,13 +1426,7 @@ class Linter:
         tree = ast.parse(source_code)
         for checker in self.checkers:
             checker.visit(tree)
-            for violation in checker.violations:
-                self.print_violation(
-                    file_name,
-                    checker.issue_code,
-                    violation.node,
-                    violation.message,
-                )
+            self.print_violations(checker, file_name)
 ```
 
 Sweet. Now that we have a framework, we can start writing our own checkers. Let's start with a simple one, one that checks if a set has duplicate items:
