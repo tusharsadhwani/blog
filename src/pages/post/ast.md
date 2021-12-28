@@ -832,6 +832,8 @@ print(age)
 visitor.visit(tree)
 ```
 
+> We'll look closer at the code inside `MyVisitor` very soon, but let's try and examine its output first.
+
 This outputs the following:
 
 ```text
@@ -883,9 +885,9 @@ entering Name(id='x', ctx=Load())
 entering Load()
 ```
 
-We'll look closer at the code inside `MyVisitor` very soon, but let's examine this output properly first.
+You might notice that the first line output is the entire `Module`. The second line is the `Assign` node that is inside the `Module`, and the third line is a `Name` node which is inside that. Interesting.
 
-You can imagine this "visitor" moving from up to down, left to right in this tree structure:
+With that, let's understand what's going on. You can imagine this "visitor" moving from up to down, left to right in this tree structure:
 
 ```text
                <----Module---->
@@ -1253,7 +1255,7 @@ Let's go a little more in depth. This article is super long already, might as we
 
 Since it's very common for AST modifications to deal with a specific kind of node, and nothing else (We've already seen a few examples where that would've been useful, such as turning every number into `42`), The `NodeVisitor` and `NodeTransformer` classes both let you define Node-specific visitor methods.
 
-You define a node-specific visitor method by defining a `visit_<NodeName>` method, just as `visit_For` to just visit for-loops.
+You define a node-specific visitor method by defining a `visit_<NodeName>` method, just as `visit_For` to just visit for-loops. If the visitor encounters a for loop, it will first see if a `visit_For` is defined in the class, and run that. If there isn't, it runs `generic_visit` as the fallback.
 
 Here's a somewhat wacky example, which lets you run a program that outputs to the terminal, and make it so that it outputs to a file instead. To do that, we're going to rewrite every `print` call, and add an attribute, `file=...`, which will make it print to that file instead.
 
@@ -1721,6 +1723,6 @@ If you somehow still want to learn more about ASTs, then my first recommendation
 
 One of the craziest parts about the `ast` module is that, even with all the amazing things it lets us do, the entire source code `ast.py` is just [1700 lines of Python code](https://github.com/python/cpython/blob/main/Lib/ast.py). It's a definite must-read if you want to dive deeper into ASTs.
 
-The linter that I wrote can be thought of as an an extremely simplified version of [pylint](https://github.com/pycqa/pylint), one of the most popular linters in Python, which also has its own AST wrapper called [astroid](https://github.com/pycqa/astroid).
+The linter that I wrote can be found on [my github](https://github.com/tusharsadhwani/mylint). It can be thought of as an an extremely simplified version of [pylint](https://github.com/pycqa/pylint), one of the most popular linters in Python, which also has its own AST wrapper called [astroid](https://github.com/pycqa/astroid).
 
 And with that, you've reached the end of the article. I hope you find good use of this.
