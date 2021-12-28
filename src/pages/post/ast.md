@@ -95,7 +95,7 @@ Python has a builtin `ast` module, which has a rich set of features to create, m
 
 ### All the `Node`s
 
-There are a lot of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: **Literals**, **Variables**, **Statements** and **Expressions**. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.
+There are lots of kinds of "Nodes" in a Python AST each with their own functionalities, but you can broadly divide them into four categories: **Literals**, **Variables**, **Statements** and **Expressions**. We'll take a look at them one by one, but before we do that we need to understand how a "Node" is represented.
 
 The role of a node is to concretely represent the features of a language.
 
@@ -277,7 +277,7 @@ Now let's look at the body:
     )
 ```
 
-The body in our case is a single `Expr`-ession. Note that, when I said that a block or module always contains a list of statements, I wasn't lying. This `Expr` right here is actually an **expression-statement**. Yeah, I'm not making this up, it will make sense in a bit.
+The body in our case is a single `Expr`ession. Note that, when I said that a block or module always contains a list of statements, I wasn't lying. This `Expr` right here is actually an **expression-statement**. Yeah, I'm not making this up, it will make sense in a bit.
 
 ### Expressions vs. Statements
 
