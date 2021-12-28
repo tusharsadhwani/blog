@@ -70,7 +70,7 @@
   <article class="content astro-A2RTLENG">
     <main class="astro-A2RTLENG">
       <blockquote>
-<p>This is currently a work in progress.</p>
+<p>Hi! Before we start, a word of caution: This is an extremely large article, and it might take multiple days to finish completely. But I promise it'll be worth it. Oh, and follow me on <a href="https://twitter.com/sadhlife">twitter</a>, I frequently post Python content there as well.</p>
 </blockquote><h2 id="so-what-is-an-ast">So what is an AST?</h2><p>In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.</p><p>The programs that you and I write in our language of choice is usually called the "source code", and I'll be referring to it as such in this article.</p><p>On the other end, computer chips can only understand "machine code", which is a set of binary numbers that have special meanings for that model of the chip. Some of these numbers are <em>instructions</em>, which tell the CPU a simple task to perform, like "add the numbers stored in these two places", or "jump 10 numbers down and continue running code from there". The instructions run one by one, and they dictate the flow of the program.</p><p>Similarly, you define your programs as a set of "statements", with each statement being one thing that you want your code to do. They're sort of a more human-friendly version of the CPU instructions, that we can write and reason with more easily.</p><p>Now, I know that theory can get boring really quick, so I'm going to go through a bunch of examples. Let's write the same piece of code in many languages, and notice the similarities:</p><ul>
 <li>
 <p>Python</p>
@@ -1060,9 +1060,69 @@ test.py:1:0: W002: Unused variable: <span class="token string">'s'</span>
 test.py:17:0: W002: Unused variable: <span class="token string">'s2'</span>
 test.py:5:4: W002: Unused variable: <span class="token string">'var'</span>
 test.py:17:15: W001: Set contains duplicate item: <span class="token number">1</span>
-test.py:12:12: W001: Set contains duplicate item: <span class="token string">'PUT'</span></code></pre><p>It works! We did it, we've built our own linter 🥳</p><h3 id="ast-utilities">AST utilities</h3><p>~~ literal eval, parse/unparse, and walk</p><h2 id="what-about-code-formatters">What about code formatters?</h2><p>You need whitespace info, comments and other details that ASTs drop, like what
-kind of quotes did you use, single or double. for that for most cases.
-Which means you need a CST.</p><p>Differentiate between the two, and point towards libcst.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>~~ Read the docs, ast, libcst and and greentreesnakes.</p><p>One of the craziest parts about the <code data-astro-raw="">ast</code> module is that, even with all the amazing things it lets us do, the entire source code <code data-astro-raw="">ast.py</code> is just 1600 lines of Python code. It's a definite must-read if you want to dive deeper into ASTs.</p>
+test.py:12:12: W001: Set contains duplicate item: <span class="token string">'PUT'</span></code></pre><p>It works! We did it, we've built our own linter 🥳</p><p>If you've made it all the way to this part of the post, congratulations. Even though I've tried my best, I wouldn't be surprised if people still find this article too hard to follow. But, that's just the nature of code analysis -- it's hard. It took me 6 months of working with Python's AST every single day to be able to write this blog, so if you've appreciated the work I'd love to hear about it 🙌</p><h2 id="ast-utilities">AST utilities</h2><p>The AST module gives you a few other useful utility classes:</p><ul>
+<li>
+<p><code data-astro-raw="">ast.literal_eval</code> can be used as a safer alternative to <code data-astro-raw="">eval</code>, as <code data-astro-raw="">literal_eval</code> doesn't access the Python environment, and can only parse literal values, like <code data-astro-raw="">'abc'</code> or <code data-astro-raw="">"{'name': 'Mike', 'age': 25}"</code>. But sometimes, that's all you need to evaluate, and it's infinitely safer than using <code data-astro-raw="">eval</code> for that.</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> ast
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> ast<span class="token punctuation">.</span>literal_eval<span class="token punctuation">(</span><span class="token string">'5'</span><span class="token punctuation">)</span>
+<span class="token number">5</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> ast<span class="token punctuation">.</span>literal_eval<span class="token punctuation">(</span><span class="token string">"{'name': 'Mike', 'age': 25}"</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'Mike'</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">:</span> <span class="token number">25</span><span class="token punctuation">}</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> your_password <span class="token operator">=</span> <span class="token string">'password123'</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token string">'"abc" + your_password'</span><span class="token punctuation">)</span>  <span class="token comment"># eval can access variables outside, insecure</span>
+<span class="token string">'abcpassword123'</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> ast<span class="token punctuation">.</span>literal_eval<span class="token punctuation">(</span><span class="token string">'"abc" + your_password'</span><span class="token punctuation">)</span>  <span class="token comment"># trying to use variables etc. fails</span>
+ValueError<span class="token punctuation">:</span> malformed node <span class="token keyword">or</span> string<span class="token punctuation">:</span> <span class="token operator">&lt;</span>ast<span class="token punctuation">.</span>Constant <span class="token builtin">object</span> at <span class="token number">0x7f33a7cdaa90</span><span class="token operator">&gt;</span></code></pre>
+</li>
+<li>
+<p><code data-astro-raw="">ast.unparse</code> was added in Python 3.9, and can take an AST node and convert it back to source code.</p>
+<p>Note that ASTs don't store all the information from a source file, so things like exact whitespace information, comments, use of single/double quotes etc. will be lost when you do this. But it still works:</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> ast
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> code <span class="token operator">=</span> <span class="token triple-quoted-string string">'''
+... def x():
+...   print("Hello")  # Some comment
+... def y(): pass
+... '''</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>unparse<span class="token punctuation">(</span>tree<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">x</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Hello'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">y</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span></code></pre>
+<p>Re-parsing an un-parsed AST again should generate the same AST.</p>
+</li>
+<li>
+<p><code data-astro-raw="">ast.walk</code> takes in an AST node and returns a generator, that yields all of its children one by one, in no specific order.</p>
+<pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> ast
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+... while True:
+...     x = 'hi'
+...     if len(x) == 2:
+...         break
+... '''</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">for</span> node <span class="token keyword">in</span> ast<span class="token punctuation">.</span>walk<span class="token punctuation">(</span>tree<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Found'</span><span class="token punctuation">,</span> node<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__name__<span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+Found Module
+Found While
+Found Constant
+Found Assign
+Found If
+Found Name
+Found Constant
+Found Compare
+Found Break
+Found Store
+Found Call
+Found Eq
+Found Constant
+Found Name
+Found Name
+Found Load
+Found Load</code></pre>
+</li>
+</ul><h2 id="what-about-code-formatters">What about code formatters?</h2><p>A little while ago I mentioned that ASTs don't contain certain information like whitespaces, comments, and quote styles. This is because ASTs are meant to be a representation of what the code <em>means</em>, not how the code looks. Anything that Python won't need to store to run the code, is stripped out.</p><p>Turns out, this is a huge problem if you want to create things like code formatters, which need to be able to produce the exact source code that was used to build the syntax trees. If you don't everytime the code formatter runs on your file, the whole file will look completely different from how you wrote the code.</p><p>For such use cases, we need what is called a <code data-astro-raw="">Concrete Syntax Tree</code>, or CST. A CST is essentially just an AST which contains style information as well, such as where the newlines are, how many spaces are used for indentation, and so on.</p><p>If you need to build a code editor, formatter, or something of that sort for Python, I'll highly recommend <a href="https://github.com/Instagram/LibCST">libcst</a>. It's the best CST library for Python that I know of.</p><h2 id="where-can-i-learn-more">Where can I learn more?</h2><p>If you somehow still want to learn more about ASTs, then my first recommendation would be to read all of the <a href="https://docs.python.org/3/library/ast.html">documentation of the ast module</a>. Furthermore, you should also check out <a href="https://greentreesnakes.readthedocs.io/">greentreesnakes</a>, which was the original source of most of the code examples in the official tutorial today. There's a lot of material to read there.</p><p>One of the craziest parts about the <code data-astro-raw="">ast</code> module is that, even with all the amazing things it lets us do, the entire source code <code data-astro-raw="">ast.py</code> is just <a href="https://github.com/python/cpython/blob/main/Lib/ast.py">1700 lines of Python code</a>. It's a definite must-read if you want to dive deeper into ASTs.</p><p>The linter that I wrote can be thought of as an an extremely simplified version of <a href="https://github.com/pycqa/pylint">pylint</a>, one of the most popular linters in Python, which also has its own AST wrapper called <a href="https://github.com/pycqa/astroid">astroid</a>.</p><p>And with that, you've reached the end of the article. I hope you find good use of this.</p>
     </main>
   </article>
 </div>
