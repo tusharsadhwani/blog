@@ -8,9 +8,7 @@ alt: "Learn Python ASTs, by building your own linter"
 layout: "../../layouts/BlogPost.astro"
 ---
 
-> This is currently a work in progress.
-
-<!-- Remember to add a twitter mention here :") -->
+> Hi! Before we start, a word of caution: This is an extremely large article, and it might take multiple days to finish completely. But I promise it'll be worth it. Oh, and follow me on [twitter](https://twitter.com/sadhlife), I frequently post Python content there as well.
 
 ## So what is an AST?
 
