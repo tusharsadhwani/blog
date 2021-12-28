@@ -1632,20 +1632,97 @@ test.py:12:12: W001: Set contains duplicate item: 'PUT'
 
 It works! We did it, we've built our own linter 🥳
 
-### AST utilities
+If you've made it all the way to this part of the post, congratulations. Even though I've tried my best, I wouldn't be surprised if people still find this article too hard to follow. But, that's just the nature of code analysis -- it's hard. It took me 6 months of working with Python's AST every single day to be able to write this blog, so if you've appreciated the work I'd love to hear about it 🙌
 
-~~ literal eval, parse/unparse, and walk
+## AST utilities
+
+The AST module gives you a few other useful utility classes:
+
+- `ast.literal_eval` can be used as a safer alternative to `eval`, as `literal_eval` doesn't access the Python environment, and can only parse literal values, like `'abc'` or `"{'name': 'Mike', 'age': 25}"`. But sometimes, that's all you need to evaluate, and it's infinitely safer than using `eval` for that.
+
+  ```python
+  >>> import ast
+  >>> ast.literal_eval('5')
+  5
+  >>> ast.literal_eval("{'name': 'Mike', 'age': 25}")
+  {'name': 'Mike', 'age': 25}
+  >>> your_password = 'password123'
+  >>> eval('"abc" + your_password')  # eval can access variables outside, insecure
+  'abcpassword123'
+  >>> ast.literal_eval('"abc" + your_password')  # trying to use variables etc. fails
+  ValueError: malformed node or string: <ast.Constant object at 0x7f33a7cdaa90>
+  ```
+
+- `ast.unparse` was added in Python 3.9, and can take an AST node and convert it back to source code.
+
+  Note that ASTs don't store all the information from a source file, so things like exact whitespace information, comments, use of single/double quotes etc. will be lost when you do this. But it still works:
+
+  ```python
+  >>> import ast
+  >>> code = '''
+  ... def x():
+  ...   print("Hello")  # Some comment
+  ... def y(): pass
+  ... '''
+  >>> tree = ast.parse(code)
+  >>> print(ast.unparse(tree))
+  def x():
+      print('Hello')
+
+  def y():
+      pass
+  ```
+
+  Re-parsing an un-parsed AST again should generate the same AST.
+
+- `ast.walk` takes in an AST node and returns a generator, that yields all of its children one by one, in no specific order.
+
+  ```python
+  >>> import ast
+  >>> tree = ast.parse('''
+  ... while True:
+  ...     x = 'hi'
+  ...     if len(x) == 2:
+  ...         break
+  ... ''')
+  >>> for node in ast.walk(tree):
+  ...     print('Found', node.__class__.__name__)
+  ...
+  Found Module
+  Found While
+  Found Constant
+  Found Assign
+  Found If
+  Found Name
+  Found Constant
+  Found Compare
+  Found Break
+  Found Store
+  Found Call
+  Found Eq
+  Found Constant
+  Found Name
+  Found Name
+  Found Load
+  Found Load
+  ```
 
 ## What about code formatters?
 
-You need whitespace info, comments and other details that ASTs drop, like what
-kind of quotes did you use, single or double. for that for most cases.
-Which means you need a CST.
+A little while ago I mentioned that ASTs don't contain certain information like whitespaces, comments, and quote styles. This is because ASTs are meant to be a representation of what the code _means_, not how the code looks. Anything that Python won't need to store to run the code, is stripped out.
 
-Differentiate between the two, and point towards libcst.
+Turns out, this is a huge problem if you want to create things like code formatters, which need to be able to produce the exact source code that was used to build the syntax trees. If you don't everytime the code formatter runs on your file, the whole file will look completely different from how you wrote the code.
+
+For such use cases, we need what is called a `Concrete Syntax Tree`, or CST. A CST is essentially just an AST which contains style information as well, such as where the newlines are, how many spaces are used for indentation, and so on.
+
+If you need to build a code editor, formatter, or something of that sort for Python, I'll highly recommend [libcst](https://github.com/Instagram/LibCST). It's the best CST library for Python that I know of.
 
 ## Where can I learn more?
 
-~~ Read the docs, ast, libcst and and greentreesnakes.
+If you somehow still want to learn more about ASTs, then my first recommendation would be to read all of the [documentation of the ast module](https://docs.python.org/3/library/ast.html). Furthermore, you should also check out [greentreesnakes](https://greentreesnakes.readthedocs.io/), which was the original source of most of the code examples in the official tutorial today. There's a lot of material to read there.
 
-One of the craziest parts about the `ast` module is that, even with all the amazing things it lets us do, the entire source code `ast.py` is just 1600 lines of Python code. It's a definite must-read if you want to dive deeper into ASTs.
+One of the craziest parts about the `ast` module is that, even with all the amazing things it lets us do, the entire source code `ast.py` is just [1700 lines of Python code](https://github.com/python/cpython/blob/main/Lib/ast.py). It's a definite must-read if you want to dive deeper into ASTs.
+
+The linter that I wrote can be thought of as an an extremely simplified version of [pylint](https://github.com/pycqa/pylint), one of the most popular linters in Python, which also has its own AST wrapper called [astroid](https://github.com/pycqa/astroid).
+
+And with that, you've reached the end of the article. I hope you find good use of this.
