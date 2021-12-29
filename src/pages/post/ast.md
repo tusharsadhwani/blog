@@ -342,13 +342,7 @@ Statements are pretty easy to define. They're kind of like the building blocks o
 
   ```python
   Assert(
-    test=Compare(
-      left=Name(id='a', ctx=Load()),
-      ops=[Eq()],
-      comparators=[
-        Name(id='b', ctx=Load())
-      ]
-    )
+    test=Constant(value=False)
   )
   ```
 
@@ -1127,6 +1121,8 @@ Running this, we get:
 ```text
 13
 28
+1
+2
 3
 128
 ```
