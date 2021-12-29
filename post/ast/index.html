@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.9f4c515c.css">
+  <link rel="stylesheet" href="../../assets/android-localhost.1e4f8e75.css">
 
 
 
@@ -261,13 +261,7 @@ Module<span class="token punctuation">(</span>
 <pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">assert</span> <span class="token boolean">False</span></code></pre>
 <p>Becomes:</p>
 <pre class="language-python"><code data-astro-raw="" class="language-python">Assert<span class="token punctuation">(</span>
-  test<span class="token operator">=</span>Compare<span class="token punctuation">(</span>
-    left<span class="token operator">=</span>Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    ops<span class="token operator">=</span><span class="token punctuation">[</span>Eq<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    comparators<span class="token operator">=</span><span class="token punctuation">[</span>
-      Name<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token operator">=</span><span class="token string">'b'</span><span class="token punctuation">,</span> ctx<span class="token operator">=</span>Load<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">]</span>
-  <span class="token punctuation">)</span>
+  test<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
 <span class="token punctuation">)</span></code></pre>
 </li>
 <li>
@@ -735,6 +729,8 @@ num <span class="token operator">=</span> <span class="token number">28</span>
 output <span class="token operator">=</span> add<span class="token punctuation">(</span>num<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span></code></pre><p>Running this, we get:</p><pre class="language-text"><code data-astro-raw="" class="language-text">13
 28
+1
+2
 3
 128</code></pre><p>Now, if all numbers in this code were 42, our output would be:</p><pre class="language-text"><code data-astro-raw="" class="language-text">42
 42
