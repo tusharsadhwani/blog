@@ -1181,6 +1181,8 @@ And, as expected, the output is:
 ```text
 13
 28
+1
+2
 3
 128
 ```
