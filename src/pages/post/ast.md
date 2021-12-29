@@ -28,7 +28,7 @@ layout: "../../layouts/BlogPost.astro"
 
 ## So what is an AST?
 
-In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.
+It's short for Abstract Syntax Tree. In programmer terms, "ASTs are a programmatic way to understand the structure of your source code". But to understand what that really means, we must first understand a few things about the structure of a computer program.
 
 The programs that you and I write in our language of choice is usually called the "source code", and I'll be referring to it as such in this article.
 
