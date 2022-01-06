@@ -1652,7 +1652,7 @@ Note that `_typeshed` is **not an actual module** in Python, so you'll have to i
 
 We implemented a simple Stack class in [typing classes](#typing-classes), but it only worked for integers. But we can very simply make it work for any type. To do that, we just tell it that to accept any type `T`, and then `pop()` will return the same `T` type.
 
-To do that, we need mypy to understand what `T` means inside the class. And for that, we need the class to extend `Generic[T]`, and then provide the concrete type to `Stack`:
+For that, we need mypy to understand what `T` means inside the class. And for that, we need the class to extend `Generic[T]`, and then provide the concrete type to `Stack`:
 
 ```python
 from typing import List, Generic, TypeVar
