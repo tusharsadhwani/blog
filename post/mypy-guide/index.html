@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/dunders.7fb549c3.css">
+  <link rel="stylesheet" href="../../assets/ast.e1ed87bc.css">
 
 
 
@@ -965,15 +965,15 @@ T <span class="token operator">=</span> TypeVar<span class="token punctuation">(
 
 <span class="token keyword">class</span> <span class="token class-name">Stack</span><span class="token punctuation">(</span>Generic<span class="token punctuation">[</span>T<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>_values<span class="token punctuation">:</span> List<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        self<span class="token punctuation">.</span>_values<span class="token punctuation">:</span> List<span class="token punctuation">[</span>T<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
 
     <span class="token keyword">def</span> <span class="token function">__repr__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">str</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> <span class="token string-interpolation"><span class="token string">f'Stack</span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>_values<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">'</span></span>
 
-    <span class="token keyword">def</span> <span class="token function">push</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">:</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">push</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">:</span> T<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_values<span class="token punctuation">.</span>append<span class="token punctuation">(</span>value<span class="token punctuation">)</span>
 
-    <span class="token keyword">def</span> <span class="token function">pop</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">int</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">pop</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> T<span class="token punctuation">:</span>
         <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>_values<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
             <span class="token keyword">raise</span> RuntimeError<span class="token punctuation">(</span><span class="token string">'Underflow!'</span><span class="token punctuation">)</span>
 
