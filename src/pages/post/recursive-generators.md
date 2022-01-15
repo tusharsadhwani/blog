@@ -307,11 +307,6 @@ Now the best part, is that we can create both the original usecases, of printing
 
 ```python
 $ python -i find.py
->>> list(get_paths_generator(file_tree))
-['', '/etc', '/etc/passwd', '/etc/shadow', '/usr', '/usr/bin',
-'/usr/bin/cat', '/usr/bin/ls', '/usr/lib', '/usr/lib/my_lib',
-'/usr/lib/gcc', '/usr/lib/gcc/x86_64-linux-gnu']
-
 >>> for path in get_paths_generator(file_tree):
 ...     print(path)
 
@@ -326,6 +321,11 @@ $ python -i find.py
 /usr/lib/my_lib
 /usr/lib/gcc
 /usr/lib/gcc/x86_64-linux-gnu
+
+>>> list(get_paths_generator(file_tree))
+['', '/etc', '/etc/passwd', '/etc/shadow', '/usr', '/usr/bin',
+'/usr/bin/cat', '/usr/bin/ls', '/usr/lib', '/usr/lib/my_lib',
+'/usr/lib/gcc', '/usr/lib/gcc/x86_64-linux-gnu']
 ```
 
 This solution is a lot more flexible, and will never have the same eager evaluation problems as the original one did.
