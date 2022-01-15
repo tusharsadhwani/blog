@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" class="astro-7CIAHWF2"><head>
+<!DOCTYPE html><html lang="en" class="astro-35DIGKXB"><head>
     
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -29,12 +29,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
-  <link rel="stylesheet" href="../../assets/does-python-need-types.9f4c515c.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.858e353f.css">
 
 
 
 
-<script type="module" src="../../assets/android-localhost.269d250e.js"></script>
+<script type="module" src="../../assets/android-localhost.427fbf83.js"></script>
 </head>
   
 
@@ -56,19 +56,20 @@
 
 
 
-    <div class="layout astro-36S45FQT">
-  <header class="astro-36S45FQT">
-    <p class="publish-date astro-36S45FQT">Saturday, 17 April 2021</p>
-    <h1 class="title astro-36S45FQT">Connecting android apps to localhost, simplified</h1>
-    <img src="/images/android-localhost.jpg" title="Connecting android apps to localhost, simplified" alt="Connecting android apps to localhost, simplified" class="astro-36S45FQT">
+    <div class="layout astro-DFUN6QKL">
+  <header class="astro-DFUN6QKL">
+    <p class="publish-date astro-DFUN6QKL">Saturday, 17 April 2021</p>
+    <h1 class="title astro-DFUN6QKL">Connecting android apps to localhost, simplified</h1>
+    <p class="description astro-DFUN6QKL">Figure out how to setup your android development environment, the right way.</p>
+    <img src="/images/android-localhost.jpg" title="Connecting android apps to localhost, simplified" alt="Connecting android apps to localhost, simplified" class="astro-DFUN6QKL">
     
 <div class="author astro-BL6UQIAR">
   <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
 </div>
 
   </header>
-  <article class="content astro-36S45FQT">
-    <main class="astro-36S45FQT">
+  <article class="content astro-DFUN6QKL">
+    <main class="astro-DFUN6QKL">
       <blockquote>
 <p>P.S. if you're in a hurry, find the correct solution <a href="#the-correct-easy-way">here</a></p>
 </blockquote><p>I was working on a full stack side project a few months ago, and I wanted to make API requests from my android app to my desktop, and for some reason <code data-astro-raw="">localhost:8000</code> wasn't simply accessible by my phone.</p><p>Well, understandable, I know that every device's localhost is independent and cannot be accessed by your home network (your Wi-Fi, for example). So the localhost on my laptop won't be able to access the localhost on my phone.</p><p>So, I asked Google for help. And I got a large number of solutions, the most sensible one being "use the internal IP address of your PC", et voilà.</p><h1 id="the-bad-way">The Bad way</h1><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tgakgpfuw4eyvjud9tin.png" alt="image"></p><figcaption>Use ipconfig if you're on windows</figcaption><p>Running <code data-astro-raw="">ip addr</code> on my machine tells me that the laptop's internal IP is <code data-astro-raw="">192.168.29.76</code>.</p><p>And sure enough, as long as both devices were using the same Wi-Fi network, accessing <code data-astro-raw="">http://192.168.29.76:8000</code> instead of <code data-astro-raw="">http://localhost:8000</code> did work. My Android app can now make web requests to my local backend server 🎉</p><p>But this solution is... a bit unstable.</p><p>The internal IP of your laptop can keep changing whenever it connects to Wi-Fi, depending on various factors. And everytime it changes, you have to change the URL in your app's code, which is not ideal.</p><p>There's other ways as well like using ngrok, but it faces similar issues.</p><h1 id="the-correct-easy-way">The Correct, easy way</h1><p>use <code data-astro-raw="">adb reverse</code>.</p><p>Yup, that's it.</p><p>Connect your android device to your pc via USB, ensure you have <a href="https://www.xda-developers.com/install-adb-windows-macos-linux/">adb setup</a>, and run this in your terminal:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">adb reverse tcp:8000 tcp:8000</code></pre><p>Now, your mobile can access <code data-astro-raw="">localhost:8000</code>, just like your PC. (you can replace <code data-astro-raw="">8000</code> with whichever port you want to forward)</p><h1 id="why-did-nobody-tell-me-this">Why did nobody tell me this?</h1><p>Yeah, I was also surprised when I was unable to find anyone on Google or StackOverflow mentioning the existence of <code data-astro-raw="">adb reverse</code> when I tried to look for it.</p><p>Which is why I wrote this blog. Now hopefully, <code data-astro-raw="">adb reverse</code> will become more popular.</p><p>If you know why <code data-astro-raw="">adb reverse</code> isn't as popular, let me know. Also, if you know another android developer that should know about this little productivity hack, why not share this blog with them? :P</p><hr>
@@ -86,14 +87,14 @@ Unsplash
 
 
 
-    <hr class="astro-7CIAHWF2">
-    <div class="centered astro-7CIAHWF2">
+    <hr class="astro-35DIGKXB">
+    <div class="centered astro-35DIGKXB">
       <astro-root uid="ZwUM0Q"></astro-root>
     </div>
-    <div class="back-to-top-wrapper astro-7CIAHWF2">
-      <a href="#top" class="back-to-top-link astro-7CIAHWF2" aria-label="Scroll to Top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-7CIAHWF2" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-7CIAHWF2"></path>
+    <div class="back-to-top-wrapper astro-35DIGKXB">
+      <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-35DIGKXB" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-35DIGKXB"></path>
         </svg>
       </a>
     </div>
