@@ -16,6 +16,12 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a
     <BaseHead title={title} description={description} />
     <link rel="stylesheet" href="/style/global.css" />
 
+    <script>
+      if (localStorage.getItem("lightMode") == "true") {
+        document.documentElement.dataset.theme = "light";
+      }
+    </script>
+
     <style>
       body {
         width: 100%;
