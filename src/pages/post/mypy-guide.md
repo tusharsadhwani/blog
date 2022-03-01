@@ -943,7 +943,7 @@ for string in generator(3):
 
 To add type annotations to generators, you need `typing.Generator`. The syntax is as follows:
 
-`Generator[yield_type, throw_type, return_type]`
+`Generator[yield_type, send_type, return_type]`
 
 With that knowledge, typing this is fairly straightforward:
 
@@ -964,7 +964,7 @@ for string in generator(3):
     print(string)
 ```
 
-Since we're not raising any errors in the generator, `throw_type` is `None`. And although the return type is `int` which is correct, we're not really using the returned value anyway, so you could use `Generator[str, None, None]` as well, and skip the `return` part altogether.
+Since we're not sending any data back into the generator, `send_type` is `None`. And although the return type is `int` which is correct, we're not really using the returned value anyway, so you could use `Generator[str, None, None]` as well, and skip the `return` part altogether.
 
 ## Typing `*args` and `**kwargs`
 
