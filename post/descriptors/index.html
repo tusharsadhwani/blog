@@ -1,27 +1,27 @@
-<!DOCTYPE html><html lang="en" class="astro-JAIOYU43"><head>
+<!DOCTYPE html><html lang="en" class="astro-35DIGKXB"><head>
     
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
 <!-- Primary Meta Tags -->
-<title>Tushar's Blog</title>
-<meta name="title" content="Tushar's Blog">
-<meta name="description" content="My thoughts and learnings.">
+<title>Implementing @property, @staticmethod and @classmethod from scratch</title>
+<meta name="title" content="Implementing @property, @staticmethod and @classmethod from scratch">
+<meta name="description" content="TODO">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sadh.life">
-<meta property="og:title" content="Tushar's Blog">
-<meta property="og:description" content="My thoughts and learnings.">
-<meta property="og:image" content="https://sadh.lifeundefined">
+<meta property="og:title" content="Implementing @property, @staticmethod and @classmethod from scratch">
+<meta property="og:description" content="TODO">
+<meta property="og:image" content="https://sadh.life/images/TODO.jpg">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://sadh.life">
-<meta property="twitter:title" content="Tushar's Blog">
-<meta property="twitter:description" content="My thoughts and learnings.">
-<meta property="twitter:image" content="https://sadh.lifeundefined">
+<meta property="twitter:title" content="Implementing @property, @staticmethod and @classmethod from scratch">
+<meta property="twitter:description" content="TODO">
+<meta property="twitter:image" content="https://sadh.life/images/TODO.jpg">
 
 <link rel="stylesheet" href="/style/global.css">
 <link rel="stylesheet" href="/style/merged-themes.css">
@@ -36,18 +36,16 @@
   }
 </script>
 
-    <link rel="stylesheet" href="/style/global.css">
-
-    
-  <link rel="stylesheet" href="../../assets/index.72a8cece.css">
+  <link rel="stylesheet" href="../../assets/does-python-need-types.858e353f.css">
 
 
 
 
-<script type="module" src="../../assets/3.5a492494.js"></script>
+<script type="module" src="../../assets/descriptors.2522760e.js"></script>
 </head>
+  
 
-  <body>
+  <body id="top">
     <header class="astro-D64JDZG7">
   <a href="/" class="astro-D64JDZG7">
     <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-D64JDZG7">
@@ -65,48 +63,61 @@
 
 
 
-    <main class="content astro-JAIOYU43">
-      <section class="astro-JAIOYU43">
-        <small class="count astro-JAIOYU43">13–14 of 14</small>
-        <article class="post-preview astro-JU7XYECP">
-  <header class="astro-JU7XYECP">
-    <h3 class="publish-date astro-JU7XYECP">Thursday, 17 March 2002</h3>
-    <a href="/post/descriptors" class="astro-JU7XYECP"><h1 class="title astro-JU7XYECP">Implementing @property, @staticmethod and @classmethod from scratch</h1></a>
+    <div class="layout astro-DFUN6QKL">
+  <header class="astro-DFUN6QKL">
+    <p class="publish-date astro-DFUN6QKL">Thursday, 17 March 2002</p>
+    <h1 class="title astro-DFUN6QKL">Implementing @property, @staticmethod and @classmethod from scratch</h1>
+    <p class="description astro-DFUN6QKL">TODO</p>
+    <img src="/images/TODO.jpg" title="Implementing @property, @staticmethod and @classmethod from scratch" alt="Implementing @property, @staticmethod and @classmethod from scratch" class="astro-DFUN6QKL">
+    
+<div class="author astro-BL6UQIAR">
+  <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
+</div>
+
   </header>
-  <main class="astro-JU7XYECP">
-    <p class="astro-JU7XYECP">TODO</p>
-    <img src="/images/TODO.jpg" class="astro-JU7XYECP">
-  </main>
-</article>
-
-
-<article class="post-preview astro-JU7XYECP">
-  <header class="astro-JU7XYECP">
-    <h3 class="publish-date astro-JU7XYECP">Saturday, 27 October 2000</h3>
-    <a href="/post/dunders" class="astro-JU7XYECP"><h1 class="title astro-JU7XYECP">Explaining all Python dunders</h1></a>
-  </header>
-  <main class="astro-JU7XYECP">
-    <p class="astro-JU7XYECP">You might have heard, “In Python, everything is dunders underneath.” But, what does that really mean? Learn all about it in this one guide.</p>
-    <img src="/images/dunders.jpg" class="astro-JU7XYECP">
-  </main>
-</article>
-
-
-
-      </section>
-      
-
-
-<nav class="nav astro-QUCKWLCZ">
-  <a class="prev astro-QUCKWLCZ" href="/posts/2/" aria-label="Previous Page">Prev</a>
-  <a class="next astro-QUCKWLCZ" href="#" aria-label="Next Page">Next</a>
-</nav>
-
-      <div class="centered astro-JAIOYU43">
-        <astro-root uid="ZwUM0Q"></astro-root>
-      </div>
+  <article class="content astro-DFUN6QKL">
+    <main class="astro-DFUN6QKL">
+      <p>I recently saw this blog by <a href="https://bas.codes/posts/python-decorators">bas.codes</a> that explained decorators in Python,
+and used <code data-astro-raw="">@property</code> and <code data-astro-raw="">@staticmethod</code> as examples. However, in reality those
+aren't really decorators. So I wanted to make a continuation to it, by
+explaining how these are really implemented.</p><h2 id="property"><code data-astro-raw="">@property</code></h2><p>So when we do:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token decorator annotation punctuation">@property</span>
+<span class="token keyword">def</span> <span class="token function">x</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>It's still the same as defining a function <code data-astro-raw="">x</code> and then doing <code data-astro-raw="">x = property(x)</code>,
+so we are still wrapping <code data-astro-raw="">x</code>, but <code data-astro-raw="">property(...)</code> doesn't return a function.
+It returns a <em>descriptor</em> object.</p><h2 id="so-whats-a-descriptor">So what's a descriptor</h2><p>Also, instance attributes can shadow descriptors, as they're defined on the
+class.</p><h2 id="staticmethod"><code data-astro-raw="">@staticmethod</code></h2><p>We need to use descriptors to avoid having to do the <code data-astro-raw="">wrapper(_=None)</code> hack.</p><h2 id="classmethod"><code data-astro-raw="">@classmethod</code></h2><h2 id="extras-methods-are-descriptors">Extras: Methods are descriptors</h2><p>Like in classmethod, if you put <code data-astro-raw="">obj</code> as the argument instead of <code data-astro-raw="">cls</code>, it
+creates a method. That's how methods work in Python, and that's where the first
+arg of <code data-astro-raw="">self</code> comes from when you do <code data-astro-raw="">obj.method()</code>:</p><p>TODO: example of <code data-astro-raw="">obj.method()</code> and equivalent descriptor implementation</p><h2 id="appendix">Appendix</h2><p>There's a few things missing with the implementations above, like the <code data-astro-raw="">deleter</code>
+attribute in properties, type annotations, preserving function names and
+docstrings, and the like. I'll be leaving those for you to figure out yourself.
+Here's some resources if you need help with those:</p><ul>
+<li><a href="https://docs.python.org/3/library/functools.html#functools.wraps">functools.wraps</a></li>
+<li><a href="https://sadh.life/post/mypy-guide">mypy guide</a></li>
+</ul><p>And that's it. Hopefully this helped you understand descriptors and why you'd
+want to use them. There's some very interesting uses of descriptors outside of
+these three, and hopefully if you encounter such a situation, you'll remember
+this feature and be able to use it.</p>
     </main>
-    <hr class="astro-ZUKZCZIV">
+  </article>
+</div>
+
+
+
+    <hr class="astro-35DIGKXB">
+    <div class="centered astro-35DIGKXB">
+      <astro-root uid="ZwUM0Q"></astro-root>
+    </div>
+    <div class="back-to-top-wrapper astro-35DIGKXB">
+      <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-35DIGKXB" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-35DIGKXB"></path>
+        </svg>
+      </a>
+    </div>
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    </script>
+  
+  <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-ZUKZCZIV"></path></svg>
@@ -127,4 +138,9 @@
 </footer>
 
 
-  </body></html>
+  <noscript>
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+  </noscript>
+  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+
+</body></html>
