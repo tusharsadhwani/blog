@@ -1,9 +1,9 @@
 ---
 title: "Implementing @property, @staticmethod and @classmethod from scratch"
-description: "TODO"
-publishDate: "Thursday, 17 March 2002"
+description: "The builtin method decorators... aren't actually decorators?"
+publishDate: "Thursday, 17 March 2022"
 author: "Tushar Sadhwani"
-heroImage: "/images/TODO.jpg"
+heroImage: "/images/descriptors.jpg"
 alt: "Implementing @property, @staticmethod and @classmethod from scratch"
 layout: "../../layouts/BlogPost.astro"
 ---
