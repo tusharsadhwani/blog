@@ -3,7 +3,7 @@ title: "Implementing @property, @staticmethod and @classmethod from scratch"
 description: "The builtin method decorators... aren't actually decorators?"
 publishDate: "Thursday, 17 March 2022"
 author: "Tushar Sadhwani"
-heroImage: "/images/descriptors.png"
+heroImage: "/images/descriptors.jpg"
 alt: "Implementing @property, @staticmethod and @classmethod from scratch"
 layout: "../../layouts/BlogPost.astro"
 ---
