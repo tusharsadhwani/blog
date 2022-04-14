@@ -1,6 +1,7 @@
-<!DOCTYPE html><html lang="en" class="astro-35DIGKXB"><head>
-    
-<meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="en" class="astro-35DIGKXB">
+  <head>
+    <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
@@ -27,21 +28,30 @@
 <link rel="stylesheet" href="/style/merged-themes.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Open+Sans:wght@400;600&display=swap">
 
-<script>
-  if (localStorage.getItem("lightMode") == "true") {
-    document.documentElement.dataset.theme = "light";
-  }
+
+
+  <link rel="stylesheet" href="/assets/asset.5b049261.css"></link>
+<link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
+<link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a279.js" astro-script="/post/url-shortener/script-0"></script>
+<script type="module" data-astro-component-hydration astro-script="/post/url-shortener/script-1">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("kUrzW", {name:"Newsletter",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.9e2f0c78.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-35DIGKXB"}, children);
+
+});
 </script>
+<script type="module" data-astro-component-hydration astro-script="/post/url-shortener/script-2">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-D64JDZG7"}, children);
 
-  <link rel="stylesheet" href="../../assets/does-python-need-types.858e353f.css">
-
-
-
-
-<script type="module" src="../../assets/url-shortener.d9509698.js"></script>
+});
+</script>
 </head>
   
 
@@ -57,7 +67,7 @@
 
   </a>
   <div class="right astro-D64JDZG7">
-    <astro-root uid="rve9A"></astro-root>
+    <astro-root uid="Z201JGg"></astro-root>
   </div>
 </header>
 
@@ -67,7 +77,7 @@
   <header class="astro-DFUN6QKL">
     <p class="publish-date astro-DFUN6QKL">Tuesday, 1 September 2020</p>
     <h1 class="title astro-DFUN6QKL">How I made my own URL shortener for free</h1>
-    <p class="description astro-DFUN6QKL">It's quick, it's easy, and it's free! Oh, and it's actually pretty useful and clever.</p>
+    <p class="description astro-DFUN6QKL">It&#39;s quick, it&#39;s easy, and it&#39;s free! Oh, and it&#39;s actually pretty useful and clever.</p>
     <img src="/images/url-shortener.jpg" title="How I made my own URL shortener for free" alt="How I made my own URL shortener for free" class="astro-DFUN6QKL">
     
 <div class="author astro-BL6UQIAR">
@@ -80,20 +90,20 @@
       <p>URL shorteners are great. You can take a long URL and make it 6–8 characters, you know the drill.</p><p>And the free URL shorteners are pretty nice too! <strong>bit.ly</strong> is what I used, and it did its job pretty well, but free public shorteners have a few issues:</p><ul>
 <li>Finding the perfect short URL is hard: most of the short ones that make sense, are usually already taken.</li>
 <li>the URLs are hard to update: <em>(and I don’t know if this is a bit.ly specific issue)</em>, <strong>but you can’t change the URL the short link points to</strong>, once it has been created.</li>
-</ul><p>So I decided to make my own instead.</p><h2 id="step-1-getting-a-shortdomain">Step 1: Getting a short&nbsp;domain</h2><p>The entire point of a URL shortener is to be short, and for that you need to get a short domain name. Fortunately, services like <a href="http://dot.tk">Dot tk</a> exist, which provide domains from various TLDs at no cost. (If you’re a university student, you can also use the GitHub Student pack for domains like <strong>.me</strong>).</p><p>I got the domain <strong>tshr.me</strong> for myself.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/6x3o1hq4ma6nk26vqmy7.png" alt="free short domains for everyone!"><em>free short domains for everyone!</em></p><h2 id="step-2-making-the-urlsredirect">Step 2: Making the URLs&nbsp;redirect</h2><p>Traditionally, URLs run off of a hosted web server, which are also relatively easy to make, <a href="https://www.youtube.com/watch?v=gq5yubc1u18">as shown in this video for example.</a></p><p>But the issue with a web server solution is that you have to host it, and <strong>hosting ain’t free.</strong></p><p>Sure, there’s services like <a href="https://heroku.com">Heroku</a>, which is a great platform, but it’s inadequate for our use case:</p><ul>
+</ul><p>So I decided to make my own instead.</p><h2 id="step-1-getting-a-shortdomain">Step 1: Getting a short domain</h2><p>The entire point of a URL shortener is to be short, and for that you need to get a short domain name. Fortunately, services like <a href="http://dot.tk">Dot tk</a> exist, which provide domains from various TLDs at no cost. (If you’re a university student, you can also use the GitHub Student pack for domains like <strong>.me</strong>).</p><p>I got the domain <strong>tshr.me</strong> for myself.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/6x3o1hq4ma6nk26vqmy7.png" alt="free short domains for everyone!"><em>free short domains for everyone!</em></p><h2 id="step-2-making-the-urlsredirect">Step 2: Making the URLs redirect</h2><p>Traditionally, URLs run off of a hosted web server, which are also relatively easy to make, <a href="https://www.youtube.com/watch?v=gq5yubc1u18">as shown in this video for example.</a></p><p>But the issue with a web server solution is that you have to host it, and <strong>hosting ain’t free.</strong></p><p>Sure, there’s services like <a href="https://heroku.com">Heroku</a>, which is a great platform, but it’s inadequate for our use case:</p><ul>
 <li>Its free dynos only run for 550 hours a month, which means you either have to add your credit card information, or there will be no guarantees that your links will always work.</li>
 <li>Free dynos <strong>go to sleep after 1 hour of inactivity</strong>, meaning if someone tries to access your URLs after a long time, they might have to wait a significantly long time before they get redirected. <em>(This can possibly be fixed by scheduling</em> <a href="https://cron-job.org/"><em>cron jobs</em></a> <em>to ping the server, but it’s not a great solution.)</em></li>
 <li>And most importantly: <strong>Heroku’s free tier doesn’t support custom domain names!</strong></li>
-</ul><p>So we will have to use a different approach.</p><h2 id="github-to-the-rescuepart1">GitHub to the rescue — Part&nbsp;1</h2><p>You should be knowing already, that GitHub can hosts static websites for free on its platform called <strong>GitHub Pages</strong>.</p><p>But you might be thinking, <em>“Yes, I know you can use GitHub for static websites, but you can’t use it to host web servers, dummy.”</em></p><p>… or can you. 🤨</p><p>Nah, you can’t host a web server on GitHub, but you can do the next best thing: host a static URL shortener.</p><pre class="language-html"><code data-astro-raw="" class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">http-equiv</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>refresh<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0;url=https://medium.com<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">&gt;</span></span>
+</ul><p>So we will have to use a different approach.</p><h2 id="github-to-the-rescuepart1">GitHub to the rescue — Part 1</h2><p>You should be knowing already, that GitHub can hosts static websites for free on its platform called <strong>GitHub Pages</strong>.</p><p>But you might be thinking, <em>“Yes, I know you can use GitHub for static websites, but you can’t use it to host web servers, dummy.”</em></p><p>… or can you. 🤨</p><p>Nah, you can’t host a web server on GitHub, but you can do the next best thing: host a static URL shortener.</p><pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">http-equiv</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>refresh<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0;url=https://medium.com<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
   <span class="token comment">&lt;!-- Old Method: requires JavaScript   
-  &lt;script&gt;
+  &lt;script>
     window.location.replace('https://medium.com');
-  &lt;/script&gt; --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span></code></pre><p>This script, when ran in a browser, will redirect you to <strong>medium.com</strong> immediately. Put this file in a repository on GitHub, add the domain name <strong>tshr.me</strong> to the GitHub Pages custom domain field, and BOOM!💥</p><p><strong>tshr.me</strong> now redirects to <strong>medium.com</strong>.</p><p>… you don’t seem very impressed. Don’t worry, we’ll get there.</p><h2 id="just-automate-it-withpython">Just Automate it (with&nbsp;Python!)</h2><p>Here comes the fun part:</p><p>If we could generate all the static short links we want that use the above technique to redirect to the actual URL we want, then this technique might be of some actual use, right?</p><p>So I wrote a python scripts that takes in JSON data of various short links and their corresponding redirect URLs, and generates all the HTML pages for me.</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    html <span class="token operator">=</span> <span class="token string">'&lt;html&gt;&lt;head&gt;&lt;meta http-equiv="refresh" content="0;url={url}" /&gt;&lt;/head&gt;&lt;/html&gt;'</span>
+  &lt;/script> --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre><p>This script, when ran in a browser, will redirect you to <strong>medium.com</strong> immediately. Put this file in a repository on GitHub, add the domain name <strong>tshr.me</strong> to the GitHub Pages custom domain field, and BOOM!💥</p><p><strong>tshr.me</strong> now redirects to <strong>medium.com</strong>.</p><p>… you don’t seem very impressed. Don’t worry, we’ll get there.</p><h2 id="just-automate-it-withpython">Just Automate it (with Python!)</h2><p>Here comes the fun part:</p><p>If we could generate all the static short links we want that use the above technique to redirect to the actual URL we want, then this technique might be of some actual use, right?</p><p>So I wrote a python scripts that takes in JSON data of various short links and their corresponding redirect URLs, and generates all the HTML pages for me.</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    html <span class="token operator">=</span> <span class="token string">'&lt;html>&lt;head>&lt;meta http-equiv="refresh" content="0;url={url}" />&lt;/head>&lt;/html>'</span>
 
     <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'links.json'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
         links <span class="token operator">=</span> json<span class="token punctuation">.</span>load<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
@@ -111,7 +121,7 @@
 
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><p>The corresponding JSON data looks like this:</p><pre class="language-json"><code data-astro-raw="" class="language-json"><span class="token punctuation">[</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><p>The corresponding JSON data looks like this:</p><pre class="language-json"><code class="language-json"><span class="token punctuation">[</span>
   <span class="token punctuation">{</span>
     <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"index"</span><span class="token punctuation">,</span>
     <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"https://tusharsadhwani.dev"</span>
@@ -120,20 +130,20 @@
     <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"cv"</span><span class="token punctuation">,</span>
     <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"https://tusharsadhwani.dev/assets/resume.pdf"</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">]</span></code></pre><p>Now we’re talking! Running this script generates your HTML redirects and places them neatly in a folder, which you can upload to your GitHub.</p><p>But this isn’t exactly the most convenient, right? Every time you have to update your URLs, you have to <em>update the JSON file, run the python code, push the folder to GitHub…</em></p><p>It just sounds really cumbersome. And it is.</p><h2 id="github-to-the-rescuepart2">GitHub to the rescue — Part&nbsp;2</h2><p>Here’s where we use GitHub’s slightly less known, but really powerful tool: <strong>GitHub Actions.</strong></p><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/y4lsjmlqpfxovxbz8gd2.png" alt="Github Actions promo"></p><p>GitHub Actions is GitHub’s super powerful builtin CI/CD tool. It runs a virtual machine for you, that can pull your code, test it, and deploy it, every single time you push an update to your repository. All for no cost at all.</p><p>What we are going to do is use its Python workflow that runs our HTML generator script for us, and use a plugin to create a separate GitHub Pages branch to deploy it to, automatically.</p><p>Using this, we can update our short links by simply editing and saving our links.json file, everything else will be handled for us by GitHub.</p><p><strong>But first,</strong> we need to make some arrangements.</p><h2 id="deploy-keys-a-short-explanation">Deploy Keys: a short explanation</h2><p>GitHub has a feature called Deploy Keys, which are essentially just SSH keys that have read/write access to your repository, so a computer that has that key can push code to your repo directly.</p><p>To add a deploy key to your GitHub repo, follow these simple steps:</p><ul>
+<span class="token punctuation">]</span></code></pre><p>Now we’re talking! Running this script generates your HTML redirects and places them neatly in a folder, which you can upload to your GitHub.</p><p>But this isn’t exactly the most convenient, right? Every time you have to update your URLs, you have to <em>update the JSON file, run the python code, push the folder to GitHub…</em></p><p>It just sounds really cumbersome. And it is.</p><h2 id="github-to-the-rescuepart2">GitHub to the rescue — Part 2</h2><p>Here’s where we use GitHub’s slightly less known, but really powerful tool: <strong>GitHub Actions.</strong></p><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/y4lsjmlqpfxovxbz8gd2.png" alt="Github Actions promo"></p><p>GitHub Actions is GitHub’s super powerful builtin CI/CD tool. It runs a virtual machine for you, that can pull your code, test it, and deploy it, every single time you push an update to your repository. All for no cost at all.</p><p>What we are going to do is use its Python workflow that runs our HTML generator script for us, and use a plugin to create a separate GitHub Pages branch to deploy it to, automatically.</p><p>Using this, we can update our short links by simply editing and saving our links.json file, everything else will be handled for us by GitHub.</p><p><strong>But first,</strong> we need to make some arrangements.</p><h2 id="deploy-keys-a-short-explanation">Deploy Keys: a short explanation</h2><p>GitHub has a feature called Deploy Keys, which are essentially just SSH keys that have read/write access to your repository, so a computer that has that key can push code to your repo directly.</p><p>To add a deploy key to your GitHub repo, follow these simple steps:</p><ul>
 <li>Generate an SSH key:
-open your terminal/command prompt and type <code data-astro-raw="">ssh-keygen</code>
+open your terminal/command prompt and type <code>ssh-keygen</code>
 Give it any name you like (using the repository name would be good), use an empty passphrase for it, and keep everything else default.<br>
-This will generate a private key file, and a public&nbsp;<code data-astro-raw="">.pub</code> file, both with the same name.<br>
-<em>(If the command</em> <code data-astro-raw="">_ssh-keygen_</code> <em>doesn’t work, you might have to install OpenSSH on your system)</em></li>
-</ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/hyssr7nq0gmbhbtctpho.png" alt="You just generated an SSH public-private key&nbsp;pair!"></p><figcaption>You just generated an SSH public-private key&nbsp;pair!</figcaption><ul>
+This will generate a private key file, and a public <code>.pub</code> file, both with the same name.<br>
+<em>(If the command</em> <code>_ssh-keygen_</code> <em>doesn’t work, you might have to install OpenSSH on your system)</em></li>
+</ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/hyssr7nq0gmbhbtctpho.png" alt="You just generated an SSH public-private key pair!"></p><figcaption>You just generated an SSH public-private key pair!</figcaption><ul>
 <li>Open your repository settings, and go to the Deploy Keys tab.<br>
 It should look something like this:</li>
 </ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/9vd0q51ub8by6fdifwvf.png" alt="Deploy Keys in GitHub"></p><ul>
-<li>Click on “Add deploy key” on the top right, and copy-paste the entire contents of the&nbsp;<code data-astro-raw="">.pub</code> file that you just generated. <strong>(Make sure to click the “write access” checkbox)</strong>:</li>
-</ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/7mjl0gb479g8q7ksgyn3.png" alt="The title of the key doesn’t really matter&nbsp;here."></p><figcaption>The title of the key doesn’t really matter&nbsp;here.</figcaption><ul>
-<li>Then head down to the <strong>Secrets</strong> section of your repository settings, and add a new secret named <code data-astro-raw="">ACTIONS_DEPLOY_KEY</code>, and copy your private key into it. It should look something like:</li>
-</ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/znap67oz7d72ls2mmv7i.png" alt="That’s a long&nbsp;secret."></p><figcaption>That’s a long&nbsp;secret.</figcaption><p>And that’s it! We can now get into <strong>the Action</strong> (pun intended).</p><h2 id="final-step-setting-up-the-githubaction">Final step: Setting up the GitHub&nbsp;Action</h2><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/bejlitlom7cg47ucxu2x.png" alt="The workflow we will be&nbsp;using"></p><figcaption>The workflow we will be&nbsp;using</figcaption><p>Simply navigate to the Actions tab, and click on the Python Application workflow. Replace its contents with the ones provided below:</p><pre class="language-yaml"><code data-astro-raw="" class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Python Deploy
+<li>Click on “Add deploy key” on the top right, and copy-paste the entire contents of the <code>.pub</code> file that you just generated. <strong>(Make sure to click the “write access” checkbox)</strong>:</li>
+</ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/7mjl0gb479g8q7ksgyn3.png" alt="The title of the key doesn’t really matter here."></p><figcaption>The title of the key doesn’t really matter here.</figcaption><ul>
+<li>Then head down to the <strong>Secrets</strong> section of your repository settings, and add a new secret named <code>ACTIONS_DEPLOY_KEY</code>, and copy your private key into it. It should look something like:</li>
+</ul><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/znap67oz7d72ls2mmv7i.png" alt="That’s a long secret."></p><figcaption>That’s a long secret.</figcaption><p>And that’s it! We can now get into <strong>the Action</strong> (pun intended).</p><h2 id="final-step-setting-up-the-githubaction">Final step: Setting up the GitHub Action</h2><p><img src="https://dev-to-uploads.s3.amazonaws.com/i/bejlitlom7cg47ucxu2x.png" alt="The workflow we will be using"></p><figcaption>The workflow we will be using</figcaption><p>Simply navigate to the Actions tab, and click on the Python Application workflow. Replace its contents with the ones provided below:</p><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Python Deploy
 
 <span class="token key atrule">on</span><span class="token punctuation">:</span>
   <span class="token key atrule">push</span><span class="token punctuation">:</span>
@@ -161,7 +171,7 @@ It should look something like this:</li>
           <span class="token key atrule">deploy_key</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.ACTIONS_DEPLOY_KEY <span class="token punctuation">}</span><span class="token punctuation">}</span>
           <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./dist</code></pre><p>And we’re done!</p><blockquote>
 <p>You can create your own free URL shortener by simply forking my repository:</p>
-</blockquote><p><a href="https://github.com/tusharsadhwani/url-shortener">https://github.com/tusharsadhwani/url-shortener</a>,</p><p>adding a secret and a deploy key to your repo with write access, and changing the website name from <strong>tshr.me</strong> to whatever your domain name is, in the <code data-astro-raw="">main.py</code> file.</p><p>Thanks for reading this article!<br>
+</blockquote><p><a href="https://github.com/tusharsadhwani/url-shortener">https://github.com/tusharsadhwani/url-shortener</a>,</p><p>adding a secret and a deploy key to your repo with write access, and changing the website name from <strong>tshr.me</strong> to whatever your domain name is, in the <code>main.py</code> file.</p><p>Thanks for reading this article!<br>
 Big thanks from my side to <a href="https://www.youtube.com/channel/UCLNgu_OupwoeESgtab33CCw">Coding Garden</a>, whose videos motivated me to make this project in the first place, and <a href="https://medium.com/@cmichel/how-to-deploy-a-create-react-app-with-github-actions-5e01f7a7b6b">this article</a>, which led me to the free hack that I came up with. Also thanks to <a href="https://github.com/wojpawlik">Wojtek Pawlik</a> <em>(GingerPlusPlus)</em> for suggesting a non-javascript method for redirects.</p>
     </main>
   </article>
@@ -171,7 +181,7 @@ Big thanks from my side to <a href="https://www.youtube.com/channel/UCLNgu_Oupwo
 
     <hr class="astro-35DIGKXB">
     <div class="centered astro-35DIGKXB">
-      <astro-root uid="ZwUM0Q"></astro-root>
+      <astro-root uid="kUrzW"></astro-root>
     </div>
     <div class="back-to-top-wrapper astro-35DIGKXB">
       <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
@@ -180,9 +190,9 @@ Big thanks from my side to <a href="https://www.youtube.com/channel/UCLNgu_Oupwo
         </svg>
       </a>
     </div>
-    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async>
     </script>
-  
+  </body>
   <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
@@ -205,8 +215,7 @@ Big thanks from my side to <a href="https://www.youtube.com/channel/UCLNgu_Oupwo
 
 
   <noscript>
-    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-35DIGKXB">
   </noscript>
-  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
-
-</body></html>
+  <script defer src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</html>

@@ -1,6 +1,7 @@
-<!DOCTYPE html><html lang="en" class="astro-35DIGKXB"><head>
-    
-<meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="en" class="astro-35DIGKXB">
+  <head>
+    <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
@@ -27,21 +28,30 @@
 <link rel="stylesheet" href="/style/merged-themes.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Open+Sans:wght@400;600&display=swap">
 
-<script>
-  if (localStorage.getItem("lightMode") == "true") {
-    document.documentElement.dataset.theme = "light";
-  }
+
+
+  <link rel="stylesheet" href="/assets/asset.5b049261.css"></link>
+<link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
+<link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a2711.js" astro-script="/post/descriptors/script-0"></script>
+<script type="module" data-astro-component-hydration astro-script="/post/descriptors/script-1">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("kUrzW", {name:"Newsletter",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.9e2f0c78.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-35DIGKXB"}, children);
+
+});
 </script>
+<script type="module" data-astro-component-hydration astro-script="/post/descriptors/script-2">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-D64JDZG7"}, children);
 
-  <link rel="stylesheet" href="../../assets/does-python-need-types.858e353f.css">
-
-
-
-
-<script type="module" src="../../assets/descriptors.2522760e.js"></script>
+});
+</script>
 </head>
   
 
@@ -57,7 +67,7 @@
 
   </a>
   <div class="right astro-D64JDZG7">
-    <astro-root uid="rve9A"></astro-root>
+    <astro-root uid="Z201JGg"></astro-root>
   </div>
 </header>
 
@@ -67,7 +77,7 @@
   <header class="astro-DFUN6QKL">
     <p class="publish-date astro-DFUN6QKL">Thursday, 17 March 2022</p>
     <h1 class="title astro-DFUN6QKL">Implementing @property, @staticmethod and @classmethod from scratch</h1>
-    <p class="description astro-DFUN6QKL">The builtin method decorators... aren't actually decorators?</p>
+    <p class="description astro-DFUN6QKL">The builtin method decorators... aren&#39;t actually decorators?</p>
     <img src="/images/descriptors.jpg" title="Implementing @property, @staticmethod and @classmethod from scratch" alt="Implementing @property, @staticmethod and @classmethod from scratch" class="astro-DFUN6QKL">
     
 <div class="author astro-BL6UQIAR">
@@ -78,12 +88,12 @@
   <article class="content astro-DFUN6QKL">
     <main class="astro-DFUN6QKL">
       <p>I recently saw this blog by <a href="https://bas.codes/posts/python-decorators">bas.codes</a> that explained decorators in Python,
-and used <code data-astro-raw="">@property</code> and <code data-astro-raw="">@staticmethod</code> as examples. However, in reality those
+and used <code>@property</code> and <code>@staticmethod</code> as examples. However, in reality those
 aren't really decorators. So I wanted to make a continuation to it, by
-explaining how these are really implemented.</p><h2 id="property"><code data-astro-raw="">@property</code></h2><p><code data-astro-raw="">@property</code> allows us to create getter and setter functions for a property in
-Python. Instead of defining a <code data-astro-raw="">get_x()</code> and <code data-astro-raw="">set_x()</code> method as you would in
+explaining how these are really implemented.</p><h2 id="property"><code>@property</code></h2><p><code>@property</code> allows us to create getter and setter functions for a property in
+Python. Instead of defining a <code>get_x()</code> and <code>set_x()</code> method as you would in
 other languages, Python lets you turn normal attribute access and assignment
-into function calls:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+into function calls:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token comment"># Private data</span>
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> <span class="token number">42</span>
@@ -101,24 +111,24 @@ into function calls:</p><pre class="language-python"><code data-astro-raw="" cla
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>
 c<span class="token punctuation">.</span>x <span class="token operator">=</span> <span class="token number">10</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span></code></pre><p>This is the output:</p><pre class="language-console"><code data-astro-raw="" class="language-console">$ python property.py
+<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span></code></pre><p>This is the output:</p><pre class="language-bash"><code class="language-bash">$ python property.py
 Running getter
-42
+<span class="token number">42</span>
 Running setter
 Running getter
-10</code></pre><p>Simply accessing <code data-astro-raw="">c.x</code> and assigning it a new value runs the defined functions.
-Isn't that neat?</p><p>So when we do:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+<span class="token number">10</span></code></pre><p>Simply accessing <code>c.x</code> and assigning it a new value runs the defined functions.
+Isn't that neat?</p><p>So when we do:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token decorator annotation punctuation">@property</span>
     <span class="token keyword">def</span> <span class="token function">x</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>The "decorator" part of it is the same. As in, you can also write this like so:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>The "decorator" part of it is the same. As in, you can also write this like so:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">x</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
-    x <span class="token operator">=</span> <span class="token builtin">property</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span></code></pre><p>So we are still wrapping <code data-astro-raw="">x</code>, but <code data-astro-raw="">property(...)</code> doesn't return a function.
-It returns a <em>descriptor</em> object.</p><h2 id="so-whats-a-descriptor">So what's a descriptor</h2><p>Once <code data-astro-raw="">x</code> has been wrapped with <code data-astro-raw="">@property</code>, <code data-astro-raw="">c.x</code> is no longer a normal value or
+    x <span class="token operator">=</span> <span class="token builtin">property</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span></code></pre><p>So we are still wrapping <code>x</code>, but <code>property(...)</code> doesn't return a function.
+It returns a <em>descriptor</em> object.</p><h2 id="so-whats-a-descriptor">So what's a descriptor</h2><p>Once <code>x</code> has been wrapped with <code>@property</code>, <code>c.x</code> is no longer a normal value or
 function that exists on the object. It has a really weird behaviour: When you
-try to access <code data-astro-raw="">c.x</code>, a function is called. This function call is what gives
-the value of <code data-astro-raw="">c.x</code>, not the <code data-astro-raw="">x</code> object itself.</p><p>Regular class objects don't behave like this at all. For example:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">some_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+try to access <code>c.x</code>, a function is called. This function call is what gives
+the value of <code>c.x</code>, not the <code>x</code> object itself.</p><p>Regular class objects don't behave like this at all. For example:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">some_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Running function"</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> <span class="token number">42</span>
 
@@ -126,11 +136,11 @@ the value of <code data-astro-raw="">c.x</code>, not the <code data-astro-raw=""
     x <span class="token operator">=</span> some_function
 
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span></code></pre><pre class="language-console"><code data-astro-raw="" class="language-console">$ python property.py
-<bound method="" some_function="" of="" <__main__.c="" object="" at="" 0x7f0713093b50="">&gt;</bound></code></pre><p><code data-astro-raw="">c.x</code> is a function in this case, but you can see that simply accessing it
+<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span></code></pre><pre class="language-bash"><code class="language-bash">$ python property.py
+<span class="token operator">&lt;</span>bound method some_function of <span class="token operator">&lt;</span>__main__.C object at 0x7f0713093b5<span class="token operator"><span class="token file-descriptor important">0</span>>></span></code></pre><p><code>c.x</code> is a function in this case, but you can see that simply accessing it
 doesn't run it. That's how Python normally works.</p><p>To be able to turn attribute access into a function call, you need descriptors.
 That's pretty much all that they do: turn attribute access and assignment into
-function calls.</p><p>Let's see how they work with an example:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">MagicNumberDescriptor</span><span class="token punctuation">:</span>
+function calls.</p><p>Let's see how they work with an example:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">MagicNumberDescriptor</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__get__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> obj<span class="token punctuation">,</span> cls<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> <span class="token number">42</span>
 
@@ -138,11 +148,11 @@ function calls.</p><p>Let's see how they work with an example:</p><pre class="la
     x <span class="token operator">=</span> MagicNumberDescriptor<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>  <span class="token comment"># output: 42</span></code></pre><p>When Python sees the <code data-astro-raw="">__get__</code> method in a class, it automatically turns its
+<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>  <span class="token comment"># output: 42</span></code></pre><p>When Python sees the <code>__get__</code> method in a class, it automatically turns its
 objects into descriptors. Python has special hooks in place, where when you try
-to access the descriptor, Python's runtime triggers <code data-astro-raw="">__get__</code> for you.</p><p>Yeah, the answer ends up being "black magic" in the end. But this little bit of
-magic allows us to do a lot of cool things.</p><p>Similarly, attribute assignment calls the <code data-astro-raw="">__set__</code> method. With this we can
-create a variable that behaves like our <code data-astro-raw="">property</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">ValueDescriptor</span><span class="token punctuation">:</span>
+to access the descriptor, Python's runtime triggers <code>__get__</code> for you.</p><p>Yeah, the answer ends up being "black magic" in the end. But this little bit of
+magic allows us to do a lot of cool things.</p><p>Similarly, attribute assignment calls the <code>__set__</code> method. With this we can
+create a variable that behaves like our <code>property</code>:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">ValueDescriptor</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token number">42</span>
 
@@ -161,25 +171,25 @@ c <span class="token operator">=</span> C<span class="token punctuation">(</span
 <span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>y<span class="token punctuation">)</span>  <span class="token comment"># 42</span>
 c<span class="token punctuation">.</span>x <span class="token operator">+=</span> <span class="token number">10</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>  <span class="token comment"># 52</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>y<span class="token punctuation">)</span>  <span class="token comment"># 42</span></code></pre><p>This is cool, but we are still far away from implementing <code data-astro-raw="">@property</code>, as:</p><ul>
+<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>y<span class="token punctuation">)</span>  <span class="token comment"># 42</span></code></pre><p>This is cool, but we are still far away from implementing <code>@property</code>, as:</p><ul>
 <li>Currently, descriptor data is disjoint from object data. We can't access
-<code data-astro-raw="">self.value</code> from <code data-astro-raw="">c</code>, and so we can't make <code data-astro-raw="">self.value</code> affect other parts of
-the object. Unlike <code data-astro-raw="">@property</code>, where the underlying <code data-astro-raw="">self._x</code> value is still
+<code>self.value</code> from <code>c</code>, and so we can't make <code>self.value</code> affect other parts of
+the object. Unlike <code>@property</code>, where the underlying <code>self._x</code> value is still
 within the class and can be accessed by other methods.</li>
-<li>Right now, there's just one <code data-astro-raw="">__get__</code> and <code data-astro-raw="">__set__</code> method for all the
+<li>Right now, there's just one <code>__get__</code> and <code>__set__</code> method for all the
 descriptors that we define. If we want to customize the getter or setter
 function, like adding data validation, we need to create a new descriptor
 class everytime.</li>
 </ul><p>With these things in mind, let's implement a descriptor that is a lot more
-flexible.</p><h2 id="implementing-property">Implementing <code data-astro-raw="">@property</code></h2><p>Let's start with implementing a <code data-astro-raw="">my_property</code> class, which works the same way as
-<code data-astro-raw="">property</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+flexible.</p><h2 id="implementing-property">Implementing <code>@property</code></h2><p>Let's start with implementing a <code>my_property</code> class, which works the same way as
+<code>property</code>:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> <span class="token number">42</span>
 
     <span class="token decorator annotation punctuation">@my_property</span>
     <span class="token keyword">def</span> <span class="token function">x</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> self<span class="token punctuation">.</span>_x</code></pre><p>We need <code data-astro-raw="">my_property</code> to be a descriptor class, because we're essentially doing
-<code data-astro-raw="">x = my_property(x)</code> through the descriptor. This is what It looks like:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_property</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>_x</code></pre><p>We need <code>my_property</code> to be a descriptor class, because we're essentially doing
+<code>x = my_property(x)</code> through the descriptor. This is what It looks like:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_property</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> getter_func<span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>getter_func <span class="token operator">=</span> getter_func
 
@@ -187,25 +197,25 @@ flexible.</p><h2 id="implementing-property">Implementing <code data-astro-raw=""
         <span class="token keyword">return</span> self<span class="token punctuation">.</span>getter_func<span class="token punctuation">(</span>obj<span class="token punctuation">)</span>
 
 <span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> <span class="token number">42</span>
 
     <span class="token decorator annotation punctuation">@my_property</span>
     <span class="token keyword">def</span> <span class="token function">x</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> self<span class="token punctuation">.</span>_x</code></pre><p>Here's how it works:</p><p>The decorator behaves like <code data-astro-raw="">x = my_property(x)</code>, so we're storing the original
-<code data-astro-raw="">x</code> function in <code data-astro-raw="">self.getter_func</code>.</p><p>Then when <code data-astro-raw="">c.x</code> is accessed, we just call the getter function, and pass it
-<code data-astro-raw="">obj</code>. <code data-astro-raw="">obj</code> is the object <code data-astro-raw="">c</code>, it's needed to be passed because that becomes
-the first parameter <code data-astro-raw="">self</code>. (We'll see a little more about this soon!)</p><p>You might have noticed that <code data-astro-raw="">__get__</code> gets two parameters passed in by default,
-<code data-astro-raw="">obj</code> and <code data-astro-raw="">cls</code>. They're the object that tried to access the descriptor, and its
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>_x</code></pre><p>Here's how it works:</p><p>The decorator behaves like <code>x = my_property(x)</code>, so we're storing the original
+<code>x</code> function in <code>self.getter_func</code>.</p><p>Then when <code>c.x</code> is accessed, we just call the getter function, and pass it
+<code>obj</code>. <code>obj</code> is the object <code>c</code>, it's needed to be passed because that becomes
+the first parameter <code>self</code>. (We'll see a little more about this soon!)</p><p>You might have noticed that <code>__get__</code> gets two parameters passed in by default,
+<code>obj</code> and <code>cls</code>. They're the object that tried to access the descriptor, and its
 class respectively. This goes to show how intertwined descriptors are with
-classes: The <code data-astro-raw="">__get__</code> method doesn't ever get triggered if you make the
-descriptor object outside of a class:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">class</span> <span class="token class-name">D</span><span class="token punctuation">:</span>
+classes: The <code>__get__</code> method doesn't ever get triggered if you make the
+descriptor object outside of a class:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">class</span> <span class="token class-name">D</span><span class="token punctuation">:</span>
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">def</span> <span class="token function">__get__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> o<span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token keyword">return</span> <span class="token number">42</span>
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> d <span class="token operator">=</span> D<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> d
-<span class="token operator">&lt;</span>__main__<span class="token punctuation">.</span>D <span class="token builtin">object</span> at <span class="token number">0x7f2dde293460</span><span class="token operator">&gt;</span></code></pre><p>The "black magic" is only triggered when the descriptor is a class attribute.</p><p>Let's also implement the setter functionality, and make the setter a little more
-interesting: Let's make it such that you can only increase the value of <code data-astro-raw="">x</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_property</span><span class="token punctuation">:</span>
+<span class="token operator">>></span><span class="token operator">></span> d <span class="token operator">=</span> D<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> d
+<span class="token operator">&lt;</span>__main__<span class="token punctuation">.</span>D <span class="token builtin">object</span> at <span class="token number">0x7f2dde293460</span><span class="token operator">></span></code></pre><p>The "black magic" is only triggered when the descriptor is a class attribute.</p><p>Let's also implement the setter functionality, and make the setter a little more
+interesting: Let's make it such that you can only increase the value of <code>x</code>:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_property</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> getter_func<span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>getter_func <span class="token operator">=</span> getter_func
         self<span class="token punctuation">.</span>setter_func <span class="token operator">=</span> <span class="token boolean">None</span>
@@ -224,7 +234,7 @@ interesting: Let's make it such that you can only increase the value of <code da
 
 
 <span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> <span class="token number">42</span>
 
     <span class="token decorator annotation punctuation">@my_property</span>
@@ -241,16 +251,16 @@ interesting: Let's make it such that you can only increase the value of <code da
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>  <span class="token comment"># 42</span>
 c<span class="token punctuation">.</span>x <span class="token operator">+=</span> <span class="token number">1</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>  <span class="token comment"># 43</span></code></pre><p>The <code data-astro-raw="">@x.setter</code> decorator doesn't do anything special, it just stores the setter
-function to be called in <code data-astro-raw="">__set__</code>.</p><p>There is one small issue, however, with this code:</p><pre class="language-console"><code data-astro-raw="" class="language-console">$ python -i property.py
-42
-43
-&gt;&gt;&gt; print(c.set_x)
-None</code></pre><p>With <code data-astro-raw="">@x.setter</code>, we're essentially doing <code data-astro-raw="">set_x = x.setter(set_x)</code>. And since
-<code data-astro-raw="">setter</code> doesn't return anything, we now have a <code data-astro-raw="">set_x</code> defined on the class for
+<span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>x<span class="token punctuation">)</span>  <span class="token comment"># 43</span></code></pre><p>The <code>@x.setter</code> decorator doesn't do anything special, it just stores the setter
+function to be called in <code>__set__</code>.</p><p>There is one small issue, however, with this code:</p><pre class="language-bash"><code class="language-bash">$ python -i property.py
+<span class="token number">42</span>
+<span class="token number">43</span>
+<span class="token operator">>></span><span class="token operator">></span> print<span class="token punctuation">(</span>c.set_x<span class="token punctuation">)</span>
+None</code></pre><p>With <code>@x.setter</code>, we're essentially doing <code>set_x = x.setter(set_x)</code>. And since
+<code>setter</code> doesn't return anything, we now have a <code>set_x</code> defined on the class for
 no reason.</p><p>To avoid this, Python mandates that the setter function has the same name as
-the getter function. But if we try to do that:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+the getter function. But if we try to do that:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> <span class="token number">42</span>
 
     <span class="token decorator annotation punctuation">@my_property</span>
@@ -262,12 +272,12 @@ the getter function. But if we try to do that:</p><pre class="language-python"><
         <span class="token keyword">if</span> new_value <span class="token operator">&lt;</span> self<span class="token punctuation">.</span>_x<span class="token punctuation">:</span>
             <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"new value must be bigger than old one"</span><span class="token punctuation">)</span>
 
-        self<span class="token punctuation">.</span>_x <span class="token operator">=</span> new_value</code></pre><p>We have this problem:</p><pre class="language-console"><code data-astro-raw="" class="language-console">$ python -i property.py
-&gt;&gt;&gt; c = C()
-&gt;&gt;&gt; print(c.x)
-None</code></pre><p>Since <code data-astro-raw="">setter</code> doesn't return anything, now <code data-astro-raw="">c.x</code> has been set to <code data-astro-raw="">None</code>.</p><p>To work around this, Python actually creates a new descriptor object. So, we
-replace the old <code data-astro-raw="">x</code> (which only had a getter function) with a new <code data-astro-raw="">x</code> (which has
-both getter and setter functions). Like so:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_property</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_x <span class="token operator">=</span> new_value</code></pre><p>We have this problem:</p><pre class="language-bash"><code class="language-bash">$ python -i property.py
+<span class="token operator">>></span><span class="token operator">></span> c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> print<span class="token punctuation">(</span>c.x<span class="token punctuation">)</span>
+None</code></pre><p>Since <code>setter</code> doesn't return anything, now <code>c.x</code> has been set to <code>None</code>.</p><p>To work around this, Python actually creates a new descriptor object. So, we
+replace the old <code>x</code> (which only had a getter function) with a new <code>x</code> (which has
+both getter and setter functions). Like so:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_property</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> getter_func<span class="token punctuation">,</span> setter_func<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>getter_func <span class="token operator">=</span> getter_func
         self<span class="token punctuation">.</span>setter_func <span class="token operator">=</span> setter_func
@@ -283,7 +293,7 @@ both getter and setter functions). Like so:</p><pre class="language-python"><cod
 
 
 <span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> <span class="token number">42</span>
 
     <span class="token decorator annotation punctuation">@my_property</span>
@@ -295,9 +305,9 @@ both getter and setter functions). Like so:</p><pre class="language-python"><cod
         <span class="token keyword">if</span> new_value <span class="token operator">&lt;</span> self<span class="token punctuation">.</span>_x<span class="token punctuation">:</span>
             <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"new value must be bigger than old one"</span><span class="token punctuation">)</span>
 
-        self<span class="token punctuation">.</span>_x <span class="token operator">=</span> new_value</code></pre><p>When <code data-astro-raw="">x.setter</code> is called, we store <code data-astro-raw="">setter_function</code> and return a new property
-descriptor. That way <code data-astro-raw="">x</code> can now both get and set data.</p><h2 id="staticmethod"><code data-astro-raw="">@staticmethod</code></h2><p><code data-astro-raw="">staticmethod</code> is comaratively simple: It just makes a class method which
-doesn't require a <code data-astro-raw="">self</code> parameter.</p><p>This is actually fairly easy to implement as a regular decorator function too:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">my_staticmethod</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_x <span class="token operator">=</span> new_value</code></pre><p>When <code>x.setter</code> is called, we store <code>setter_function</code> and return a new property
+descriptor. That way <code>x</code> can now both get and set data.</p><h2 id="staticmethod"><code>@staticmethod</code></h2><p><code>staticmethod</code> is comaratively simple: It just makes a class method which
+doesn't require a <code>self</code> parameter.</p><p>This is actually fairly easy to implement as a regular decorator function too:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">my_staticmethod</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">wrapper</span><span class="token punctuation">(</span>_<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> func<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
@@ -309,23 +319,23 @@ doesn't require a <code data-astro-raw="">self</code> parameter.</p><p>This is a
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"foo"</span><span class="token punctuation">)</span>
 
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-c<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># prints 'foo'</span></code></pre><p>But regular staticmethods also let you access them directly from the class:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+c<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># prints 'foo'</span></code></pre><p>But regular staticmethods also let you access them directly from the class:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token decorator annotation punctuation">@staticmethod</span>
     <span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"foo"</span><span class="token punctuation">)</span>
 
 C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># foo</span>
-c<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># foo</span></code></pre><p>If we try to do that:</p><pre class="language-console"><code data-astro-raw="" class="language-console">$ python -i staticmethod.py
-&gt;&gt;&gt; C.foo()
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: wrapper() missing 1 required positional argument: '_'</module></stdin></code></pre><p><code data-astro-raw="">c.foo()</code> is a shorthand for <code data-astro-raw="">C.foo(c)</code>, so if you just call <code data-astro-raw="">C.foo()</code>, there is
-no first argument. So we need to make the <code data-astro-raw="">_</code> optional:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">my_staticmethod</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
+c<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># foo</span></code></pre><p>If we try to do that:</p><pre class="language-bash"><code class="language-bash">$ python -i staticmethod.py
+<span class="token operator">>></span><span class="token operator">></span> C.foo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+Traceback <span class="token punctuation">(</span>most recent call last<span class="token punctuation">)</span>:
+  File <span class="token string">"&lt;stdin>"</span>, line <span class="token number">1</span>, <span class="token keyword">in</span> <span class="token operator">&lt;</span>module<span class="token operator">></span>
+TypeError: wrapper<span class="token punctuation">(</span><span class="token punctuation">)</span> missing <span class="token number">1</span> required positional argument: <span class="token string">'_'</span></code></pre><p><code>c.foo()</code> is a shorthand for <code>C.foo(c)</code>, so if you just call <code>C.foo()</code>, there is
+no first argument. So we need to make the <code>_</code> optional:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">my_staticmethod</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">wrapper</span><span class="token punctuation">(</span>_<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> func<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-    <span class="token keyword">return</span> wrapper</code></pre><p>To avoid having to do the <code data-astro-raw="">wrapper(_=None)</code> hack, we need to use descriptors.</p><p>Since we had to manually pass in the <code data-astro-raw="">self</code> parameter in our previous <code data-astro-raw="">__get__</code>
-implementation, having no <code data-astro-raw="">self</code> is actually even easier for us. Like so:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_staticmethod</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> wrapper</code></pre><p>To avoid having to do the <code>wrapper(_=None)</code> hack, we need to use descriptors.</p><p>Since we had to manually pass in the <code>self</code> parameter in our previous <code>__get__</code>
+implementation, having no <code>self</code> is actually even easier for us. Like so:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">my_staticmethod</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> func<span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>func <span class="token operator">=</span> func
 
@@ -336,19 +346,19 @@ implementation, having no <code data-astro-raw="">self</code> is actually even e
 <span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token decorator annotation punctuation">@my_staticmethod</span>
     <span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"foo"</span><span class="token punctuation">)</span></code></pre><p>See? Really simple.</p><pre class="language-console"><code data-astro-raw="" class="language-console">&gt;&gt;&gt; C.foo()
-"foo"
-&gt;&gt;&gt; c = C()
-&gt;&gt;&gt; c.foo()
-"foo"</code></pre><h2 id="classmethod"><code data-astro-raw="">@classmethod</code></h2><p><code data-astro-raw="">classmethod</code> is similar, but instead of having no arguments, it gets the class:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"foo"</span><span class="token punctuation">)</span></code></pre><p>See? Really simple.</p><pre class="language-bash"><code class="language-bash"><span class="token operator">>></span><span class="token operator">></span> C.foo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token string">"foo"</span>
+<span class="token operator">>></span><span class="token operator">></span> c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> c.foo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token string">"foo"</span></code></pre><h2 id="classmethod"><code>@classmethod</code></h2><p><code>classmethod</code> is similar, but instead of having no arguments, it gets the class:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
     <span class="token decorator annotation punctuation">@classmethod</span>
     <span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span>cls<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Class name is:"</span><span class="token punctuation">,</span> cls<span class="token punctuation">.</span>__name__<span class="token punctuation">)</span>
 
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Class name is: C</span></code></pre><p>Since <code data-astro-raw="">__get__</code> already gets <code data-astro-raw="">cls</code> as its 3rd parameter, we just have to "bind"
+C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Class name is: C</span></code></pre><p>Since <code>__get__</code> already gets <code>cls</code> as its 3rd parameter, we just have to "bind"
 that as the first argument of the function. We can either return a new lambda
-function which calls <code data-astro-raw="">function(cls)</code>, or we can use <code data-astro-raw="">functools.partial</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
+function which calls <code>function(cls)</code>, or we can use <code>functools.partial</code>:</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
 
 <span class="token keyword">class</span> <span class="token class-name">my_classmethod</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> func<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -365,8 +375,8 @@ function which calls <code data-astro-raw="">function(cls)</code>, or we can use
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Class name is:"</span><span class="token punctuation">,</span> cls<span class="token punctuation">.</span>__name__<span class="token punctuation">)</span>
 
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Class name is: C</span></code></pre><h2 id="extras-methods-are-descriptors">Extras: Methods are descriptors</h2><p>Like in classmethod, if you put <code data-astro-raw="">obj</code> as the argument instead of <code data-astro-raw="">cls</code>, it makes
-a regular method. That's actually how methods work in Python:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
+C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Class name is: C</span></code></pre><h2 id="extras-methods-are-descriptors">Extras: Methods are descriptors</h2><p>Like in classmethod, if you put <code>obj</code> as the argument instead of <code>cls</code>, it makes
+a regular method. That's actually how methods work in Python:</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
 
 <span class="token keyword">def</span> <span class="token function">print_name</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
@@ -383,7 +393,7 @@ a regular method. That's actually how methods work in Python:</p><pre class="lan
 
 user <span class="token operator">=</span> User<span class="token punctuation">(</span><span class="token punctuation">)</span>
 user<span class="token punctuation">.</span>print_name<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># User</span></code></pre><p>Python methods are descriptors internally, and that's where the first arg of
-<code data-astro-raw="">self</code> gets passed in from. Now you know.</p><h2 id="appendix">Appendix</h2><p>There's a few things missing with the implementations above, like the <code data-astro-raw="">deleter</code>
+<code>self</code> gets passed in from. Now you know.</p><h2 id="appendix">Appendix</h2><p>There's a few things missing with the implementations above, like the <code>deleter</code>
 attribute in properties, type annotations, preserving function names and
 docstrings, and the like. I'll be leaving those for you to figure out yourself.
 Here's some resources if you need help with those:</p><ul>
@@ -401,7 +411,7 @@ this feature and be able to use it.</p>
 
     <hr class="astro-35DIGKXB">
     <div class="centered astro-35DIGKXB">
-      <astro-root uid="ZwUM0Q"></astro-root>
+      <astro-root uid="kUrzW"></astro-root>
     </div>
     <div class="back-to-top-wrapper astro-35DIGKXB">
       <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
@@ -410,9 +420,9 @@ this feature and be able to use it.</p>
         </svg>
       </a>
     </div>
-    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async>
     </script>
-  
+  </body>
   <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
@@ -435,8 +445,7 @@ this feature and be able to use it.</p>
 
 
   <noscript>
-    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-35DIGKXB">
   </noscript>
-  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
-
-</body></html>
+  <script defer src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</html>

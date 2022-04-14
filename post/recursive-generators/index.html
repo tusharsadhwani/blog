@@ -1,6 +1,7 @@
-<!DOCTYPE html><html lang="en" class="astro-35DIGKXB"><head>
-    
-<meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="en" class="astro-35DIGKXB">
+  <head>
+    <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
@@ -27,21 +28,30 @@
 <link rel="stylesheet" href="/style/merged-themes.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Open+Sans:wght@400;600&display=swap">
 
-<script>
-  if (localStorage.getItem("lightMode") == "true") {
-    document.documentElement.dataset.theme = "light";
-  }
+
+
+  <link rel="stylesheet" href="/assets/asset.5b049261.css"></link>
+<link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
+<link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a274.js" astro-script="/post/recursive-generators/script-0"></script>
+<script type="module" data-astro-component-hydration astro-script="/post/recursive-generators/script-1">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("kUrzW", {name:"Newsletter",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.9e2f0c78.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-35DIGKXB"}, children);
+
+});
 </script>
+<script type="module" data-astro-component-hydration astro-script="/post/recursive-generators/script-2">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-D64JDZG7"}, children);
 
-  <link rel="stylesheet" href="../../assets/does-python-need-types.858e353f.css">
-
-
-
-
-<script type="module" src="../../assets/recursive-generators.d33d245f.js"></script>
+});
+</script>
 </head>
   
 
@@ -57,7 +67,7 @@
 
   </a>
   <div class="right astro-D64JDZG7">
-    <astro-root uid="rve9A"></astro-root>
+    <astro-root uid="Z201JGg"></astro-root>
   </div>
 </header>
 
@@ -67,7 +77,7 @@
   <header class="astro-DFUN6QKL">
     <p class="publish-date astro-DFUN6QKL">Saturday, 15 January 2022</p>
     <h1 class="title astro-DFUN6QKL">Lazy recursion, with generators</h1>
-    <p class="description astro-DFUN6QKL">Name a better pairing, I'll wait.</p>
+    <p class="description astro-DFUN6QKL">Name a better pairing, I&#39;ll wait.</p>
     <img src="/images/recursive-generators.jpg" title="Lazy recursion, with generators" alt="Lazy recursion, with generators" class="astro-DFUN6QKL">
     
 <div class="author astro-BL6UQIAR">
@@ -77,24 +87,24 @@
   </header>
   <article class="content astro-DFUN6QKL">
     <main class="astro-DFUN6QKL">
-      <p>In this (relatively short) article, we will look at Python's generators, and use them to improve the memory usage of recursive code.</p><h2 id="when-the-code-calls-itself">When the code calls itself</h2><p>You know what recursion is. Function call itself, recursion go brr. If you need a refresher let's see a quick example:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">factorial</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <p>In this (relatively short) article, we will look at Python's generators, and use them to improve the memory usage of recursive code.</p><h2 id="when-the-code-calls-itself">When the code calls itself</h2><p>You know what recursion is. Function call itself, recursion go brr. If you need a refresher let's see a quick example:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">factorial</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment"># base case</span>
     <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> <span class="token number">1</span>
 
     <span class="token comment"># recurse</span>
-    <span class="token keyword">return</span> n <span class="token operator">*</span> factorial<span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span></code></pre><p>To understand how calling itself works, here's what factorial(5) turns into:</p><pre class="language-text"><code data-astro-raw="" class="language-text">factorial(5)
+    <span class="token keyword">return</span> n <span class="token operator">*</span> factorial<span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span></code></pre><p>To understand how calling itself works, here's what factorial(5) turns into:</p><pre class="language-text"><code class="language-text">factorial(5)
 = 5 * factorial(4)
 = 5 * 4 * factorial(3)
 = 5 * 4 * 3 * factorial(2)
 = 5 * 4 * 3 * 2 * factorial(1)
 = 5 * 4 * 3 * 2 * 1
-= 120</code></pre><p>The value of <code data-astro-raw="">1</code> comes out of <code data-astro-raw="">factorial(1)</code>, which gets multiplied by 2, 3 and so on as it travels back up the call stack.</p><h2 id="why-bother">Why bother?</h2><p>The above recursive code can be written as a for loop instead:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">factorial</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+= 120</code></pre><p>The value of <code>1</code> comes out of <code>factorial(1)</code>, which gets multiplied by 2, 3 and so on as it travels back up the call stack.</p><h2 id="why-bother">Why bother?</h2><p>The above recursive code can be written as a for loop instead:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">factorial</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
     product <span class="token operator">=</span> <span class="token number">1</span>
     <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> n<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
         product <span class="token operator">=</span> product <span class="token operator">*</span> i
 
-    <span class="token keyword">return</span> product</code></pre><p>Then why should you bother writing recursive code?</p><p>The truth is that some logic is inherently recursive. A good example is printing out all the paths inside a folder, like what the <code data-astro-raw="">find</code> command does. Here's the source code for one of my projects:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ <span class="token function">find</span> ./src
+    <span class="token keyword">return</span> product</code></pre><p>Then why should you bother writing recursive code?</p><p>The truth is that some logic is inherently recursive. A good example is printing out all the paths inside a folder, like what the <code>find</code> command does. Here's the source code for one of my projects:</p><pre class="language-bash"><code class="language-bash">$ <span class="token function">find</span> ./src
 ./src
 ./src/pylox
 ./src/pylox/tokens.py
@@ -116,7 +126,7 @@
 <li>If it is a folder, print out all contents of this sub-folder.</li>
 </ul>
 </li>
-</ul><p>Note that the last instruction (print all contents of the sub-folder) is just a smaller subset of the original task. Recursion is a natural fit for tasks like these.</p><h2 id="time-to-code">Time to code</h2><p>Let's put those instructions into working code. We will use a fake file structure to run it.</p><p>Let's simulate the following tree structure:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ tree /
+</ul><p>Note that the last instruction (print all contents of the sub-folder) is just a smaller subset of the original task. Recursion is a natural fit for tasks like these.</p><h2 id="time-to-code">Time to code</h2><p>Let's put those instructions into working code. We will use a fake file structure to run it.</p><p>Let's simulate the following tree structure:</p><pre class="language-bash"><code class="language-bash">$ tree /
 /
 ├── etc
 │   ├── <span class="token function">passwd</span>
@@ -128,7 +138,7 @@
     └── lib
         ├── my_lib
         └── gcc
-            └── x86_64-linux-gnu</code></pre><pre class="language-python"><code data-astro-raw="" class="language-python">file_tree <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+            └── x86_64-linux-gnu</code></pre><pre class="language-python"><code class="language-python">file_tree <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
     <span class="token punctuation">[</span><span class="token string">'etc'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'passwd'</span><span class="token punctuation">,</span> <span class="token string">'shadow'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     <span class="token punctuation">[</span><span class="token string">'usr'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
         <span class="token punctuation">[</span><span class="token string">'bin'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'cat'</span><span class="token punctuation">,</span> <span class="token string">'ls'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
@@ -154,7 +164,7 @@
             <span class="token comment"># This is a folder, recurse</span>
             print_paths_recursive<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span>
 
-print_paths_recursive<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span></code></pre><p>And the output:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ python find.py
+print_paths_recursive<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span></code></pre><p>And the output:</p><pre class="language-bash"><code class="language-bash">$ python find.py
 
 /etc
 /etc/passwd
@@ -168,9 +178,9 @@ print_paths_recursive<span class="token punctuation">(</span>file_tree<span clas
 /usr/lib/gcc
 /usr/lib/gcc/x86_64-linux-gnu</code></pre><p>Fairly straightforward.</p><p>Now comes the twist: What would you do to make this function return all the paths instead?</p><h2 id="recursion-and-collection">Recursion and collection</h2><p>It's very common to have to write recursive code that collects some data along the way. Having to collect all the file paths instead of printing them out is an obvious example.</p><p>We need to make fairly minor changes to do that:</p><ul>
 <li>The function will now return a list of paths. This is an important distinction to make for recursion, as the function didn't return anything before.</li>
-<li>Instead of printing out stuff, we will <code data-astro-raw="">append</code> to the list of paths instead.</li>
-<li>Instead of just doing a recursive call, we will receive the sub-paths as the return value, and <code data-astro-raw="">append</code> them to the final answer as well.</li>
-</ul><p>Here's the changed code:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_recursive</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<li>Instead of printing out stuff, we will <code>append</code> to the list of paths instead.</li>
+<li>Instead of just doing a recursive call, we will receive the sub-paths as the return value, and <code>append</code> them to the final answer as well.</li>
+</ul><p>Here's the changed code:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_recursive</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     paths <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
 
     name<span class="token punctuation">,</span> contents <span class="token operator">=</span> folder
@@ -190,14 +200,14 @@ print_paths_recursive<span class="token punctuation">(</span>file_tree<span clas
     <span class="token keyword">return</span> paths
 
 paths <span class="token operator">=</span> get_paths_recursive<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>paths<span class="token punctuation">)</span></code></pre><p>The output:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">$ python find.py
+<span class="token keyword">print</span><span class="token punctuation">(</span>paths<span class="token punctuation">)</span></code></pre><p>The output:</p><pre class="language-bash"><code class="language-bash">$ python find.py
 
 <span class="token punctuation">[</span><span class="token string">''</span>, <span class="token string">'/etc'</span>, <span class="token string">'/etc/passwd'</span>, <span class="token string">'/etc/shadow'</span>, <span class="token string">'/usr'</span>, <span class="token string">'/usr/bin'</span>,
 <span class="token string">'/usr/bin/cat'</span>, <span class="token string">'/usr/bin/ls'</span>, <span class="token string">'/usr/lib'</span>, <span class="token string">'/usr/lib/my_lib'</span>,
 <span class="token string">'/usr/lib/gcc'</span>, <span class="token string">'/usr/lib/gcc/x86_64-linux-gnu'</span><span class="token punctuation">]</span></code></pre><h2 id="the-problem">The problem</h2><p>The problem arises if there's a lot of folders to collect. If you have thousands, or millions of files and folders in your directory, storing all of it in a list might be trouble, for two reasons:</p><ul>
 <li>Your ram usage can randomly skyrocket. There's no limit to how big the list can grow, so you could technically even run out of memory.</li>
 <li>If you only cared about a few items inside the folder, you're out of luck -- the algorithm will find out <em>every single sub-folder</em>, and only then you can do something with it.</li>
-</ul><p>Essentially, it's an <strong>eagerly evaluated</strong> algorithm. The only way to avoid storing all of it would be to perform the task directly inside the function, like what we did in the case of <code data-astro-raw="">print</code>ing it out directly. But that couples our code strongly.</p><h2 id="the-solution">The solution</h2><p>So this is our problem: we want to do arbitrary run any code we want with each file path we want. The task could be to print it out, to store it in a list, or anything else:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_recursive</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</ul><p>Essentially, it's an <strong>eagerly evaluated</strong> algorithm. The only way to avoid storing all of it would be to perform the task directly inside the function, like what we did in the case of <code>print</code>ing it out directly. But that couples our code strongly.</p><h2 id="the-solution">The solution</h2><p>So this is our problem: we want to do arbitrary run any code we want with each file path we want. The task could be to print it out, to store it in a list, or anything else:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_recursive</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     name<span class="token punctuation">,</span> contents <span class="token operator">=</span> folder
     path <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">*</span>path<span class="token punctuation">,</span> name<span class="token punctuation">)</span>
 
@@ -211,7 +221,7 @@ paths <span class="token operator">=</span> get_paths_recursive<span class="toke
             <span class="token keyword">for</span> subpath <span class="token keyword">in</span> get_paths_recursive<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span><span class="token punctuation">:</span>
                 <span class="token comment">## Do something with the `subpath` here...</span>
 
-    <span class="token keyword">return</span> paths</code></pre><p>Python gives you a really powerful construct made to solve exactly this problem, and it's called <strong>generators</strong>.</p><p>You might have heard about generators in some other context, like this:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">gen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> paths</code></pre><p>Python gives you a really powerful construct made to solve exactly this problem, and it's called <strong>generators</strong>.</p><p>You might have heard about generators in some other context, like this:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">gen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">yield</span> <span class="token number">10</span>
     <span class="token keyword">yield</span> <span class="token number">20</span>
     <span class="token keyword">yield</span> <span class="token number">10</span>
@@ -221,7 +231,7 @@ paths <span class="token operator">=</span> get_paths_recursive<span class="toke
 
 <span class="token comment"># Got: 10</span>
 <span class="token comment"># Got: 20</span>
-<span class="token comment"># Got: 10</span></code></pre><p>But there's a much lesser known fact about generators: <em>They can be used to move your evaluation between two points in code.</em></p><p>This is what I mean:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">gen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token comment"># Got: 10</span></code></pre><p>But there's a much lesser known fact about generators: <em>They can be used to move your evaluation between two points in code.</em></p><p>This is what I mean:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">gen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Start!"</span><span class="token punctuation">)</span>
     <span class="token keyword">yield</span> <span class="token number">1</span>
 
@@ -235,14 +245,14 @@ paths <span class="token operator">=</span> get_paths_recursive<span class="toke
 
 
 <span class="token keyword">for</span> item <span class="token keyword">in</span> gen<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Doing things with </span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">}</span></span><span class="token string">..."</span></span><span class="token punctuation">)</span></code></pre><p>You can see how the execution goes back and forth between <code data-astro-raw="">gen()</code> and the for-loop:</p><pre class="language-text"><code data-astro-raw="" class="language-text">$ py a.py
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Doing things with </span><span class="token interpolation"><span class="token punctuation">{</span>item<span class="token punctuation">}</span></span><span class="token string">..."</span></span><span class="token punctuation">)</span></code></pre><p>You can see how the execution goes back and forth between <code>gen()</code> and the for-loop:</p><pre class="language-text"><code class="language-text">$ py a.py
 Start!
 Doing things with 1...
 Now we're calculating stuff in gen()
 Doing things with 45...
 Last value!
 Doing things with 42...
-Done.</code></pre><p>This is exactly what we need in our case: We need to give the execution context back to the main code whenever we have a new path. So we can just <code data-astro-raw="">yield</code> the control from the generator, to the loop:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_generator</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+Done.</code></pre><p>This is exactly what we need in our case: We need to give the execution context back to the main code whenever we have a new path. So we can just <code>yield</code> the control from the generator, to the loop:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_generator</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     name<span class="token punctuation">,</span> contents <span class="token operator">=</span> folder
     path <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">*</span>path<span class="token punctuation">,</span> name<span class="token punctuation">)</span>
 
@@ -253,8 +263,8 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
             <span class="token keyword">yield</span> <span class="token string">'/'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token operator">*</span>path<span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">)</span>
         <span class="token keyword">else</span><span class="token punctuation">:</span>
             <span class="token keyword">for</span> subpath <span class="token keyword">in</span> get_paths_generator<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span><span class="token punctuation">:</span>
-                <span class="token keyword">yield</span> subpath</code></pre><p>Now the best part, is that we can create both the original usecases, of printing and storing a list really easily:</p><pre class="language-python"><code data-astro-raw="" class="language-python">$ python <span class="token operator">-</span>i find<span class="token punctuation">.</span>py
-<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">for</span> path <span class="token keyword">in</span> get_paths_generator<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">yield</span> subpath</code></pre><p>Now the best part, is that we can create both the original usecases, of printing and storing a list really easily:</p><pre class="language-python"><code class="language-python">$ python <span class="token operator">-</span>i find<span class="token punctuation">.</span>py
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">for</span> path <span class="token keyword">in</span> get_paths_generator<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span><span class="token punctuation">:</span>
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">print</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span>
 
 <span class="token operator">/</span>etc
@@ -269,10 +279,10 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
 <span class="token operator">/</span>usr<span class="token operator">/</span>lib<span class="token operator">/</span>gcc
 <span class="token operator">/</span>usr<span class="token operator">/</span>lib<span class="token operator">/</span>gcc<span class="token operator">/</span>x86_64<span class="token operator">-</span>linux<span class="token operator">-</span>gnu
 
-<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">list</span><span class="token punctuation">(</span>get_paths_generator<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token builtin">list</span><span class="token punctuation">(</span>get_paths_generator<span class="token punctuation">(</span>file_tree<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'/etc'</span><span class="token punctuation">,</span> <span class="token string">'/etc/passwd'</span><span class="token punctuation">,</span> <span class="token string">'/etc/shadow'</span><span class="token punctuation">,</span> <span class="token string">'/usr'</span><span class="token punctuation">,</span> <span class="token string">'/usr/bin'</span><span class="token punctuation">,</span>
 <span class="token string">'/usr/bin/cat'</span><span class="token punctuation">,</span> <span class="token string">'/usr/bin/ls'</span><span class="token punctuation">,</span> <span class="token string">'/usr/lib'</span><span class="token punctuation">,</span> <span class="token string">'/usr/lib/my_lib'</span><span class="token punctuation">,</span>
-<span class="token string">'/usr/lib/gcc'</span><span class="token punctuation">,</span> <span class="token string">'/usr/lib/gcc/x86_64-linux-gnu'</span><span class="token punctuation">]</span></code></pre><p>This solution is a lot more flexible, and will never have the same eager evaluation problems as the original one did.</p><h2 id="bonus-yield-from">Bonus: <code data-astro-raw="">yield from</code></h2><p>The original code that used <code data-astro-raw="">append</code> to store paths can have a slight improvement: Instead of writing a for-loop to append each subpath one by one, you can use <code data-astro-raw="">list.extend</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python">    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token string">'/usr/lib/gcc'</span><span class="token punctuation">,</span> <span class="token string">'/usr/lib/gcc/x86_64-linux-gnu'</span><span class="token punctuation">]</span></code></pre><p>This solution is a lot more flexible, and will never have the same eager evaluation problems as the original one did.</p><h2 id="bonus-yield-from">Bonus: <code>yield from</code></h2><p>The original code that used <code>append</code> to store paths can have a slight improvement: Instead of writing a for-loop to append each subpath one by one, you can use <code>list.extend</code>:</p><pre class="language-python"><code class="language-python">    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
     <span class="token keyword">for</span> item <span class="token keyword">in</span> contents<span class="token punctuation">:</span>
         <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
             paths<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token operator">*</span>path<span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -280,7 +290,7 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
             <span class="token comment">## REPLACING THIS LOOP:</span>
             <span class="token comment"># for subpath in get_paths_recursive(item, path):</span>
             <span class="token comment">#     paths.append(subpath)</span>
-            paths<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>get_paths_recursive<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre><p>The same thing can be done in our generator solution, using <code data-astro-raw="">yield from gen()</code>:</p><pre class="language-python"><code data-astro-raw="" class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_generator</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            paths<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>get_paths_recursive<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre><p>The same thing can be done in our generator solution, using <code>yield from gen()</code>:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_paths_generator</span><span class="token punctuation">(</span>folder<span class="token punctuation">,</span> path<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     name<span class="token punctuation">,</span> contents <span class="token operator">=</span> folder
     path <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">*</span>path<span class="token punctuation">,</span> name<span class="token punctuation">)</span>
 
@@ -290,7 +300,7 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
         <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
             <span class="token keyword">yield</span> <span class="token string">'/'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token operator">*</span>path<span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">)</span>
         <span class="token keyword">else</span><span class="token punctuation">:</span>
-            <span class="token keyword">yield</span> <span class="token keyword">from</span> get_paths_generator<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span></code></pre><p><code data-astro-raw="">yield from</code> will yield all values inside the other generator, one by one.</p><h2 id="footer">Footer</h2><p>And that's it! Hopefully you'll find use of generators to improve your new (and old) recursive code in Python.</p><p>James Powell has an <a href="https://www.youtube.com/watch?v=XEn_99daJro">in-depth talk</a> about generators that expands more on this idea, so take a look at that if you wish.</p>
+            <span class="token keyword">yield</span> <span class="token keyword">from</span> get_paths_generator<span class="token punctuation">(</span>item<span class="token punctuation">,</span> path<span class="token punctuation">)</span></code></pre><p><code>yield from</code> will yield all values inside the other generator, one by one.</p><h2 id="footer">Footer</h2><p>And that's it! Hopefully you'll find use of generators to improve your new (and old) recursive code in Python.</p><p>James Powell has an <a href="https://www.youtube.com/watch?v=XEn_99daJro">in-depth talk</a> about generators that expands more on this idea, so take a look at that if you wish.</p>
     </main>
   </article>
 </div>
@@ -299,7 +309,7 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
 
     <hr class="astro-35DIGKXB">
     <div class="centered astro-35DIGKXB">
-      <astro-root uid="ZwUM0Q"></astro-root>
+      <astro-root uid="kUrzW"></astro-root>
     </div>
     <div class="back-to-top-wrapper astro-35DIGKXB">
       <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
@@ -308,9 +318,9 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
         </svg>
       </a>
     </div>
-    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async>
     </script>
-  
+  </body>
   <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
@@ -333,8 +343,7 @@ Done.</code></pre><p>This is exactly what we need in our case: We need to give t
 
 
   <noscript>
-    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-35DIGKXB">
   </noscript>
-  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
-
-</body></html>
+  <script defer src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</html>

@@ -1,6 +1,7 @@
-<!DOCTYPE html><html lang="en" class="astro-35DIGKXB"><head>
-    
-<meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="en" class="astro-35DIGKXB">
+  <head>
+    <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
@@ -27,21 +28,30 @@
 <link rel="stylesheet" href="/style/merged-themes.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&amp;family=Open+Sans:wght@400;600&amp;display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Open+Sans:wght@400;600&display=swap">
 
-<script>
-  if (localStorage.getItem("lightMode") == "true") {
-    document.documentElement.dataset.theme = "light";
-  }
+
+
+  <link rel="stylesheet" href="/assets/asset.5b049261.css"></link>
+<link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
+<link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a276.js" astro-script="/post/android-localhost/script-0"></script>
+<script type="module" data-astro-component-hydration astro-script="/post/android-localhost/script-1">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("kUrzW", {name:"Newsletter",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.9e2f0c78.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-35DIGKXB"}, children);
+
+});
 </script>
+<script type="module" data-astro-component-hydration astro-script="/post/android-localhost/script-2">import setup from '../../entry.8eab8588.js';
+import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
+setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-D64JDZG7"}, children);
 
-  <link rel="stylesheet" href="../../assets/does-python-need-types.858e353f.css">
-
-
-
-
-<script type="module" src="../../assets/android-localhost.3bb116b4.js"></script>
+});
+</script>
 </head>
   
 
@@ -57,7 +67,7 @@
 
   </a>
   <div class="right astro-D64JDZG7">
-    <astro-root uid="rve9A"></astro-root>
+    <astro-root uid="Z201JGg"></astro-root>
   </div>
 </header>
 
@@ -79,13 +89,13 @@
     <main class="astro-DFUN6QKL">
       <blockquote>
 <p>P.S. if you're in a hurry, find the correct solution <a href="#the-correct-easy-way">here</a></p>
-</blockquote><p>I was working on a full stack side project a few months ago, and I wanted to make API requests from my android app to my desktop, and for some reason <code data-astro-raw="">localhost:8000</code> wasn't simply accessible by my phone.</p><p>Well, understandable, I know that every device's localhost is independent and cannot be accessed by your home network (your Wi-Fi, for example). So the localhost on my laptop won't be able to access the localhost on my phone.</p><p>So, I asked Google for help. And I got a large number of solutions, the most sensible one being "use the internal IP address of your PC", et voilà.</p><h1 id="the-bad-way">The Bad way</h1><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tgakgpfuw4eyvjud9tin.png" alt="image"></p><figcaption>Use ipconfig if you're on windows</figcaption><p>Running <code data-astro-raw="">ip addr</code> on my machine tells me that the laptop's internal IP is <code data-astro-raw="">192.168.29.76</code>.</p><p>And sure enough, as long as both devices were using the same Wi-Fi network, accessing <code data-astro-raw="">http://192.168.29.76:8000</code> instead of <code data-astro-raw="">http://localhost:8000</code> did work. My Android app can now make web requests to my local backend server 🎉</p><p>But this solution is... a bit unstable.</p><p>The internal IP of your laptop can keep changing whenever it connects to Wi-Fi, depending on various factors. And everytime it changes, you have to change the URL in your app's code, which is not ideal.</p><p>There's other ways as well like using ngrok, but it faces similar issues.</p><h1 id="the-correct-easy-way">The Correct, easy way</h1><p>use <code data-astro-raw="">adb reverse</code>.</p><p>Yup, that's it.</p><p>Connect your android device to your pc via USB, ensure you have <a href="https://www.xda-developers.com/install-adb-windows-macos-linux/">adb setup</a>, and run this in your terminal:</p><pre class="language-bash"><code data-astro-raw="" class="language-bash">adb reverse tcp:8000 tcp:8000</code></pre><p>Now, your mobile can access <code data-astro-raw="">localhost:8000</code>, just like your PC. (you can replace <code data-astro-raw="">8000</code> with whichever port you want to forward)</p><h1 id="why-did-nobody-tell-me-this">Why did nobody tell me this?</h1><p>Yeah, I was also surprised when I was unable to find anyone on Google or StackOverflow mentioning the existence of <code data-astro-raw="">adb reverse</code> when I tried to look for it.</p><p>Which is why I wrote this blog. Now hopefully, <code data-astro-raw="">adb reverse</code> will become more popular.</p><p>If you know why <code data-astro-raw="">adb reverse</code> isn't as popular, let me know. Also, if you know another android developer that should know about this little productivity hack, why not share this blog with them? :P</p><hr>
+</blockquote><p>I was working on a full stack side project a few months ago, and I wanted to make API requests from my android app to my desktop, and for some reason <code>localhost:8000</code> wasn't simply accessible by my phone.</p><p>Well, understandable, I know that every device's localhost is independent and cannot be accessed by your home network (your Wi-Fi, for example). So the localhost on my laptop won't be able to access the localhost on my phone.</p><p>So, I asked Google for help. And I got a large number of solutions, the most sensible one being "use the internal IP address of your PC", et voilà.</p><h1 id="the-bad-way">The Bad way</h1><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tgakgpfuw4eyvjud9tin.png" alt="image"></p><figcaption>Use ipconfig if you're on windows</figcaption><p>Running <code>ip addr</code> on my machine tells me that the laptop's internal IP is <code>192.168.29.76</code>.</p><p>And sure enough, as long as both devices were using the same Wi-Fi network, accessing <code>http://192.168.29.76:8000</code> instead of <code>http://localhost:8000</code> did work. My Android app can now make web requests to my local backend server 🎉</p><p>But this solution is... a bit unstable.</p><p>The internal IP of your laptop can keep changing whenever it connects to Wi-Fi, depending on various factors. And everytime it changes, you have to change the URL in your app's code, which is not ideal.</p><p>There's other ways as well like using ngrok, but it faces similar issues.</p><h1 id="the-correct-easy-way">The Correct, easy way</h1><p>use <code>adb reverse</code>.</p><p>Yup, that's it.</p><p>Connect your android device to your pc via USB, ensure you have <a href="https://www.xda-developers.com/install-adb-windows-macos-linux/">adb setup</a>, and run this in your terminal:</p><pre class="language-bash"><code class="language-bash">adb reverse tcp:8000 tcp:8000</code></pre><p>Now, your mobile can access <code>localhost:8000</code>, just like your PC. (you can replace <code>8000</code> with whichever port you want to forward)</p><h1 id="why-did-nobody-tell-me-this">Why did nobody tell me this?</h1><p>Yeah, I was also surprised when I was unable to find anyone on Google or StackOverflow mentioning the existence of <code>adb reverse</code> when I tried to look for it.</p><p>Which is why I wrote this blog. Now hopefully, <code>adb reverse</code> will become more popular.</p><p>If you know why <code>adb reverse</code> isn't as popular, let me know. Also, if you know another android developer that should know about this little productivity hack, why not share this blog with them? :P</p><hr>
 Cover image courtesy of 
-<a href="https://unsplash.com/@ffstop?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">
+<a href="https://unsplash.com/@ffstop?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
 Fotis Fotopoulos
 </a>
  on 
-<a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">
+<a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">
 Unsplash
 </a>
     </main>
@@ -96,7 +106,7 @@ Unsplash
 
     <hr class="astro-35DIGKXB">
     <div class="centered astro-35DIGKXB">
-      <astro-root uid="ZwUM0Q"></astro-root>
+      <astro-root uid="kUrzW"></astro-root>
     </div>
     <div class="back-to-top-wrapper astro-35DIGKXB">
       <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
@@ -105,9 +115,9 @@ Unsplash
         </svg>
       </a>
     </div>
-    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async="">
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async>
     </script>
-  
+  </body>
   <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
@@ -130,8 +140,7 @@ Unsplash
 
 
   <noscript>
-    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif">
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-35DIGKXB">
   </noscript>
-  <script defer="" src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
-
-</body></html>
+  <script defer src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</html>
