@@ -6,24 +6,24 @@ import BlogPostPreview from '../../components/BlogPostPreview.astro';
 import Pagination from '../../components/Pagination.astro';
 import Newsletter from '../../components/Newsletter/Newsletter.jsx'
 
-let title = 'Tushar\'s Blog';
+let title = "Tushar's Blog";
 let description = 'My thoughts and learnings.';
 
 export async function getStaticPaths({paginate, rss}) {
-  const allPosts = Astro.fetchContent('../post/*.md');
+  const allPosts = await Astro.glob('../post/*.md');
   const sortedPosts = allPosts.sort(
-    (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
+    (a, b) => new Date(b.frontmatter.publishDate).getTime() - new Date(a.frontmatter.publishDate).getTime()
   );
 
   // Generate an RSS feed from this collection of posts.
   rss({
-    title: 'Tushar\'s blog',  // TODO: use variables
+    title: "Tushar's blog",  // TODO: use variables
     description: 'My thoughts and learnings.',
     items: sortedPosts.map(item => ({
-      title: item.title,
-      description: item.description,
+      title: item.frontmatter.title,
+      description: item.frontmatter.description,
       link: item.url,
-      pubDate: new Date(item.publishDate).toISOString(),
+      pubDate: new Date(item.frontmatter.publishDate).toISOString(),
     })),
   });
 

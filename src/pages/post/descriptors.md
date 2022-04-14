@@ -44,7 +44,7 @@ print(c.x)
 
 This is the output:
 
-```console
+```bash
 $ python property.py
 Running getter
 42
@@ -99,7 +99,7 @@ c = C()
 print(c.x)
 ```
 
-```console
+```bash
 $ python property.py
 <bound method some_function of <__main__.C object at 0x7f0713093b50>>
 ```
@@ -281,7 +281,7 @@ function to be called in `__set__`.
 
 There is one small issue, however, with this code:
 
-```console
+```bash
 $ python -i property.py
 42
 43
@@ -315,7 +315,7 @@ class C:
 
 We have this problem:
 
-```console
+```bash
 $ python -i property.py
 >>> c = C()
 >>> print(c.x)
@@ -400,7 +400,7 @@ c.foo()  # foo
 
 If we try to do that:
 
-```console
+```bash
 $ python -i staticmethod.py
 >>> C.foo()
 Traceback (most recent call last):
@@ -441,7 +441,7 @@ class C:
 
 See? Really simple.
 
-```console
+```bash
 >>> C.foo()
 "foo"
 >>> c = C()

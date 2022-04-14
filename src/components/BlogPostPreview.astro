@@ -7,12 +7,12 @@ const { post } = Astro.props;
 ---
 <article class="post-preview">
   <header>
-    <h3 class="publish-date">{post.publishDate}</h3>
-    <a href={post.url}><h1 class="title">{post.title}</h1></a>
+    <h3 class="publish-date">{post.frontmatter.publishDate}</h3>
+    <a href={post.url}><h1 class="title">{post.frontmatter.title}</h1></a>
   </header>
   <main>
-    <p>{post.description}</p>
-    <img src={post.heroImage}>
+    <p>{post.frontmatter.description}</p>
+    <img src={post.frontmatter.heroImage}>
   </main>
 </article>
 

@@ -5,11 +5,11 @@ import Footer from '../components/Footer.astro';
 import BlogPostPreview from '../components/BlogPostPreview.astro';
 import Newsletter from '../components/Newsletter/Newsletter.jsx'
 
-let title = 'Tushar&#39;s Blog';
+let title = "Tushar's Blog";
 let description = 'My thoughts and learnings.';
 
-const allPosts = Astro.fetchContent('./post/*.md');
-const latestPosts = allPosts.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate)).slice(0, 6);
+const allPosts = await Astro.glob('./post/*.md');
+const latestPosts = allPosts.sort((a, b) => new Date(b.frontmatter.publishDate) - new Date(a.frontmatter.publishDate)).slice(0, 6);
 ---
 <html lang="en">
   <head>
