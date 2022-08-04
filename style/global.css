@@ -136,7 +136,7 @@ pre[class*="language-"] {
 }
 
 @media screen and (min-width: 1601px) {
-  html {
+  body {
     font-size: 1vw;
   }
 }
