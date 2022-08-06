@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" class="astro-2NGAZBH5">
+<html lang="en" class="astro-35DIGKXB">
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
 <!-- Primary Meta Tags -->
-<title>Tushar&#39;s Blog</title>
-<meta name="title" content="Tushar's Blog">
-<meta name="description" content="My thoughts and learnings.">
+<title>How I added C-style for-loops to Python</title>
+<meta name="title" content="How I added C-style for-loops to Python">
+<meta name="description" content="Or alternatively: How I made the most cursed Python package of all time.">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sadh.life">
-<meta property="og:title" content="Tushar's Blog">
-<meta property="og:description" content="My thoughts and learnings.">
-<meta property="og:image" content="https://sadh.lifeundefined">
+<meta property="og:title" content="How I added C-style for-loops to Python">
+<meta property="og:description" content="Or alternatively: How I made the most cursed Python package of all time.">
+<meta property="og:image" content="https://sadh.life/images/cursed-for.jpg">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://sadh.life">
-<meta property="twitter:title" content="Tushar's Blog">
-<meta property="twitter:description" content="My thoughts and learnings.">
-<meta property="twitter:image" content="https://sadh.lifeundefined">
+<meta property="twitter:title" content="How I added C-style for-loops to Python">
+<meta property="twitter:description" content="Or alternatively: How I made the most cursed Python package of all time.">
+<meta property="twitter:image" content="https://sadh.life/images/cursed-for.jpg">
 
 <link rel="stylesheet" href="/style/global.css">
 <link rel="stylesheet" href="/style/merged-themes.css">
@@ -33,21 +33,18 @@
 
 
 
-    <link rel="stylesheet" href="/style/global.css">
-
-    
-  <link rel="stylesheet" href="/assets/asset.9e5c9655.css"></link>
+  <link rel="stylesheet" href="/assets/asset.5b049261.css"></link>
 <link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
-<link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a272.js" astro-script="/posts/3//script-0"></script>
-<script type="module" data-astro-component-hydration astro-script="/posts/3//script-1">import setup from '../../entry.8eab8588.js';
+<link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a2712.js" astro-script="/post/cursed-for/script-0"></script>
+<script type="module" data-astro-component-hydration astro-script="/post/cursed-for/script-1">import setup from '../../entry.8eab8588.js';
 import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
-setup("1qfmE6", {name:"Newsletter",value: "preact"}, async () => {
+setup("kUrzW", {name:"Newsletter",value: "preact"}, async () => {
   const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.9e2f0c78.js"), import("../../entry.a91cb9b9.js")]);
-  return (el, children) => hydrate(el)(Component, {"class":"astro-2NGAZBH5"}, children);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-35DIGKXB"}, children);
 
 });
 </script>
-<script type="module" data-astro-component-hydration astro-script="/posts/3//script-2">import setup from '../../entry.8eab8588.js';
+<script type="module" data-astro-component-hydration astro-script="/post/cursed-for/script-2">import setup from '../../entry.8eab8588.js';
 import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
 setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
   const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
@@ -56,8 +53,9 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
 });
 </script>
 </head>
+  
 
-  <body>
+  <body id="top">
     <header class="astro-D64JDZG7">
   <a href="/" class="astro-D64JDZG7">
     <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-D64JDZG7">
@@ -75,59 +73,44 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
 
 
 
-    <main class="content astro-2NGAZBH5">
-      <section class="astro-2NGAZBH5">
-        <small class="count astro-2NGAZBH5">13–15 of 15</small>
-        <article class="post-preview astro-YRGWMQIY">
-  <header class="astro-YRGWMQIY">
-    <h3 class="publish-date astro-YRGWMQIY">Saturday, 26 September 2020</h3>
-    <a href="/post/setup-postgres" class="astro-YRGWMQIY"><h1 class="title astro-YRGWMQIY">How to setup PostgreSQL on Manjaro linux / Arch</h1></a>
+    <div class="layout astro-DFUN6QKL">
+  <header class="astro-DFUN6QKL">
+    <p class="publish-date astro-DFUN6QKL">Sunday, 7 August 2022</p>
+    <h1 class="title astro-DFUN6QKL">How I added C-style for-loops to Python</h1>
+    <p class="description astro-DFUN6QKL">Or alternatively: How I made the most cursed Python package of all time.</p>
+    <img src="/images/cursed-for.jpg" title="How I added C-style for-loops to Python" alt="How I added C-style for-loops to Python" class="astro-DFUN6QKL">
+    
+<div class="author astro-BL6UQIAR">
+  <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
+</div>
+
   </header>
-  <main class="astro-YRGWMQIY">
-    <p class="astro-YRGWMQIY">This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.</p>
-    <img src="/images/postgres.jpg" class="astro-YRGWMQIY">
-  </main>
-</article>
-
-
-<article class="post-preview astro-YRGWMQIY">
-  <header class="astro-YRGWMQIY">
-    <h3 class="publish-date astro-YRGWMQIY">Tuesday, 1 September 2020</h3>
-    <a href="/post/url-shortener" class="astro-YRGWMQIY"><h1 class="title astro-YRGWMQIY">How I made my own URL shortener for free</h1></a>
-  </header>
-  <main class="astro-YRGWMQIY">
-    <p class="astro-YRGWMQIY">It&#39;s quick, it&#39;s easy, and it&#39;s free! Oh, and it&#39;s actually pretty useful and clever.</p>
-    <img src="/images/url-shortener.jpg" class="astro-YRGWMQIY">
-  </main>
-</article>
-
-
-<article class="post-preview astro-YRGWMQIY">
-  <header class="astro-YRGWMQIY">
-    <h3 class="publish-date astro-YRGWMQIY">Saturday, 27 October 2000</h3>
-    <a href="/post/dunders" class="astro-YRGWMQIY"><h1 class="title astro-YRGWMQIY">Explaining all Python dunders</h1></a>
-  </header>
-  <main class="astro-YRGWMQIY">
-    <p class="astro-YRGWMQIY">You might have heard, “In Python, everything is dunders underneath.” But, what does that really mean? Learn all about it in this one guide.</p>
-    <img src="/images/dunders.jpg" class="astro-YRGWMQIY">
-  </main>
-</article>
-
-
-
-      </section>
-      
-
-<nav class="nav astro-QUCKWLCZ">
-  <a class="prev astro-QUCKWLCZ" href="/posts/2/" aria-label="Previous Page">Prev</a>
-  <a class="next astro-QUCKWLCZ" href="#" aria-label="Next Page">Next</a>
-</nav>
-
-      <div class="centered astro-2NGAZBH5">
-        <astro-root uid="1qfmE6"></astro-root>
-      </div>
+  <article class="content astro-DFUN6QKL">
+    <main class="astro-DFUN6QKL">
+      <blockquote>
+<p>Currently WIP, check back in a few hours!</p>
+</blockquote>
     </main>
-    <hr class="astro-ZUKZCZIV">
+  </article>
+</div>
+
+
+
+    <hr class="astro-35DIGKXB">
+    <div class="centered astro-35DIGKXB">
+      <astro-root uid="kUrzW"></astro-root>
+    </div>
+    <div class="back-to-top-wrapper astro-35DIGKXB">
+      <a href="#top" class="back-to-top-link astro-35DIGKXB" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-35DIGKXB" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-35DIGKXB"></path>
+        </svg>
+      </a>
+    </div>
+    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async>
+    </script>
+  </body>
+  <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-ZUKZCZIV"></path></svg>
@@ -148,4 +131,8 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
 </footer>
 
 
-  </body></html>
+  <noscript>
+    <img src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-35DIGKXB">
+  </noscript>
+  <script defer src="https://analytics.sadh.life/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+</html>
