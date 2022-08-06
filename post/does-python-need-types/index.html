@@ -33,7 +33,7 @@
 
 
 
-  <link rel="stylesheet" href="/assets/asset.5b049261.css"></link>
+  <link rel="stylesheet" href="/assets/asset.f5278b5a.css"></link>
 <link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
 <link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a273.js" astro-script="/post/does-python-need-types/script-0"></script>
 <script type="module" data-astro-component-hydration astro-script="/post/does-python-need-types/script-1">import setup from '../../entry.8eab8588.js';
@@ -73,20 +73,20 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
 
 
 
-    <div class="layout astro-DFUN6QKL">
-  <header class="astro-DFUN6QKL">
-    <p class="publish-date astro-DFUN6QKL">Wednesday, 28 April 2021</p>
-    <h1 class="title astro-DFUN6QKL">Does Python need types?</h1>
-    <p class="description astro-DFUN6QKL">Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?</p>
-    <img src="/images/python-types.jpg" title="Does Python need types?" alt="Does Python need types?" class="astro-DFUN6QKL">
+    <div class="layout astro-44HSQUML">
+  <header class="astro-44HSQUML">
+    <p class="publish-date astro-44HSQUML">Wednesday, 28 April 2021</p>
+    <h1 class="title astro-44HSQUML">Does Python need types?</h1>
+    <p class="description astro-44HSQUML">Python is famously a dynamic language, and many attribute its success to its dynamically typed nature. But is that really all there is to it?</p>
+    <img src="/images/python-types.jpg" title="Does Python need types?" alt="Does Python need types?" class="astro-44HSQUML">
     
 <div class="author astro-BL6UQIAR">
-  <p class="astro-BL6UQIAR"><a href="https://tusharsadhwani.dev" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
+  <p class="astro-BL6UQIAR"><a href="https://twitter.com/sadhlife" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
 </div>
 
   </header>
-  <article class="content astro-DFUN6QKL">
-    <main class="astro-DFUN6QKL">
+  <article class="content astro-44HSQUML">
+    <main class="astro-44HSQUML">
       <p>I'm a huge fan of Python. It's by far the simplest general purpose language, that you can just pick up and start building amazing things with.</p><p>But for the past year or so, I've been working on frontend projects, and I've really enjoyed using <a href="https://www.typescriptlang.org">Typescript</a>. It's essentially JavaScript, but with fancy features built on top of it like <em>Static Type checking</em> and <em>Null safety</em>, and it was <em>awesome</em> how much it helped in writing robust, bug free code.</p><p>So I went out to find if Python has such an equivalent, and sure enough, there was.</p><p>It's called <a href="https://mypy-lang.org">mypy</a>, and it is amazing. It works so well in-fact, that I can never go back to writing plain Python now — and this article will be your introduction to it.</p><p><strong>But before all that</strong>, let's figure out what's the deal with <em>Types</em>.</p><h2 id="why-types">Why types?</h2><p>What it essentially means is if you have a type system, <strong>every variable has a pre-decided type associated with it</strong>.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fdmzm8gner72499j5i3h.png" alt="image"></p><figcaption>Untyped vs. typed Python code</figcaption><blockquote>
 <p>Note that, while this might not look like it, the typed version is perfectly valid Python code.</p>
 </blockquote><hr><p>What it also means, is you can't pass values of the wrong type anywhere. The type checker doesn't let you.</p><p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cgam11h9xoxqyhizstw2.png" alt="image"></p><p>Which is extremely valuable if you think about it - I've lost count how many <code>TypeError</code>'s I've seen in Python over the years!</p><p>Just having the confidence that there's no such place in your code where accidentally passed a <code>str</code> where an <code>int</code> was expected, eliminates an entire class of bugs from your codebase.</p><hr><p>Not only that - you get a bunch of other benefits, namely:</p><ul>
