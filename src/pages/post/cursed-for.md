@@ -351,6 +351,7 @@ a no-go.
 But hey, we can still access the stack frame...
 
 ```python
+>>> import inspect
 >>> frame = inspect.currentframe()
 ```
 
@@ -598,8 +599,9 @@ def foo():
 
 It works! We can finally use this to run our cursed for loops!
 
-If you wish to try this out yourself, you can check out [cursedfor.py][3] in the
-GitHub repository, download it and run the REPL.
+If you wish to try this out yourself, the complete code (with much better error
+handling) is present in [cursedfor.py][3] in the GitHub repository, and you can
+download it and run the REPL.
 
 <details>
 
@@ -864,6 +866,33 @@ Is this useful, at all? Probably not. Is it cursed? **YES.**
 Can this knowledge be useful in making actually good Python packages? You tell
 me!
 
+### Nested cursed loops
+
+The current method does work, but it breaks if you try to give it nested loops:
+
+```python
+for (i = 0; i < 10; i += 3):
+    for (j = i; j < 10; j += 3):
+        print(i, j)
+```
+
+This is because we don't transform the body of the for-loop, which we should.
+
+_Recursively._
+
+Simply call `_transform_cursed_for()` on the collected lines of the inner body,
+before appending it to the new body:
+
+```python
+[...]
+new_source.extend(_transform_cursed_for(for_body_lines))
+```
+
+And that's it!
+
+> The complete code for this approach, with much better error handling, etc. is
+> present in [this folder][cursed_folder] in the GitHub repository.
+
 ### The making of perhaps the most cursed Python package
 
 There's just one more thing left to do: Make this an installable package.
@@ -916,3 +945,4 @@ And that's it from me. I... hope you learned something useful? I sure did.
 [7]: https://www.youtube.com/watch?v=00h6aKnAdyY
 [8]: https://github.com/tusharsadhwani/cursed-for
 [zxpy]: https://github.com/tusharsadhwani/zxpy
+[cursed_folder]: https://github.com/tusharsadhwani/cursed-for/tree/master/approach/the_truly_cursed_way
