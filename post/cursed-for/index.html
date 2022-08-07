@@ -231,7 +231,7 @@ We'll increment the value by +2 each time, until it stays &lt; 10.</code></pre><
 <span class="token number">1</span>
 <span class="token number">4</span>
 <span class="token number">7</span>
-i <span class="token operator">=</span> <span class="token number">1</span></code></pre><p>Great! ... wait a second.</p><h3 id="generalising">Generalising</h3><p>We're not actually executing the body of the for loop as many times, we're
+i <span class="token operator">=</span> <span class="token number">1</span></code></pre><p>Great! ... wait a second.</p><h3 id="generalizing">Generalizing</h3><p>We're not actually executing the body of the for loop as many times, we're
 simply printing out <code>value</code>, which is hardcoded. The body is still only executed
 once. That's not what we wanted at all!</p><p>Let's try to hack around this.</p><h3 id="stack-manipulation">Stack manipulation</h3><p>What now? Does the <code>with</code> statement create its own stack, so we can, in theory,
 find the body of the <code>with</code> statement and execute that N times?</p><p>Let's check using the <code>dis</code> module:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> dis
@@ -432,6 +432,7 @@ way you would expect Python's interactive console to work:</p>
 
 CursedConsole<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>interact<span class="token punctuation">(</span>banner<span class="token operator">=</span><span class="token string-interpolation"><span class="token string">f"Cursed Python REPL"</span></span><span class="token punctuation">,</span> exitmsg<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span></code></pre>
 <pre class="language-text"><code class="language-text">$ python cursedfor.py
+Cursed Python REPL
 >>> x = 5
 >>> x
 5
