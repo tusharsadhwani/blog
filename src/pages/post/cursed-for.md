@@ -749,7 +749,7 @@ Let's try it out then.
 ### Time for regex hacks
 
 To create the encoding, we first need to implement a transformation function. I
-chose to implement one that works ona list of Python source lines. Here's the
+chose to implement one that works on a list of Python source lines. Here's the
 boilerplate:
 
 ```python
@@ -776,7 +776,7 @@ codecs.register(
   {'cursed_for': codecs.CodecInfo(
     name='cursed_for',
     encode=utf_8.encode,
-    decode=cursed_for_decode,
+    decode=transform_cursed_for,
   )}.get
 )
 ```
