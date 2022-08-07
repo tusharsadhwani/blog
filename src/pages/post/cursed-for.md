@@ -11,7 +11,7 @@ layout: "../../layouts/BlogPost.astro"
 It's true. It turns out, you can, in fact, add C-style for loops into Python.
 The way to get there however, was long, and painful all the way to the end.
 
-Regardless, I've learned manycursed REPL things (some of which I hope nobody _ever_ uses in
+Regardless, I've learned many things (some of which I hope nobody _ever_ uses in
 production), and I'm here to share with you, all the gruesome details. I hope
 you find it helpful (or at the very least, entertaining).
 
