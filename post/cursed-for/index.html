@@ -88,7 +88,7 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
   <article class="content astro-44HSQUML">
     <main class="astro-44HSQUML">
       <p>It's true. It turns out, you can, in fact, add C-style for loops into Python.
-The way to get there however, was long, and painful all the way to the end.</p><p>Regardless, I've learned many things (some of which I hope nobody <em>ever</em> uses in
+The way to get there however, was long, and painful all the way to the end.</p><p>Regardless, I've learned manycursed REPL things (some of which I hope nobody <em>ever</em> uses in
 production), and I'm here to share with you, all the gruesome details. I hope
 you find it helpful (or at the very least, entertaining).</p><h2 id="the-path-to-get-there">The Path to get there</h2><p>I had to try 3 different approaches in order to finally get to the image that
 you see at the top. And hence, I've sectioned the blog into 3 parts:</p><ul>
@@ -97,7 +97,7 @@ you see at the top. And hence, I've sectioned the blog into 3 parts:</p><ul>
 <li>Part 3: The "Truly Cursed" way</li>
 </ul><p>But before all of that, let's answer the big question: "why?".</p><h2 id="part-0-the-beginning">Part 0: The beginning</h2><p>In the beginning, I had a dumb idea:</p><blockquote>
 <p><em>"Can I possibly put the 3-statement for-loop from C into Python?"</em></p>
-</blockquote><p>I mocked up an idea that I though I could make, and posted it on
+</blockquote><p>I mocked up an idea that I thought I could make, and posted it on
 <a href="https://twitter.com/sadhlife/status/1497501076589019139">twitter</a>:</p><p><img src="https://user-images.githubusercontent.com/43412083/173145281-1a63ad93-56c0-4fd0-b8f1-78e7bf7005d6.png" alt="The mockup snippet"></p><p>... and immediately, I got some intriguing reactions:</p><p><img src="https://user-images.githubusercontent.com/43412083/183288619-4d5531fa-b7bc-46a1-9168-1464dc94a7d6.png" alt="Twitter response 1"></p><p><img src="https://user-images.githubusercontent.com/43412083/183288864-1cae2530-3fa2-478d-8a1e-d70eda401019.png" alt="Twitter response 2"></p><p><img src="https://user-images.githubusercontent.com/43412083/183288703-b4360ea9-7c69-4109-b63b-0e18bfa5dcc6.png" alt="Twitter response 3"></p><p>So I decided it'd be worthwhile to try and make this a reality. Simple as that.</p><h2 id="part-1-the-simple-implementation">Part 1: The "simple" implementation</h2><p>I wanted it to look like a regular for-loop from C as much as possible:</p><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre><p>But there's a couple big problems:</p><ul>
