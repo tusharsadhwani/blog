@@ -8,12 +8,12 @@ alt: "How I added C-style for-loops to Python"
 layout: "../../layouts/BlogPost.astro"
 ---
 
-It's true. It turns out, you can, in fact, add C-style for loops into Python.
-The way to get there however, was long, and painful all the way to the end.
+It's true. It turns out you can, in fact, add C-style for loops into Python. The
+way to get there however, was long and painful all the way to the end.
 
 Regardless, I've learned many things (some of which I hope nobody _ever_ uses in
-production), and I'm here to share with you, all the gruesome details. I hope
-you find it helpful (or at the very least, entertaining).
+production), and I'm here to share with you all the gruesome details. I hope you
+find it helpful (or at the very least, entertaining).
 
 ## The Path to get there
 
@@ -174,7 +174,7 @@ Comparing var(i) < 10
 This `_Comparison` objects stores all information about the comparison, and this
 gets passed down to the `_for()` function.
 
-We do the same for increment:
+We'll do the same for the increment part:
 
 ```python
 class _Increment:
@@ -385,9 +385,7 @@ fact that you can add _arbitrary semantics_ into Python -- essentially, if
 something is valid Python code, you could _transform_ it to suit your needs. All
 you need is this one simple trick: **AST manipulation**.
 
-Here's what I mean:
-
-We can take any piece of code:
+Here's what I mean. You can take any piece of code:
 
 ```python
 >>> code = '2 + 3'
@@ -486,8 +484,8 @@ class CursedForTransformer(ast.NodeTransformer):
           return node
 ```
 
-> If you want to deep dive into what's going on here with `generic_visit` etc.,
-> check out [this post][2].
+> If you want to deep dive into what's going on here with `NodeTransformer`,
+> `generic_visit` etc., check out [this post][2].
 
 Essentially:
 
