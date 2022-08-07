@@ -505,7 +505,7 @@ stop me, so you might as well see what I have to say.</p><p>The approach in my m
 <li>Substitute that text with two lines: <code>init</code> and <code>while condition:</code></li>
 <li>Append the <code>increment</code> statement at the end of the <code>for</code> body.</li>
 </ul><p>Let's try it out then.</p><h3 id="time-for-regex-hacks">Time for regex hacks</h3><p>To create the encoding, we first need to implement a transformation function. I
-chose to implement one that works ona list of Python source lines. Here's the
+chose to implement one that works on a list of Python source lines. Here's the
 boilerplate:</p><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> codecs
 
 <span class="token keyword">def</span> <span class="token function">_transform_cursed_for</span><span class="token punctuation">(</span>lines<span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
@@ -529,7 +529,7 @@ codecs<span class="token punctuation">.</span>register<span class="token punctua
   <span class="token punctuation">{</span><span class="token string">'cursed_for'</span><span class="token punctuation">:</span> codecs<span class="token punctuation">.</span>CodecInfo<span class="token punctuation">(</span>
     name<span class="token operator">=</span><span class="token string">'cursed_for'</span><span class="token punctuation">,</span>
     encode<span class="token operator">=</span>utf_8<span class="token punctuation">.</span>encode<span class="token punctuation">,</span>
-    decode<span class="token operator">=</span>cursed_for_decode<span class="token punctuation">,</span>
+    decode<span class="token operator">=</span>transform_cursed_for<span class="token punctuation">,</span>
   <span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span>get
 <span class="token punctuation">)</span></code></pre><p>Now for the details on how we match and replace <code>for (x; y; z):</code> lines:</p><ul>
 <li>
