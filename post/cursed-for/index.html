@@ -87,10 +87,10 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
   </header>
   <article class="content astro-44HSQUML">
     <main class="astro-44HSQUML">
-      <p>It's true. It turns out, you can, in fact, add C-style for loops into Python.
-The way to get there however, was long, and painful all the way to the end.</p><p>Regardless, I've learned many things (some of which I hope nobody <em>ever</em> uses in
-production), and I'm here to share with you, all the gruesome details. I hope
-you find it helpful (or at the very least, entertaining).</p><h2 id="the-path-to-get-there">The Path to get there</h2><p>I had to try 3 different approaches in order to finally get to the image that
+      <p>It's true. It turns out you can, in fact, add C-style for loops into Python. The
+way to get there however, was long and painful all the way to the end.</p><p>Regardless, I've learned many things (some of which I hope nobody <em>ever</em> uses in
+production), and I'm here to share with you all the gruesome details. I hope you
+find it helpful (or at the very least, entertaining).</p><h2 id="the-path-to-get-there">The Path to get there</h2><p>I had to try 3 different approaches in order to finally get to the image that
 you see at the top. And hence, I've sectioned the blog into 3 parts:</p><ul>
 <li>Part 1: The "simple" implementation</li>
 <li>Part 2: Making our own language inside Python</li>
@@ -176,7 +176,7 @@ Comparing var<span class="token punctuation">(</span>i<span class="token punctua
 <span class="token string">'&lt;'</span>
 <span class="token operator">>></span><span class="token operator">></span> comp<span class="token punctuation">.</span>value
 <span class="token number">10</span></code></pre><p>This <code>_Comparison</code> objects stores all information about the comparison, and this
-gets passed down to the <code>_for()</code> function.</p><p>We do the same for increment:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">_Increment</span><span class="token punctuation">:</span>
+gets passed down to the <code>_for()</code> function.</p><p>We'll do the same for the increment part:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">_Increment</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> var<span class="token punctuation">,</span> op<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>var <span class="token operator">=</span> var
         self<span class="token punctuation">.</span>op <span class="token operator">=</span> op
@@ -291,7 +291,7 @@ we could...</p><h3 id="giving-up">Giving up</h3><p>Here's one (obvious) piece of
 you trying to rewrite the Python interpreter, you have messed up.</p><p>Let's backtrack, and try to think of some other possibility.</p><h3 id="part-2-making-our-own-language-inside-python">Part 2: Making our own language inside Python</h3><p>Thanks to <a href="https://github.com/tusharsadhwani/zxpy">another such project</a> that I made in the past, I learned the
 fact that you can add <em>arbitrary semantics</em> into Python -- essentially, if
 something is valid Python code, you could <em>transform</em> it to suit your needs. All
-you need is this one simple trick: <strong>AST manipulation</strong>.</p><p>Here's what I mean:</p><p>We can take any piece of code:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> code <span class="token operator">=</span> <span class="token string">'2 + 3'</span></code></pre><p>You can parse it (as long as it's valid "Syntax")</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> ast
+you need is this one simple trick: <strong>AST manipulation</strong>.</p><p>Here's what I mean. You can take any piece of code:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> code <span class="token operator">=</span> <span class="token string">'2 + 3'</span></code></pre><p>You can parse it (as long as it's valid "Syntax")</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> ast
 <span class="token operator">>></span><span class="token operator">></span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
 <span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>tree<span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 Module<span class="token punctuation">(</span>
@@ -337,8 +337,8 @@ inside them.</p><pre class="language-python"><code class="language-python"><span
               node<span class="token punctuation">.</span>body <span class="token operator">=</span> new_body
 
           <span class="token keyword">return</span> node</code></pre><blockquote>
-<p>If you want to deep dive into what's going on here with <code>generic_visit</code> etc.,
-check out <a href="https://sadh.life/post/ast">this post</a>.</p>
+<p>If you want to deep dive into what's going on here with <code>NodeTransformer</code>,
+<code>generic_visit</code> etc., check out <a href="https://sadh.life/post/ast">this post</a>.</p>
 </blockquote><p>Essentially:</p><ul>
 <li>
 <p>We're finding all blocks in our code, by finding <code>body</code> attributes:</p>
