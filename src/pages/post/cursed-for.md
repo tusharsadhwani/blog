@@ -11,7 +11,7 @@ layout: "../../layouts/BlogPost.astro"
 It's true. It turns out, you can, in fact, add C-style for loops into Python.
 The way to get there however, was long, and painful all the way to the end.
 
-Regardless, I've learned many things (some of which I hope nobody _ever_ uses in
+Regardless, I've learned manycursed REPL things (some of which I hope nobody _ever_ uses in
 production), and I'm here to share with you, all the gruesome details. I hope
 you find it helpful (or at the very least, entertaining).
 
@@ -32,7 +32,7 @@ In the beginning, I had a dumb idea:
 
 > _"Can I possibly put the 3-statement for-loop from C into Python?"_
 
-I mocked up an idea that I though I could make, and posted it on
+I mocked up an idea that I thought I could make, and posted it on
 [twitter](https://twitter.com/sadhlife/status/1497501076589019139):
 
 ![The mockup snippet](https://user-images.githubusercontent.com/43412083/173145281-1a63ad93-56c0-4fd0-b8f1-78e7bf7005d6.png)
