@@ -844,7 +844,7 @@ Now for the details on how we match and replace `for (x; y; z):` lines:
 So that's how I did it. And to my own surprise, it works!
 
 ```python
-code = '''
+code = b'''
 for (i = 0; i < 10; i += 2):
     print(i)
 print("done")
