@@ -87,9 +87,521 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
   </header>
   <article class="content astro-44HSQUML">
     <main class="astro-44HSQUML">
-      <blockquote>
-<p>Currently WIP, check back in a few hours!</p>
-</blockquote>
+      <p>It's true. It turns out, you can, in fact, add C-style for loops into Python.
+The way to get there however, was long, and painful all the way to the end.</p><p>Regardless, I've learned many things (some of which I hope nobody <em>ever</em> uses in
+production), and I'm here to share with you, all the gruesome details. I hope
+you find it helpful (or at the very least, entertaining).</p><h2 id="the-path-to-get-there">The Path to get there</h2><p>I had to try 3 different approaches in order to finally get to the image that
+you see at the top. And hence, I've sectioned the blog into 3 parts:</p><ul>
+<li>Part 1: The "simple" implementation</li>
+<li>Part 2: Making our own language inside Python</li>
+<li>Part 3: The "Truly Cursed" way</li>
+</ul><p>But before all of that, let's answer the big question: "why?".</p><h2 id="part-0-the-beginning">Part 0: The beginning</h2><p>In the beginning, I had a dumb idea:</p><blockquote>
+<p><em>"Can I possibly put the 3-statement for-loop from C into Python?"</em></p>
+</blockquote><p>I mocked up an idea that I though I could make, and posted it on
+<a href="https://twitter.com/sadhlife/status/1497501076589019139">twitter</a>:</p><p><img src="https://user-images.githubusercontent.com/43412083/173145281-1a63ad93-56c0-4fd0-b8f1-78e7bf7005d6.png" alt="The mockup snippet"></p><p>... and immediately, I got some intriguing reactions:</p><p><img src="https://user-images.githubusercontent.com/43412083/183288619-4d5531fa-b7bc-46a1-9168-1464dc94a7d6.png" alt="Twitter response 1"></p><p><img src="https://user-images.githubusercontent.com/43412083/183288864-1cae2530-3fa2-478d-8a1e-d70eda401019.png" alt="Twitter response 2"></p><p><img src="https://user-images.githubusercontent.com/43412083/183288703-b4360ea9-7c69-4109-b63b-0e18bfa5dcc6.png" alt="Twitter response 3"></p><p>So I decided it'd be worthwhile to try and make this a reality. Simple as that.</p><h2 id="part-1-the-simple-implementation">Part 1: The "simple" implementation</h2><p>I wanted it to look like a regular for-loop from C as much as possible:</p><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre><p>But there's a couple big problems:</p><ul>
+<li>
+<p>The builtin <code>for</code> syntax requires you to have an <code>in</code> clause:</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">for</span> <span class="token operator">&lt;</span>variable<span class="token operator">></span> <span class="token keyword">in</span> <span class="token operator">&lt;</span>some expression that gives an iterable<span class="token operator">></span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre>
+<p>Which is pretty restrictive. So our second best bet is to implement a function
+instead -- one that takes in three arguments. I went with <code>_for(x, y, z)</code>.</p>
+<p>For the <code>for</code> to be a block, I needed a generic block kind of statement, one
+that allows us to put arbitrary code inside it: so I close a <code>with</code> block:
+<code>with</code> blocks can be customized with <code>__enter__</code> and <code>__exit__</code>.</p>
+</li>
+<li>
+<p>The second problem is much bigger: The original <code>for</code> loop syntax takes in
+<strong>statements</strong>. Notice that <code>int i = 0</code> and <code>i++</code> are statements, ones which
+declare and assign a variable respectively.</p>
+<p>Whereas, Python functions take in "expressions", things that return a value.
+This one is much harder to hack in, but I have one idea to save the day:</p>
+<p>We need to do assignment, but we are limited to expressions. Hmmm... where
+have I heard of this before... oh right. <strong>Assignment expressions.</strong></p>
+<p>Python 3.8 has come to save the day. Let's try it out.</p>
+</li>
+</ul><p>Hence, I started with this rough idea:</p><pre class="language-python"><code class="language-python"><span class="token keyword">with</span> _for<span class="token punctuation">(</span>i <span class="token operator">:=</span> var<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span></code></pre><blockquote>
+<p>Yeah, it's not the greatest syntax of all time, but you have to be confined to
+Python syntax when writing Python (... or so I thought, more on that later).</p>
+</blockquote><p>The first argument <code>i := var(0)</code> is what will initialise our <code>i</code> variable. But,
+it is no ordinary variable, mind you. For the second and third argument to work,
+<code>i &#x3C; 10</code> and <code>i + 2</code> should <em>behave</em> as the condition and increment part of the
+for loop. Thankfully, By overriding functions like <code>__lt__</code> and <code>__add__</code>, we
+can customize how this <code>i</code> variable behaves when we do these comparisons and
+additions.</p><p>Now, all that's left is to implement this <code>_for</code> and <code>var</code> thing.</p><h3 id="implementing-var">Implementing <code>var</code></h3><p>We want <code>var</code> to be able to do these 3 things at least:</p><ul>
+<li>Support storing a value inside it when initializing, i.e. <code>var(0)</code>.</li>
+<li>Support creating conditions with comparisons: <code>i &#x3C; 10</code> should return a
+"conditional" type, which we will use later.</li>
+<li>Support creating the "increment", i.e. <code>i + 2</code> should return an "increment"
+type, which we will also use later.</li>
+</ul><p>So I started with a simple <code>var</code> class:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">var</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>value <span class="token operator">=</span> value
+
+    <span class="token keyword">def</span> <span class="token function">__repr__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token builtin">repr</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>value<span class="token punctuation">)</span>
+
+
+i <span class="token operator">=</span> var<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>  <span class="token comment"># prints 0</span></code></pre><p>I then added comparison support, by making a <code>_Comparison</code> type, and
+implementing <code>__lt__</code>, such that doing <code>i &#x3C; something</code> stores that information:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">_Comparison</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> var<span class="token punctuation">,</span> op<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>var <span class="token operator">=</span> var
+        self<span class="token punctuation">.</span>op <span class="token operator">=</span> op
+        self<span class="token punctuation">.</span>value <span class="token operator">=</span> value
+
+    <span class="token keyword">def</span> <span class="token function">__repr__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string-interpolation"><span class="token string">f"Comparing var(</span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>var<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">) </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>op<span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>value<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">"</span></span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">var</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>value <span class="token operator">=</span> value
+
+    <span class="token keyword">def</span> <span class="token function">__repr__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token builtin">repr</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>value<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">__lt__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> _Comparison<span class="token punctuation">(</span>var<span class="token operator">=</span>self<span class="token punctuation">,</span> op<span class="token operator">=</span><span class="token string">"&lt;"</span><span class="token punctuation">,</span> value<span class="token operator">=</span>value<span class="token punctuation">)</span></code></pre><p>Pretty simple so far:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> i <span class="token operator">=</span> var<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token number">0</span>
+<span class="token operator">>></span><span class="token operator">></span> comp <span class="token operator">=</span> i <span class="token operator">&lt;</span> <span class="token number">10</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>comp<span class="token punctuation">)</span>
+Comparing var<span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">10</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token builtin">type</span><span class="token punctuation">(</span>comp<span class="token punctuation">)</span>
+<span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'__main__._Comparison'</span><span class="token operator">></span>
+<span class="token operator">>></span><span class="token operator">></span> comp<span class="token punctuation">.</span>op
+<span class="token string">'&lt;'</span>
+<span class="token operator">>></span><span class="token operator">></span> comp<span class="token punctuation">.</span>value
+<span class="token number">10</span></code></pre><p>This <code>_Comparison</code> objects stores all information about the comparison, and this
+gets passed down to the <code>_for()</code> function.</p><p>We do the same for increment:</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">_Increment</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> var<span class="token punctuation">,</span> op<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>var <span class="token operator">=</span> var
+        self<span class="token punctuation">.</span>op <span class="token operator">=</span> op
+        self<span class="token punctuation">.</span>value <span class="token operator">=</span> value
+
+    <span class="token keyword">def</span> <span class="token function">__repr__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string-interpolation"><span class="token string">f"Incrementing var(</span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>var<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">) with </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>op<span class="token punctuation">}</span></span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>value<span class="token conversion-option punctuation">!r</span><span class="token punctuation">}</span></span><span class="token string">"</span></span>
+
+<span class="token keyword">class</span> <span class="token class-name">var</span><span class="token punctuation">:</span>
+    <span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>
+
+    <span class="token keyword">def</span> <span class="token function">__add__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> _Increment<span class="token punctuation">(</span>var<span class="token operator">=</span>self<span class="token punctuation">,</span> op<span class="token operator">=</span><span class="token string">"+"</span><span class="token punctuation">,</span> value<span class="token operator">=</span>value<span class="token punctuation">)</span></code></pre><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> x <span class="token operator">=</span> var<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> x <span class="token operator">+</span> <span class="token number">2</span>
+Incrementing var<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token keyword">with</span> <span class="token operator">+</span><span class="token number">2</span></code></pre><p>Alright! Now to the next part.</p><h3 id="implementing-_for">Implementing <code>_for</code></h3><p><code>_for()</code> must return a context manager, because we're using it with a <code>with</code>
+statement, so we'll use the <a href="https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager"><code>contextlib.contextmanager</code></a> decorator to
+quickly make one:</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> contextlib <span class="token keyword">import</span> contextmanager
+
+<span class="token decorator annotation punctuation">@contextmanager</span>
+<span class="token keyword">def</span> <span class="token function">_for</span><span class="token punctuation">(</span>variable<span class="token punctuation">,</span> comparison<span class="token punctuation">,</span> increment<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"We initialized the variable as </span><span class="token interpolation"><span class="token punctuation">{</span>variable<span class="token punctuation">}</span></span><span class="token string">."</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>
+      <span class="token string-interpolation"><span class="token string">f"We'll increment the value by </span><span class="token interpolation"><span class="token punctuation">{</span>increment<span class="token punctuation">.</span>op<span class="token punctuation">}</span></span><span class="token interpolation"><span class="token punctuation">{</span>increment<span class="token punctuation">.</span>value<span class="token punctuation">}</span></span><span class="token string"> "</span></span>
+      <span class="token string-interpolation"><span class="token string">f"each time, until it ~~stays~~ </span><span class="token interpolation"><span class="token punctuation">{</span>comparison<span class="token punctuation">.</span>op<span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span>comparison<span class="token punctuation">.</span>value<span class="token punctuation">}</span></span><span class="token string">."</span></span>
+      <span class="token punctuation">)</span>
+    <span class="token keyword">yield</span>
+
+<span class="token keyword">with</span> _for<span class="token punctuation">(</span>i <span class="token operator">:=</span> var<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>And this way, we should have all the information needed:</p><pre class="language-text"><code class="language-text">$ python cursedfor.py
+We initialized the variable as 0.
+We'll increment the value by +2 each time, until it stays &lt; 10.</code></pre><p>Let's do the looping now, shall we?</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> contextlib <span class="token keyword">import</span> contextmanager
+
+<span class="token decorator annotation punctuation">@contextmanager</span>
+<span class="token keyword">def</span> <span class="token function">_for</span><span class="token punctuation">(</span>variable<span class="token punctuation">,</span> comparison<span class="token punctuation">,</span> increment<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    value <span class="token operator">=</span> variable<span class="token punctuation">.</span>value
+    <span class="token keyword">while</span> value <span class="token operator">&lt;</span> comparison<span class="token punctuation">.</span>value<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+        value <span class="token operator">+=</span> increment<span class="token punctuation">.</span>value
+
+    <span class="token keyword">yield</span>
+
+
+<span class="token keyword">with</span> _for<span class="token punctuation">(</span>i <span class="token operator">:=</span> var<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre><p>And the output:</p><pre class="language-text"><code class="language-text">$ python cursedfor.py
+0
+2
+4
+6
+8</code></pre><p>It works! Let's try a couple other cases:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">with</span> _for<span class="token punctuation">(</span>i <span class="token operator">:=</span> var<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>   <span class="token keyword">print</span><span class="token punctuation">(</span>f"<span class="token punctuation">{</span>i <span class="token operator">=</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token number">1</span>
+<span class="token number">4</span>
+<span class="token number">7</span>
+i <span class="token operator">=</span> <span class="token number">1</span></code></pre><p>Great! ... wait a second.</p><h3 id="generalising">Generalising</h3><p>We're not actually executing the body of the for loop as many times, we're
+simply printing out <code>value</code>, which is hardcoded. The body is still only executed
+once. That's not what we wanted at all!</p><p>Let's try to hack around this.</p><h3 id="stack-manipulation">Stack manipulation</h3><p>What now? Does the <code>with</code> statement create its own stack, so we can, in theory,
+find the body of the <code>with</code> statement and execute that N times?</p><p>Let's check using the <code>dis</code> module:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> dis
+<span class="token operator">>></span><span class="token operator">></span> dis<span class="token punctuation">.</span>dis<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+... with x:
+...   pass
+... '''</span><span class="token punctuation">)</span>
+  <span class="token number">2</span>           <span class="token number">0</span> LOAD_NAME                <span class="token number">0</span> <span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+              <span class="token number">2</span> SETUP_WITH              <span class="token number">16</span> <span class="token punctuation">(</span>to <span class="token number">20</span><span class="token punctuation">)</span>
+              <span class="token number">4</span> POP_TOP
+
+  <span class="token number">3</span>           <span class="token number">6</span> POP_BLOCK
+              <span class="token number">8</span> LOAD_CONST               <span class="token number">0</span> <span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">)</span>
+             <span class="token number">10</span> DUP_TOP
+             <span class="token number">12</span> DUP_TOP
+             <span class="token number">14</span> CALL_FUNCTION            <span class="token number">3</span>
+             <span class="token number">16</span> POP_TOP
+             <span class="token number">18</span> JUMP_FORWARD            <span class="token number">16</span> <span class="token punctuation">(</span>to <span class="token number">36</span><span class="token punctuation">)</span>
+        <span class="token operator">>></span>   <span class="token number">20</span> WITH_EXCEPT_START
+             <span class="token number">22</span> POP_JUMP_IF_TRUE        <span class="token number">26</span>
+             <span class="token number">24</span> RERAISE
+        <span class="token operator">>></span>   <span class="token number">26</span> POP_TOP
+             <span class="token number">28</span> POP_TOP
+             <span class="token number">30</span> POP_TOP
+             <span class="token number">32</span> POP_EXCEPT
+             <span class="token number">34</span> POP_TOP
+        <span class="token operator">>></span>   <span class="token number">36</span> LOAD_CONST               <span class="token number">0</span> <span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">)</span>
+             <span class="token number">38</span> RETURN_VALUE</code></pre><p>Nope. Since there's only one block of output, that shows there's no separate
+code object for a <code>with</code> statement's body. Compare this to a function:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> dis<span class="token punctuation">.</span>dis<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+... def foo():
+...   pass
+...
+... foo()
+... '''</span><span class="token punctuation">)</span>
+  <span class="token number">2</span>           <span class="token number">0</span> LOAD_CONST               <span class="token number">0</span> <span class="token punctuation">(</span><span class="token operator">&lt;</span>code <span class="token builtin">object</span> foo at <span class="token number">0x7f318f54bf50</span><span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token string">"&lt;dis>"</span><span class="token punctuation">,</span> line <span class="token number">2</span><span class="token operator">></span><span class="token punctuation">)</span>
+              <span class="token number">2</span> LOAD_CONST               <span class="token number">1</span> <span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">)</span>
+              <span class="token number">4</span> MAKE_FUNCTION            <span class="token number">0</span>
+              <span class="token number">6</span> STORE_NAME               <span class="token number">0</span> <span class="token punctuation">(</span>foo<span class="token punctuation">)</span>
+
+  <span class="token number">5</span>           <span class="token number">8</span> LOAD_NAME                <span class="token number">0</span> <span class="token punctuation">(</span>foo<span class="token punctuation">)</span>
+             <span class="token number">10</span> CALL_FUNCTION            <span class="token number">0</span>
+             <span class="token number">12</span> POP_TOP
+             <span class="token number">14</span> LOAD_CONST               <span class="token number">2</span> <span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">)</span>
+             <span class="token number">16</span> RETURN_VALUE
+
+Disassembly of <span class="token operator">&lt;</span>code <span class="token builtin">object</span> foo at <span class="token number">0x7f318f54bf50</span><span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token string">"&lt;dis>"</span><span class="token punctuation">,</span> line <span class="token number">2</span><span class="token operator">></span><span class="token punctuation">:</span>
+  <span class="token number">3</span>           <span class="token number">0</span> LOAD_CONST               <span class="token number">0</span> <span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">)</span>
+              <span class="token number">2</span> RETURN_VALUE</code></pre><p>You can see there's two disassemblies, of two separate code objects. So that's
+a no-go.</p><p>But hey, we can still access the stack frame...</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> frame <span class="token operator">=</span> inspect<span class="token punctuation">.</span>currentframe<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><p>And I could read the code object inside it...</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> frame<span class="token punctuation">.</span>f_code
+<span class="token operator">&lt;</span>code <span class="token builtin">object</span> <span class="token operator">&lt;</span>module<span class="token operator">></span> at <span class="token number">0x7f03e9d90f50</span><span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token string">"&lt;stdin>"</span><span class="token punctuation">,</span> line <span class="token number">1</span><span class="token operator">></span>
+<span class="token operator">>></span><span class="token operator">></span> frame<span class="token punctuation">.</span>f_code<span class="token punctuation">.</span>co_code
+<span class="token string">b'e\x00\xa0\x01\xa1\x00Z\x02d\x00S\x00'</span>
+<span class="token operator">>></span><span class="token operator">></span> frame<span class="token punctuation">.</span>f_lasti
+<span class="token number">10</span></code></pre><p><code>f_lasti</code> also tells us which of those bytes (instructions) was last executed,
+which means the code after it must contain the body of the <code>with</code> statement!</p><p>So if we could just extract the bytecode and then run the body manually N times,
+we could...</p><h3 id="giving-up">Giving up</h3><p>Here's one (obvious) piece of advice -- if your current approach devolves into
+you trying to rewrite the Python interpreter, you have messed up.</p><p>Let's backtrack, and try to think of some other possibility.</p><h3 id="part-2-making-our-own-language-inside-python">Part 2: Making our own language inside Python</h3><p>Thanks to <a href="https://github.com/tusharsadhwani/zxpy">another such project</a> that I made in the past, I learned the
+fact that you can add <em>arbitrary semantics</em> into Python -- essentially, if
+something is valid Python code, you could <em>transform</em> it to suit your needs. All
+you need is this one simple trick: <strong>AST manipulation</strong>.</p><p>Here's what I mean:</p><p>We can take any piece of code:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> code <span class="token operator">=</span> <span class="token string">'2 + 3'</span></code></pre><p>You can parse it (as long as it's valid "Syntax")</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> ast
+<span class="token operator">>></span><span class="token operator">></span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>code<span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>tree<span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+Module<span class="token punctuation">(</span>
+  body<span class="token operator">=</span><span class="token punctuation">[</span>
+    Expr<span class="token punctuation">(</span>
+      value<span class="token operator">=</span>BinOp<span class="token punctuation">(</span>
+        left<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        op<span class="token operator">=</span>Add<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        right<span class="token operator">=</span>Constant<span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  type_ignores<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span></code></pre><p>You can change what the code actually means:</p><pre class="language-python"><code class="language-python"><span class="token comment"># Substituting addition with subtraction</span>
+<span class="token operator">>></span><span class="token operator">></span> tree<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>value<span class="token punctuation">.</span>op <span class="token operator">=</span> ast<span class="token punctuation">.</span>Sub<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><p>And you can generate code back out of it:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> ast<span class="token punctuation">.</span>unparse<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+<span class="token string">'2 - 3'</span></code></pre><p>Which you're free to execute as you please. This example is really simplified,
+but with enough transformation, you can turn any Python code into anything else.</p><p>So let's do exactly that.</p><h3 id="building-a-for-loop-transformer">Building a for-loop transformer</h3><p>What we want the following code:</p><pre class="language-python"><code class="language-python"><span class="token keyword">with</span> _for<span class="token punctuation">(</span>i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">,</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token operator">&lt;</span>the body<span class="token operator">></span></code></pre><p>into the following:</p><pre class="language-python"><code class="language-python">i <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">while</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">:</span>
+    <span class="token operator">&lt;</span>the body<span class="token operator">></span>
+    i <span class="token operator">+=</span> <span class="token number">2</span></code></pre><p>We can break this down into three distinct parts:</p><ul>
+<li>Find all <code>with _for()</code> statements inside a code block</li>
+<li>Transform the <code>with _for()</code> into the initializer and <code>while</code> statements.</li>
+<li>Replace all the instances with the two statements instead.</li>
+</ul><p>Let's do them in that order:</p><h3 id="find-the-cursed-loops">Find the cursed loops</h3><p>We'll be using an <code>ast.NodeTransformer</code> class which helps us find and replace
+AST nodes inside the code easily. We'll be implementing its <code>generic_visit()</code>
+method, to find all AST nodes that have a <code>body</code>, and find cursed <code>_for</code> blocks
+inside them.</p><pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">CursedForTransformer</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>NodeTransformer<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">generic_visit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>AST<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> ast<span class="token punctuation">.</span>AST<span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>generic_visit<span class="token punctuation">(</span>node<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token builtin">hasattr</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token string">"body"</span><span class="token punctuation">)</span> <span class="token keyword">and</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>body<span class="token punctuation">,</span> <span class="token builtin">list</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            new_body <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+            <span class="token keyword">for</span> stmt <span class="token keyword">in</span> node<span class="token punctuation">.</span>body<span class="token punctuation">:</span>
+                <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>stmt<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>With<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    <span class="token keyword">if</span> <span class="token builtin">any</span><span class="token punctuation">(</span>
+                        self<span class="token punctuation">.</span>is_cursed_for_call<span class="token punctuation">(</span>expr<span class="token punctuation">.</span>context_expr<span class="token punctuation">)</span>
+                        <span class="token keyword">for</span> expr <span class="token keyword">in</span> stmt<span class="token punctuation">.</span>items
+                    <span class="token punctuation">)</span><span class="token punctuation">:</span>
+                        item_replacements <span class="token operator">=</span> self<span class="token punctuation">.</span>replace_cursed_for<span class="token punctuation">(</span>stmt<span class="token punctuation">)</span>
+                        new_body<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>item_replacements<span class="token punctuation">)</span>
+                        <span class="token keyword">continue</span>
+
+                <span class="token comment"># If it wasn't a cursed `with` node, add it to body.</span>
+                new_body<span class="token punctuation">.</span>append<span class="token punctuation">(</span>stmt<span class="token punctuation">)</span>
+
+              node<span class="token punctuation">.</span>body <span class="token operator">=</span> new_body
+
+          <span class="token keyword">return</span> node</code></pre><blockquote>
+<p>If you want to deep dive into what's going on here with <code>generic_visit</code> etc.,
+check out <a href="https://sadh.life/post/ast">this post</a>.</p>
+</blockquote><p>Essentially:</p><ul>
+<li>
+<p>We're finding all blocks in our code, by finding <code>body</code> attributes:</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">if</span> <span class="token builtin">hasattr</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token string">"body"</span><span class="token punctuation">)</span> <span class="token keyword">and</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>body<span class="token punctuation">,</span> <span class="token builtin">list</span><span class="token punctuation">)</span><span class="token punctuation">:</span></code></pre>
+</li>
+<li>
+<p>Then we're trying to find <code>with</code> statements, which contain the cursed
+for-loops:</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>stmt<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>With<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token builtin">any</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">.</span>is_cursed_for_call<span class="token punctuation">(</span>expr<span class="token punctuation">.</span>context_expr<span class="token punctuation">)</span>
+        <span class="token keyword">for</span> expr <span class="token keyword">in</span> stmt<span class="token punctuation">.</span>items
+    <span class="token punctuation">)</span><span class="token punctuation">:</span></code></pre>
+</li>
+<li>
+<p>And if found, we call <code>self.replace_cursed_for(stmt)</code> to replace it with the
+initializer and while loop, in the <code>new_body</code>:</p>
+<pre class="language-python"><code class="language-python">item_replacements <span class="token operator">=</span> self<span class="token punctuation">.</span>replace_cursed_for<span class="token punctuation">(</span>stmt<span class="token punctuation">)</span>
+new_body<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>item_replacements<span class="token punctuation">)</span>
+<span class="token keyword">continue</span></code></pre>
+</li>
+<li>
+<p>Otherwise, if it's not a cursed for loop, we just add the node to the body,
+unchanged:</p>
+<pre class="language-python"><code class="language-python"><span class="token comment"># If it wasn't a cursed `with` node, add it to body.</span>
+new_body<span class="token punctuation">.</span>append<span class="token punctuation">(</span>stmt<span class="token punctuation">)</span></code></pre>
+<p>And we update the node's body, and return.</p>
+</li>
+</ul><p>Here's the code for <code>self.is_cursed_for_call</code>, it just checks if the function is
+called <code>_for</code>:</p><pre class="language-python"><code class="language-python">    <span class="token decorator annotation punctuation">@staticmethod</span>
+    <span class="token keyword">def</span> <span class="token function">is_cursed_for_call</span><span class="token punctuation">(</span>node<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>AST<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">bool</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>
+            <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Call<span class="token punctuation">)</span>
+            <span class="token keyword">and</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>func<span class="token punctuation">,</span> ast<span class="token punctuation">.</span>Name<span class="token punctuation">)</span>
+            <span class="token keyword">and</span> node<span class="token punctuation">.</span>func<span class="token punctuation">.</span><span class="token builtin">id</span> <span class="token operator">==</span> <span class="token string">"_for"</span>
+        <span class="token punctuation">)</span>
+</code></pre><h3 id="implementing-the-cursed-for-transformer">Implementing the cursed-for transformer</h3><p>We have yet to see how <code>self.replace_cursed_for(stmt)</code> works. In essence it just
+has to return a list of two nodes:</p><ul>
+<li>An initializer (like <code>i = 0</code>),</li>
+<li>And a <code>while</code> loop, containing the condition and the <code>with</code> body.</li>
+</ul><p>Here's the function, simplified and documented for explanation:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">replace_cursed_for</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> node<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>With<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">list</span><span class="token punctuation">[</span>ast<span class="token punctuation">.</span>AST<span class="token punctuation">]</span><span class="token punctuation">:</span>
+    <span class="token comment"># Get the `_for(init, condition, increment)` node</span>
+    cursed_for_call<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>Call <span class="token operator">=</span> node<span class="token punctuation">.</span>items<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>context_expr
+    <span class="token comment"># Extract `init`, `condition` and `increment`</span>
+    init_node<span class="token punctuation">,</span> condition_node<span class="token punctuation">,</span> increment_node <span class="token operator">=</span> cursed_for_call<span class="token punctuation">.</span>args
+
+    <span class="token comment"># Turn the init expression into a statement, i.e. from `i := 0` to `i = 0`</span>
+    init_variable<span class="token punctuation">:</span> ast<span class="token punctuation">.</span>Name <span class="token operator">=</span> init_node<span class="token punctuation">.</span>target
+    init_statement <span class="token operator">=</span> ast<span class="token punctuation">.</span>Assign<span class="token punctuation">(</span>targets<span class="token operator">=</span><span class="token punctuation">[</span>init_variable<span class="token punctuation">]</span><span class="token punctuation">,</span> value<span class="token operator">=</span>init_node<span class="token punctuation">.</span>value<span class="token punctuation">)</span>
+
+    <span class="token comment"># Turn the increment expression into a statement, i.e. `i + 2` to `i += 2`</span>
+    increment_statement <span class="token operator">=</span> ast<span class="token punctuation">.</span>AugAssign<span class="token punctuation">(</span>
+        target<span class="token operator">=</span>init_variable<span class="token punctuation">,</span>
+        op<span class="token operator">=</span>increment_node<span class="token punctuation">.</span>op<span class="token punctuation">,</span>
+        value<span class="token operator">=</span>increment_node<span class="token punctuation">.</span>right<span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># Add the increment statement at the end of the while loop's body</span>
+    block_body <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">*</span>node<span class="token punctuation">.</span>body<span class="token punctuation">,</span> increment_statement<span class="token punctuation">]</span>
+    while_statement <span class="token operator">=</span> ast<span class="token punctuation">.</span>While<span class="token punctuation">(</span>test<span class="token operator">=</span>condition_node<span class="token punctuation">,</span> body<span class="token operator">=</span>block_body<span class="token punctuation">,</span> orelse<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Return the initializer and while loop</span>
+    <span class="token keyword">return</span> <span class="token punctuation">[</span>init_statement<span class="token punctuation">,</span> while_statement<span class="token punctuation">]</span></code></pre><p>To show it in action, here's the transformation it does:</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+... def foo():
+...     with _for(i := 10, i &lt;= 0, i - 3):
+...         print("The value is:", i)
+... '''</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> modified_tree <span class="token operator">=</span> CursedForTransformer<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>unparse<span class="token punctuation">(</span>modified_tree<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> ast<span class="token punctuation">.</span>fix_missing_locations<span class="token punctuation">(</span>modified_tree<span class="token punctuation">)</span>
+<span class="token operator">&lt;</span>ast<span class="token punctuation">.</span>Module <span class="token builtin">object</span> at <span class="token number">0x7f7a18bebf70</span><span class="token operator">></span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>ast<span class="token punctuation">.</span>unparse<span class="token punctuation">(</span>modified_tree<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    i <span class="token operator">=</span> <span class="token number">10</span>
+    <span class="token keyword">while</span> i <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'The value is:'</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+        i <span class="token operator">-=</span> <span class="token number">3</span></code></pre><p>It works! We can finally use this to run our cursed for loops!</p><p>If you wish to try this out yourself, you can check out <a href="https://github.com/tusharsadhwani/cursed-for/blob/master/approach/ast_manipulation/cursedfor.py">cursedfor.py</a> in the
+GitHub repository, download it and run the REPL.</p><details>
+<summary> How the cursed REPL works </summary>
+<p>Python's standard library never ceases to amaze me. Even for a usecase as weird
+as creating a custom REPL, Python lets you do that by itself. Specifically,
+there exists a <code>code</code> module, which contains primitives such as
+<code>code.InteractiveConsole</code>.</p>
+<p><code>InteractiveConsole</code> is a pre-built Python REPL, which by default works the same
+way you would expect Python's interactive console to work:</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">import</span> code
+
+<span class="token keyword">class</span> <span class="token class-name">CursedConsole</span><span class="token punctuation">(</span>code<span class="token punctuation">.</span>InteractiveConsole<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span>
+
+CursedConsole<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>interact<span class="token punctuation">(</span>banner<span class="token operator">=</span><span class="token string-interpolation"><span class="token string">f"Cursed Python REPL"</span></span><span class="token punctuation">,</span> exitmsg<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span></code></pre>
+<pre class="language-text"><code class="language-text">$ python cursedfor.py
+>>> x = 5
+>>> x
+5
+>>></code></pre>
+<p>Completely normal.</p>
+<p>But, you can override any of its functions to change their functionality.</p>
+<p>In our case, we can change the <code>runsource</code> method, which is responsible for
+running a single statement or expression at a time. Here's the full
+implementation:</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">CursedConsole</span><span class="token punctuation">(</span>code<span class="token punctuation">.</span>InteractiveConsole<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">runsource</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">,</span>
+        source<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span>
+        filename<span class="token punctuation">:</span> <span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">"&lt;input>"</span><span class="token punctuation">,</span>
+        symbol<span class="token punctuation">:</span> <span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">"single"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">bool</span><span class="token punctuation">:</span>
+        <span class="token comment"># First, check if it could be incomplete input, return True if it is.</span>
+        <span class="token comment"># This will allow it to keep taking input</span>
+        <span class="token keyword">with</span> suppress<span class="token punctuation">(</span>SyntaxError<span class="token punctuation">,</span> OverflowError<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> code<span class="token punctuation">.</span>compile_command<span class="token punctuation">(</span>source<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>source<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> mode<span class="token operator">=</span>symbol<span class="token punctuation">)</span>
+            CursedForTransformer<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+            ast<span class="token punctuation">.</span>fix_missing_locations<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+        <span class="token keyword">except</span> <span class="token punctuation">(</span>ValueError<span class="token punctuation">,</span> SyntaxError<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># Let the original implementation take care of incomplete input / errors</span>
+            <span class="token keyword">return</span> <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>runsource<span class="token punctuation">(</span>source<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> symbol<span class="token punctuation">)</span>
+
+        code_obj <span class="token operator">=</span> <span class="token builtin">compile</span><span class="token punctuation">(</span>tree<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> mode<span class="token operator">=</span>symbol<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>runcode<span class="token punctuation">(</span>code_obj<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span></code></pre>
+<p>The <code>code.compile_command</code> part returning <code>True</code> is important to support
+multiline statements in the REPL, like these:</p>
+<pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token operator">>></span><span class="token operator">></span></code></pre>
+<p>Support for multiline input and exceptions comes for free because we used this
+class.</p>
+<p>Apart from that, the interesting part is this:</p>
+<pre class="language-python"><code class="language-python"><span class="token keyword">try</span><span class="token punctuation">:</span>
+    tree <span class="token operator">=</span> ast<span class="token punctuation">.</span>parse<span class="token punctuation">(</span>source<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> mode<span class="token operator">=</span>symbol<span class="token punctuation">)</span>
+    CursedForTransformer<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>visit<span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+<span class="token keyword">except</span> <span class="token punctuation">(</span>ValueError<span class="token punctuation">,</span> SyntaxError<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>
+
+code_obj <span class="token operator">=</span> <span class="token builtin">compile</span><span class="token punctuation">(</span>tree<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> mode<span class="token operator">=</span>symbol<span class="token punctuation">)</span>
+self<span class="token punctuation">.</span>runcode<span class="token punctuation">(</span>code_obj<span class="token punctuation">)</span></code></pre>
+<p>We simply modified the AST tree before passing it on to <code>self.runcode</code>.</p>
+<p>This is actually amazing. Using this same class and a custom <code>NodeTransformer</code>,
+you can build basically any DSL or mini language that uses Python's syntax.</p>
+<p>If you want to try doing it yourself, the starter code is present <a href="https://github.com/tusharsadhwani/t/blob/master/custom_interpreter.py">here</a>.</p>
+</details><h3 id="is-that-it">Is that it?</h3><p>I was finally done with this project, but it always stayed in the back of my
+mind. I just felt that I hadn't done it justice.</p><p>And so, a couple months later, I got to know of a much, <em>much</em> better way to do
+this. And it was everything that I could've ever wanted.</p><h2 id="part-3-the-truly-cursed-way">Part 3: The "Truly Cursed" way</h2><p>I stumbled upon <a href="https://pypi.org/p/cstyle">this library</a>, which tries to add braces to Python instead
+of indentation. And although the implementation is questionable, it gave me
+<strong>exactly</strong> the tool I needed to finish this project: <code>codecs</code>.</p><h3 id="what-the-heck-is-a-codec">What the heck is a codec?</h3><p>A "codec" in Python refers to the tools that let you convert the text encoding
+of a source file into a Python string, and (in case of source code) can run the
+code.</p><p>A lot of pre-built codecs exist, such as <code>utf-8</code>, <code>cp1252</code>, and <code>ascii</code>, so that
+people can write their code in whichever file encoding they prefer to use, and
+Python will pre-process the file into the text format that it understands,
+before trying to run it.</p><p>There's just one tiny detail: You can write your own custom codecs.</p><h3 id="source-translation">Source translation</h3><p>So here's the new idea: What if instead of AST manipulation, we manipulated the
+source text directly before it runs?</p><p>Yeah, I know, it's probably a bad idea. But I think it can work. And you can't
+stop me, so you might as well see what I have to say.</p><p>The approach in my mind is pretty simple:</p><ul>
+<li>Find the <code>for (init; condition; increment):</code> pattern in the source code</li>
+<li>Substitute that text with two lines: <code>init</code> and <code>while condition:</code></li>
+<li>Append the <code>increment</code> statement at the end of the <code>for</code> body.</li>
+</ul><p>Let's try it out then.</p><h3 id="time-for-regex-hacks">Time for regex hacks</h3><p>To create the encoding, we first need to implement a transformation function. I
+chose to implement one that works ona list of Python source lines. Here's the
+boilerplate:</p><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> codecs
+
+<span class="token keyword">def</span> <span class="token function">_transform_cursed_for</span><span class="token punctuation">(</span>lines<span class="token punctuation">:</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    new_source <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    index <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">while</span> index <span class="token operator">&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>lines<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        line <span class="token operator">=</span> lines<span class="token punctuation">[</span>index<span class="token punctuation">]</span>
+
+        <span class="token comment"># Do stuff with the line</span>
+        new_source<span class="token punctuation">.</span>append<span class="token punctuation">(</span>line<span class="token punctuation">)</span>
+        index <span class="token operator">+=</span> <span class="token number">1</span>
+
+    <span class="token keyword">return</span> new_source
+
+<span class="token keyword">def</span> <span class="token function">transform_cursed_for</span><span class="token punctuation">(</span>source<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">str</span><span class="token punctuation">:</span>
+    lines <span class="token operator">=</span> source<span class="token punctuation">.</span>splitlines<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    new_lines <span class="token operator">=</span> _transform_cursed_for<span class="token punctuation">(</span>lines<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token string">"\n"</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>new_lines<span class="token punctuation">)</span>
+
+codecs<span class="token punctuation">.</span>register<span class="token punctuation">(</span>
+  <span class="token punctuation">{</span><span class="token string">'cursed_for'</span><span class="token punctuation">:</span> codecs<span class="token punctuation">.</span>CodecInfo<span class="token punctuation">(</span>
+    name<span class="token operator">=</span><span class="token string">'cursed_for'</span><span class="token punctuation">,</span>
+    encode<span class="token operator">=</span>utf_8<span class="token punctuation">.</span>encode<span class="token punctuation">,</span>
+    decode<span class="token operator">=</span>cursed_for_decode<span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">.</span>get
+<span class="token punctuation">)</span></code></pre><p>Now for the details on how we match and replace <code>for (x; y; z):</code> lines:</p><ul>
+<li>
+<p>First, you match the syntax:</p>
+<pre class="language-python"><code class="language-python">beginning_with_for_regex <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">r'^\s*for\b'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> beginning_with_for_regex<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre>
+</li>
+<li>
+<p>If we find such a line, we find the three parts and the indentation of the
+inner block:</p>
+<pre class="language-python"><code class="language-python">indent_regex <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">r'^\s*'</span><span class="token punctuation">)</span>
+cursed_for_regex <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">r'^\s*for\s*\((.+?);(.+?);(.+?)\):(.*)$'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">match</span> <span class="token operator">=</span> cursed_for_regex<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span>
+initializer<span class="token punctuation">,</span> condition<span class="token punctuation">,</span> increment <span class="token operator">=</span> <span class="token keyword">match</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">match</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">match</span><span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>
+
+<span class="token comment"># The indentation of the `for ():` line</span>
+for_indent_level <span class="token operator">=</span> indent_regex<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Read the next line</span>
+next_line <span class="token operator">=</span> lines<span class="token punctuation">[</span>index<span class="token punctuation">]</span>
+index <span class="token operator">+=</span> <span class="token number">1</span>
+
+<span class="token comment"># The indentation of the inner block</span>
+body_indent_level <span class="token operator">=</span> indent_regex<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span>next_line<span class="token punctuation">)</span><span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+</li>
+<li>
+<p>Now, we collect all the lines which are inside the <code>for</code> block, by finding all
+lines which are indented at the same level as the first line:</p>
+<pre class="language-python"><code class="language-python">for_body_lines <span class="token operator">=</span> <span class="token punctuation">[</span>next_line<span class="token punctuation">]</span>
+
+<span class="token keyword">while</span> index <span class="token operator">&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>lines<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    next_line <span class="token operator">=</span> lines<span class="token punctuation">[</span>index<span class="token punctuation">]</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> next_line<span class="token punctuation">.</span>startswith<span class="token punctuation">(</span>body_indent_level<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">break</span>
+
+    for_body_lines<span class="token punctuation">.</span>append<span class="token punctuation">(</span>next_line<span class="token punctuation">)</span>
+    index <span class="token operator">+=</span> <span class="token number">1</span></code></pre>
+</li>
+<li>
+<p>At the end, we add in the two initializer and <code>while</code> statemnets:</p>
+<pre class="language-python"><code class="language-python">initializer_stmt <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">{</span>for_indent_level<span class="token punctuation">}</span></span><span class="token interpolation"><span class="token punctuation">{</span>initializer<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">'</span></span>
+while_stmt <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">{</span>for_indent_level<span class="token punctuation">}</span></span><span class="token string">while </span><span class="token interpolation"><span class="token punctuation">{</span>condition<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">:'</span></span>
+increment_stmt <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">{</span>body_indent_level<span class="token punctuation">}</span></span><span class="token interpolation"><span class="token punctuation">{</span>increment<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">'</span></span>
+
+new_source<span class="token punctuation">.</span>append<span class="token punctuation">(</span>initializer_stmt<span class="token punctuation">)</span>
+new_source<span class="token punctuation">.</span>append<span class="token punctuation">(</span>while_stmt<span class="token punctuation">)</span>
+new_source<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>for_body_lines<span class="token punctuation">)</span>
+new_source<span class="token punctuation">.</span>append<span class="token punctuation">(</span>increment_stmt<span class="token punctuation">)</span></code></pre>
+</li>
+</ul><p>So that's how I did it. And to my own surprise, it works!</p><pre class="language-python"><code class="language-python">code <span class="token operator">=</span> <span class="token triple-quoted-string string">'''
+for (i = 0; i &lt; 10; i += 2):
+    print(i)
+print("done")
+'''</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>code<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'cursed_for'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre><pre class="language-python"><code class="language-python">$ python cursedfor<span class="token punctuation">.</span>py
+i <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">while</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+    i <span class="token operator">+=</span> <span class="token number">2</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"done"</span><span class="token punctuation">)</span></code></pre><p>Is this useful, at all? Probably not. Is it cursed? <strong>YES.</strong></p><p>Can this knowledge be useful in making actually good Python packages? You tell
+me!</p><h3 id="the-making-of-perhaps-the-most-cursed-python-package">The making of perhaps the most cursed Python package</h3><p>There's just one more thing left to do: Make this an installable package.</p><p>And honestly, that part of the process is a lot more black-magic hackery than
+what we've even seen so far. I basically copied what this other project called
+<a href="https://github.com/asottile-archive/future-fstrings">future-fstrings</a> does, and you can watch <a href="https://www.youtube.com/watch?v=00h6aKnAdyY">this video</a> if you're really
+curious.</p><p>In essence, we need to register this encoding at Python's startup time. And we
+do that by creating a <code>.pth</code> file which must be stored into the <code>site-packages</code>
+folder, which will get auto imported when Python starts up.</p><p>And with that, our package is complete.</p><h3 id="test-drive">Test drive</h3><p>You can now install the package:</p><pre class="language-text"><code class="language-text">pip install cursed-for</code></pre><p>And run your cursed python files with a <code># coding</code> comment at the top:</p><pre class="language-python"><code class="language-python"><span class="token comment"># coding: cursed-for</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span></code></pre><pre class="language-text"><code class="language-text">$ python x.py
+5
+7
+9</code></pre><p>Can you do this in a REPL? Can you debug the output? Absolutely! Check out the
+<a href="https://github.com/tusharsadhwani/cursed-for">repository's README</a> for more info.</p><p>And that's it from me. I... hope you learned something useful? I sure did.</p>
     </main>
   </article>
 </div>
