@@ -70,7 +70,7 @@ But there's a couple big problems:
   instead -- one that takes in three arguments. I went with `_for(x, y, z)`.
 
   For the `for` to be a block, I needed a generic block kind of statement, one
-  that allows us to put arbitrary code inside it: so I close a `with` block:
+  that allows us to put arbitrary code inside it: so I chose a `with` block:
   `with` blocks can be customized with `__enter__` and `__exit__`.
 
 - The second problem is much bigger: The original `for` loop syntax takes in
