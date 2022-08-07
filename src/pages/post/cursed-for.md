@@ -275,7 +275,7 @@ i = 1
 
 Great! ... wait a second.
 
-### Generalising
+### Generalizing
 
 We're not actually executing the body of the for loop as many times, we're
 simply printing out `value`, which is hardcoded. The body is still only executed
@@ -626,6 +626,7 @@ CursedConsole().interact(banner=f"Cursed Python REPL", exitmsg="")
 
 ```text
 $ python cursedfor.py
+Cursed Python REPL
 >>> x = 5
 >>> x
 5
