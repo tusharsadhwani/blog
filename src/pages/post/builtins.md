@@ -1482,7 +1482,7 @@ class list:
 Similarly, sets are unordered so even their location doesn't matter, only their "presence":
 
 ```python
-class list:
+class set:
     def __eq__(self, other):
         if len(self) != len(other):
             return False
