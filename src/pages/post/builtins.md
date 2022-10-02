@@ -1400,7 +1400,7 @@ Now `y` arrow has been changed to point to an integer object `5` instead. `z` st
 
 Now z points to yet another new object `10`, which is stored somewhere in memory. Now the second `object` also has nothing pointing to it, so that is subsequently garbage collected.
 
-To be able to verify all of this, we can use the `id` builtin function. `id` spells out the exact location of the object in memory, represented as a number.
+To be able to verify all of this, we can use the `id` builtin function. `id` spells out a number that uniquely identifies the object during its lifetime. In CPython that’s the exact memory location of that object, but this is an implementation detail and other interpreters may choose a different representation.
 
 ```python
 >>> x = object()
@@ -1423,6 +1423,43 @@ True
 ```
 
 Same object, same `id`. Different objects, different `id`. Simple as that.
+
+<details>
+<summary>Extra: Small Integer Cache & String Interning</summary>
+
+First, some intriguing yet confusing code.
+
+```python
+>>> x = 1
+>>> id(x)
+136556405979440
+>>> y = 1
+>>> id(y)
+136556405979440 # same int object?
+
+>>> x = 257
+>>> id(x)
+136556404964368
+>>> y = 257
+>>> id(y)
+136556404964144 # but different int object now???
+
+>>> x = "hello"
+>>> id(x)
+136556404561904
+>>> y = "hello"
+>>> id(y)
+136556404561904 # same str object?
+```
+
+Integers and strings are objects that are used in almost any program, and in many cases there are copies of the same integer value or the same string content. To save the time and memory of creating a whole new object when an exact same one is already there, CPython implements two common techniques used in many other languages: Small Integer Cache & String Interning. 
+
+Although they have different names, the underlying idea is the same: make objects immutable and reuse them across different references (arrows). [Small Integer Cache](https://docs.python.org/3.8/c-api/long.html#c.PyLong_FromLong) makes integers in the range of [-5,256] reuse the same object for the same value. [String Interning](http://python-reference.readthedocs.io/en/latest/docs/functions/intern.html) points references to strings having the same content to the same object. 
+
+This is just a simplified explanation, and you should read more if you care about the memory consumption of your Python program. Hopefully the code example makes sense to you now.
+
+</details>
+
 
 With `object`s, `==` and `is` behaves the same way:
 
