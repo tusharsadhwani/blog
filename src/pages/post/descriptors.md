@@ -500,17 +500,20 @@ def print_name(self):
     print(self.name)
 
 class Method:
+    def __init__(self, method) -> None:
+        self._method = method
+    
     def __get__(self, obj, cls):
-        return partial(print_name, obj)  # bind object as first argument
+        return partial(self._method, obj)  # bind object as first argument
 
 class User:
-    def __init__(self):
-        self.name = "User"
+    def __init__(self, name):
+        self.name = name
 
-    print_name = Method()
+    print_name = Method(print_name)
 
-user = User()
-user.print_name()  # User
+user = User("George")
+user.print_name()  # George
 ```
 
 Python methods are descriptors internally, and that's where the first arg of
