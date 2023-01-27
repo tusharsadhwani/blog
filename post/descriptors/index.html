@@ -382,17 +382,20 @@ a regular method. That's actually how methods work in Python:</p><pre class="lan
     <span class="token keyword">print</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
 
 <span class="token keyword">class</span> <span class="token class-name">Method</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> method<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_method <span class="token operator">=</span> method
+    
     <span class="token keyword">def</span> <span class="token function">__get__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> obj<span class="token punctuation">,</span> cls<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> partial<span class="token punctuation">(</span>print_name<span class="token punctuation">,</span> obj<span class="token punctuation">)</span>  <span class="token comment"># bind object as first argument</span>
+        <span class="token keyword">return</span> partial<span class="token punctuation">(</span>self<span class="token punctuation">.</span>_method<span class="token punctuation">,</span> obj<span class="token punctuation">)</span>  <span class="token comment"># bind object as first argument</span>
 
 <span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">"User"</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name <span class="token operator">=</span> name
 
-    print_name <span class="token operator">=</span> Method<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    print_name <span class="token operator">=</span> Method<span class="token punctuation">(</span>print_name<span class="token punctuation">)</span>
 
-user <span class="token operator">=</span> User<span class="token punctuation">(</span><span class="token punctuation">)</span>
-user<span class="token punctuation">.</span>print_name<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># User</span></code></pre><p>Python methods are descriptors internally, and that's where the first arg of
+user <span class="token operator">=</span> User<span class="token punctuation">(</span><span class="token string">"George"</span><span class="token punctuation">)</span>
+user<span class="token punctuation">.</span>print_name<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># George</span></code></pre><p>Python methods are descriptors internally, and that's where the first arg of
 <code>self</code> gets passed in from. Now you know.</p><h2 id="appendix">Appendix</h2><p>There's a few things missing with the implementations above, like the <code>deleter</code>
 attribute in properties, type annotations, preserving function names and
 docstrings, and the like. I'll be leaving those for you to figure out yourself.
