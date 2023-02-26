@@ -22,7 +22,7 @@ jobs:
         run: |
           npm install
           npm run build
-          echo 'sadh.life' > ./dist/CNAME
+          echo 'tushar.lol' > ./dist/CNAME
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
