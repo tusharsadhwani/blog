@@ -2,9 +2,9 @@
 export interface Props {
   title: string;
   description: string;
-  heroImage: string;
+  heroImage?: string;
 }
-const { title, description, heroImage } = Astro.props;
+const { title, description, heroImage = "" } = Astro.props;
 ---
 
 <meta charset="utf-8" />
