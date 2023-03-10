@@ -12,17 +12,17 @@
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sadh.life">
+<meta property="og:url" content="https://tushar.lol">
 <meta property="og:title" content="Implementing @property, @staticmethod and @classmethod from scratch">
 <meta property="og:description" content="The builtin method decorators... aren't actually decorators?">
-<meta property="og:image" content="https://sadh.life/images/descriptors.jpg">
+<meta property="og:image" content="https://tushar.lol/images/descriptors.jpg">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://sadh.life">
+<meta property="twitter:url" content="https://tushar.lol">
 <meta property="twitter:title" content="Implementing @property, @staticmethod and @classmethod from scratch">
 <meta property="twitter:description" content="The builtin method decorators... aren't actually decorators?">
-<meta property="twitter:image" content="https://sadh.life/images/descriptors.jpg">
+<meta property="twitter:image" content="https://tushar.lol/images/descriptors.jpg">
 
 <link rel="stylesheet" href="/style/global.css">
 <link rel="stylesheet" href="/style/merged-themes.css">
@@ -33,7 +33,7 @@
 
 
 
-  <link rel="stylesheet" href="/assets/asset.ad5f1f18.css"></link>
+  <link rel="stylesheet" href="/assets/asset.e9fb454e.css"></link>
 <link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link>
 <link rel="stylesheet" href="/assets/asset.f321c214.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.1e6f5a2711.js" astro-script="/post/descriptors/script-0"></script>
 <script type="module" data-astro-component-hydration astro-script="/post/descriptors/script-1">import setup from '../../entry.8eab8588.js';
@@ -46,9 +46,9 @@ setup("Z1Tf25X", {name:"Newsletter",value: "preact"}, async () => {
 </script>
 <script type="module" data-astro-component-hydration astro-script="/post/descriptors/script-2">import setup from '../../entry.8eab8588.js';
 import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
-setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
+setup("WpNq3", {name:"Switch",value: "preact"}, async () => {
   const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
-  return (el, children) => hydrate(el)(Component, {"class":"astro-D64JDZG7"}, children);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-ZEBAPXNU"}, children);
 
 });
 </script>
@@ -56,18 +56,19 @@ setup("Z201JGg", {name:"Switch",value: "preact"}, async () => {
   
 
   <body id="top">
-    <header class="astro-D64JDZG7">
-  <a href="/" class="astro-D64JDZG7">
-    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-D64JDZG7">
-      <g class="astro-D64JDZG7">
-        <rect width="380" height="380" x="10" y="10" stroke="var(--text-color)" stroke-width="18" rx="18" fill-opacity="0" class="astro-D64JDZG7"></rect>
-        <text x="52.5" y="357.427" font-family="sans-serif" font-size="250" font-weight="bold" text-anchor="start" transform="matrix(0.946786642074585,0,0,1.0035842657089233,19.687279514968395,-1.4603642597794533)" xml:space="preserve" style="stroke: var(--text-color); fill: var(--text-color)" class="astro-D64JDZG7">TS</text>
+    <header class="astro-ZEBAPXNU">
+  <a href="/" class="astro-ZEBAPXNU">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-ZEBAPXNU">
+      <g class="astro-ZEBAPXNU">
+        <rect width="380" height="380" x="10" y="10" stroke="var(--text-color)" stroke-width="18" rx="18" fill-opacity="0" class="astro-ZEBAPXNU"></rect>
+        <text x="52.5" y="357.427" font-family="sans-serif" font-size="250" font-weight="bold" text-anchor="start" transform="matrix(0.946786642074585,0,0,1.0035842657089233,19.687279514968395,-1.4603642597794533)" xml:space="preserve" style="stroke: var(--text-color); fill: var(--text-color)" class="astro-ZEBAPXNU">TS</text>
       </g>
     </svg>
 
   </a>
-  <div class="right astro-D64JDZG7">
-    <astro-root uid="Z201JGg"></astro-root>
+  <div class="right astro-ZEBAPXNU">
+    <a href="/rss.xml" title="RSS" class="astro-ZEBAPXNU"><img style="height: 36px; padding: 4px;" src="/rss.png" alt="RSS" class="astro-ZEBAPXNU"></a>
+    <astro-root uid="WpNq3"></astro-root>
   </div>
 </header>
 
@@ -384,7 +385,7 @@ a regular method. That's actually how methods work in Python:</p><pre class="lan
 <span class="token keyword">class</span> <span class="token class-name">Method</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> method<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token boolean">None</span><span class="token punctuation">:</span>
         self<span class="token punctuation">.</span>_method <span class="token operator">=</span> method
-    
+
     <span class="token keyword">def</span> <span class="token function">__get__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> obj<span class="token punctuation">,</span> cls<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> partial<span class="token punctuation">(</span>self<span class="token punctuation">.</span>_method<span class="token punctuation">,</span> obj<span class="token punctuation">)</span>  <span class="token comment"># bind object as first argument</span>
 
@@ -401,7 +402,7 @@ attribute in properties, type annotations, preserving function names and
 docstrings, and the like. I'll be leaving those for you to figure out yourself.
 Here's some resources if you need help with those:</p><ul>
 <li><a href="https://docs.python.org/3/library/functools.html#functools.wraps">functools.wraps</a></li>
-<li><a href="https://sadh.life/post/mypy-guide">mypy guide</a></li>
+<li><a href="https://tushar.lol/post/mypy-guide">mypy guide</a></li>
 </ul><p>And that's it. Hopefully this helped you understand descriptors and why you'd
 want to use them. There's some very interesting uses of descriptors outside of
 these three, and hopefully if you encounter such a situation, you'll remember
