@@ -937,7 +937,7 @@ Can you do this in a REPL? Can you debug the output? Absolutely! Check out the
 And that's it from me. I... hope you learned something useful? I sure did.
 
 [1]: https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager
-[2]: https://sadh.life/post/ast
+[2]: https://tushar.lol/post/ast
 [3]: https://github.com/tusharsadhwani/cursed-for/blob/master/approach/ast_manipulation/cursedfor.py
 [4]: https://github.com/tusharsadhwani/t/blob/master/custom_interpreter.py
 [5]: https://pypi.org/p/cstyle

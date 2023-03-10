@@ -502,7 +502,7 @@ def print_name(self):
 class Method:
     def __init__(self, method) -> None:
         self._method = method
-    
+
     def __get__(self, obj, cls):
         return partial(self._method, obj)  # bind object as first argument
 
@@ -536,4 +536,4 @@ this feature and be able to use it.
 
 [1]: https://bas.codes/posts/python-decorators
 [2]: https://docs.python.org/3/library/functools.html#functools.wraps
-[3]: https://sadh.life/post/mypy-guide
+[3]: https://tushar.lol/post/mypy-guide

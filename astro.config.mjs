@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 import preact from "@astrojs/preact";
 
 export default defineConfig({
-  site: "https://sadh.life",
+  site: "https://tushar.lol",
   integrations: [preact()],
   markdown: {
     // TODO: switch to shiki
