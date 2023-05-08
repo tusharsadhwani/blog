@@ -4,6 +4,7 @@
 }
 :root {
   --background-color: rgb(10, 10, 20);
+  --background-gradient-color: rgba(83, 69, 124, 0.25);
   --highlight-color: rgb(15, 15, 30);
   --border-color: rgb(30, 30, 60);
   --primary-color: rgb(90, 60, 235);
@@ -15,6 +16,7 @@
 }
 :root[data-theme="light"] {
   --background-color: rgb(233, 233, 255);
+  --background-gradient-color: rgba(83, 69, 124, 0.15);
   --highlight-color: rgb(235, 235, 255);
   --border-color: rgb(200, 200, 255);
   --primary-color: rgb(60, 40, 161);
@@ -47,7 +49,7 @@ body {
   background-size: 2.5rem 2.5rem;
   background-image: radial-gradient(
     circle,
-    rgba(83, 69, 124, 0.25) 0.12rem,
+    var(--background-gradient-color) 0.12rem,
     transparent 0
   );
   background-attachment: fixed;
