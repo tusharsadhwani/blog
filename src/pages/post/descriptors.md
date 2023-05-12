@@ -365,7 +365,7 @@ descriptor. That way `x` can now both get and set data.
 
 ## `@staticmethod`
 
-`staticmethod` is comaratively simple: It just makes a class method which
+`staticmethod` is comparatively simple: It just makes a class method which
 doesn't require a `self` parameter.
 
 This is actually fairly easy to implement as a regular decorator function too:
@@ -487,6 +487,10 @@ class C:
 c = C()
 C.foo()  # Class name is: C
 ```
+
+> Note: This is a *\*slight\** simplification, the behaviour of calling `__get__`
+> directly is going to be different from how the builtin `classmethod` behaves.
+> But, this is very rare in practice.
 
 ## Extras: Methods are descriptors
 
