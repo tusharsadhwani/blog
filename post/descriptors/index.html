@@ -307,7 +307,7 @@ both getter and setter functions). Like so:</p><pre class="language-python"><cod
             <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"new value must be bigger than old one"</span><span class="token punctuation">)</span>
 
         self<span class="token punctuation">.</span>_x <span class="token operator">=</span> new_value</code></pre><p>When <code>x.setter</code> is called, we store <code>setter_function</code> and return a new property
-descriptor. That way <code>x</code> can now both get and set data.</p><h2 id="staticmethod"><code>@staticmethod</code></h2><p><code>staticmethod</code> is comaratively simple: It just makes a class method which
+descriptor. That way <code>x</code> can now both get and set data.</p><h2 id="staticmethod"><code>@staticmethod</code></h2><p><code>staticmethod</code> is comparatively simple: It just makes a class method which
 doesn't require a <code>self</code> parameter.</p><p>This is actually fairly easy to implement as a regular decorator function too:</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">my_staticmethod</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">wrapper</span><span class="token punctuation">(</span>_<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> func<span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -376,7 +376,11 @@ function which calls <code>function(cls)</code>, or we can use <code>functools.p
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Class name is:"</span><span class="token punctuation">,</span> cls<span class="token punctuation">.</span>__name__<span class="token punctuation">)</span>
 
 c <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Class name is: C</span></code></pre><h2 id="extras-methods-are-descriptors">Extras: Methods are descriptors</h2><p>Like in classmethod, if you put <code>obj</code> as the argument instead of <code>cls</code>, it makes
+C<span class="token punctuation">.</span>foo<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># Class name is: C</span></code></pre><blockquote>
+<p>Note: This is a <em>*slight*</em> simplification, the behaviour of calling <code>__get__</code>
+directly is going to be different from how the builtin <code>classmethod</code> behaves.
+But, this is very rare in practice.</p>
+</blockquote><h2 id="extras-methods-are-descriptors">Extras: Methods are descriptors</h2><p>Like in classmethod, if you put <code>obj</code> as the argument instead of <code>cls</code>, it makes
 a regular method. That's actually how methods work in Python:</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
 
 <span class="token keyword">def</span> <span class="token function">print_name</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
