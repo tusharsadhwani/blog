@@ -41,7 +41,15 @@ const { title, description, heroImage = "" } = Astro.props;
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600&family=Open+Sans:wght@400;600&display=swap" />
 
 <script>
-  if (localStorage.getItem("lightMode") == "true") {
+  let lightMode = localStorage.getItem("lightMode");
+
+  if (
+    lightMode === null &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: light)").matches
+  ) {
+    document.documentElement.dataset.theme = "light";
+  } else if (lightMode === "true") {
     document.documentElement.dataset.theme = "light";
   }
 </script>
