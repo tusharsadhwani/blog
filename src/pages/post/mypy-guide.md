@@ -1775,15 +1775,12 @@ What this also allows us to do is define **Recursive type definitions**. The sim
 ```python
 from typing import Generator, Optional, Protocol
 
-class _Tree(Protocol):
-    def __init__(
-            self,
-            data: int,
-            left: Optional['_Tree'] = None,
-            right: Optional['_Tree'] = None,
-    ) -> None: ...
+class Tree(Protocol):
+    data: int
+    left: Optional['Tree']
+    right: Optional['Tree']
 
-class Tree(_Tree):
+class TreeNode:
     def __init__(
             self,
             data: int,
@@ -1798,7 +1795,7 @@ class Tree(_Tree):
         return f'Tree({self.data!r})'
 
 
-tree = Tree(2, left=Tree(4), right=Tree(0))
+tree = TreeNode(2, left=TreeNode(4), right=TreeNode(0))
 print(tree)       # Tree(2)
 print(tree.left)  # Tree(4)
 
@@ -1820,6 +1817,39 @@ for value in traverse_inorder(tree):
 
 > _Note that for this simple example, using Protocol wasn't necessary, as mypy is able to understand simple recursive structures. But for anything more complex than this, like an N-ary tree, you'll need to use Protocol._
 > Structural subtyping and all of its features are defined extremely well in [PEP 544](https://www.python.org/dev/peps/pep-0544/).
+
+<details>
+<summary>Bonus: `isintance(Protocol)`?</summary>
+
+For the above protocol implementation, there's actually something that's broken: instance checks at runtime.
+
+If you wanted to do this:
+
+```python
+tree = MyTree()
+...
+
+if isinstance(tree, Tree):
+    print(tree.data, tree.left, tree.right)
+```
+
+It won't work. This is because the `MyTree` class is not subclassing `Tree` at all.
+
+But, thanks to how flexible Python is, we can fix that by slapping `@typing.runtime_checkable` on the Protocol:
+
+```python
+from typing import Optional, Protocol, runtime_checkable
+
+@runtime_checkable
+class Tree(Protocol):
+    data: int
+    left: Optional['Tree']
+    right: Optional['Tree']
+```
+
+This decorator will define the `__instancecheck__` and `__subclasscheck__` dunder methods for you, which allows the `isinstance` and `issubclass` calls to work again.
+
+</details>
 
 ## Further learning
 
