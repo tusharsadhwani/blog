@@ -1085,7 +1085,9 @@ tree <span class="token operator">=</span> TreeNode<span class="token punctuatio
 <p><em>Note that for this simple example, using Protocol wasn't necessary, as mypy is able to understand simple recursive structures. But for anything more complex than this, like an N-ary tree, you'll need to use Protocol.</em>
 Structural subtyping and all of its features are defined extremely well in <a href="https://www.python.org/dev/peps/pep-0544/">PEP 544</a>.</p>
 </blockquote><details>
-<summary>Bonus: `isintance(Protocol)`?</summary>
+<summary>
+<p>Bonus: <code>isinstance(Protocol)</code>?</p>
+</summary>
 <p>For the above protocol implementation, there's actually something that's broken: instance checks at runtime.</p>
 <p>If you wanted to do this:</p>
 <pre class="language-python"><code class="language-python">tree <span class="token operator">=</span> MyTree<span class="token punctuation">(</span><span class="token punctuation">)</span>
