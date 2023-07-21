@@ -1819,7 +1819,11 @@ for value in traverse_inorder(tree):
 > Structural subtyping and all of its features are defined extremely well in [PEP 544](https://www.python.org/dev/peps/pep-0544/).
 
 <details>
-<summary>Bonus: `isintance(Protocol)`?</summary>
+<summary>
+
+Bonus: `isinstance(Protocol)`?
+
+</summary>
 
 For the above protocol implementation, there's actually something that's broken: instance checks at runtime.
 
