@@ -166,7 +166,7 @@ def build_number_under_8(number):
     eight = '__name__.__len__()'
 
     if number == 0:
-        return f'{eight} - {eight}'
+        return f'({eight}).__sub__({eight})'
 
     one = f'({eight}.__floordiv__({eight}))'
     return '.__add__'.join([one] * number)
@@ -402,8 +402,11 @@ And `'r'` can be picked from the `str` class here:
 >>> __name__.__class__.__name__[-1]
 'r'
 
-# In the end it'll look like this
+# Replacing the number with dunders and operators
 >>> __name__.__class__.__name__[-(__name__.__len__() // __name__.__len__())]
+'r'
+# And in the end it'll look like this
+>>> __name__.__class__.__name__[-(__name__.__len__().__floordiv__(__name__.__len__()))]
 'r'
 ```
 
