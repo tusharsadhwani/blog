@@ -10,17 +10,17 @@ layout: "../../layouts/BlogPost.astro"
 
 So I saw this piece of code on a discord channel, completely out of context:
 
-TODO: image
+![The prologue: Someone had written this code to print hello world.](/images/dunderhell-prologue.jpg)
 
-And this is what I had to say:
+Someone had written this code to print `hello world`. And to that I just said:
 
-TODO: me saying not enough
+![This will be messy.](/images/not-enough.jpg)
 
 I guess that means it's time to build a Python code transpiler that produces _only_ dunders.
 
 > Trust me, this is not a shitpost, this will teach you something useful.
 >
-> Maybe.
+> _Maybe._
 
 ---
 
@@ -30,7 +30,7 @@ So this is a piece of code:
 TODO
 ```
 
-```console
+```bash
 TODO
 ```
 
@@ -40,7 +40,7 @@ And this is the same code, but made purely with dunders:
 TODO
 ```
 
-```console
+```bash
 TODO
 ```
 
@@ -68,13 +68,13 @@ So, you can build any positive number like this:
 
 ```python
 def build_number(number):
-    eight = '__name__.__len__()'
+    eight = "__name__.__len__()"
 
     if number == 0:
-        return f'{eight} - {eight}'
+        return f"{eight} - {eight}"
 
-    one = f'({eight} // {eight})'
-    return ' + '.join([one] * number)
+    one = f"({eight} // {eight})"
+    return " + ".join([one] * number)
 ```
 
 It does seem to generate correct code:
@@ -85,11 +85,18 @@ It does seem to generate correct code:
 >>> eval(build_number(2))
 2
 >>> four = f'{build_number(2)} + {build_number(2)}'
->>> four
-'(__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__())'
+>>> print(four)
+(
+    (__name__.__len__() // __name__.__len__())
+    + (__name__.__len__() // __name__.__len__())
+    + (__name__.__len__() // __name__.__len__())
+    + (__name__.__len__() // __name__.__len__())
+)
 >>> eval(four)
 4
 ```
+
+> I'll be wrapping all the output code using black, just so that it's readable.
 
 In fact, we can go a step further: `a + b` in Python is actually syntax sugar for `(a).__add__(b)`. Similarly `a // b` can be `(a).__floordiv__(b)`.
 
@@ -97,13 +104,13 @@ So, we can simply change `' + '.join(...)` with `'.__add__'.join(...)` and so on
 
 ```python
 def build_number(number):
-    eight = '__name__.__len__()'
+    eight = "__name__.__len__()"
 
     if number == 0:
-        return f'({eight}).__sub__({eight})'
+        return f"({eight}).__sub__({eight})"
 
-    one = f'({eight}.__floordiv__({eight}))'
-    return '.__add__'.join([one] * number)
+    one = f"({eight}.__floordiv__({eight}))"
+    return ".__add__".join([one] * number)
 ```
 
 It still works:
@@ -114,7 +121,11 @@ It still works:
 >>> build_number(1)
 '(__name__.__len__().__floordiv__(__name__.__len__()))'
 >>> build_number(2)
-'(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__()))'
+'''
+(__name__.__len__().__floordiv__(__name__.__len__())).__add__(
+    __name__.__len__().__floordiv__(__name__.__len__())
+)
+'''
 >>> eval(build_number(1))
 1
 >>> eval(build_number(2))
@@ -196,8 +207,44 @@ def build_number(number):
 Let's see if it's more resonable now?
 
 ```python
->>> build_number(100000)
-'((__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__()))'
+>>> print(build_number(100000))
+(
+    (__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+    .__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__()).__mul__(__name__.__len__()).__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__()).__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__()).__mul__(__name__.__len__())
+).__add__(
+    (__name__.__len__())
+).__add__(
+    (__name__.__len__())
+).__add__(
+    (__name__.__len__())
+).__add__(
+    (__name__.__len__())
+)
 >>> len(build_number(100000))
 912
 >>> eval(build_number(100000))
@@ -212,11 +259,11 @@ I'll call this tool `dunderhell`, because it sounds appropriate.
 
 Let's say you use it like this:
 
-```console
+```bash
 $ cat foo.py
 print(1)
 $ dunderhell foo.py
-print(__name__.__len__() // __name__.__len__())
+print(__name__.__len__().__floordiv__(__name__.__len__()))
 ```
 
 So we can create our first alpha of `dunderhell.py` like so:
@@ -252,12 +299,19 @@ if __name__ == '__main__':
 
 And it works!
 
-```console
+```python
 $ cat foo.py
 print(2 + 2)
 
 $ python3 dunderhell.py foo.py
-print((__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())) + (__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())))
+print(
+    (__name__.__len__().__floordiv__(__name__.__len__())).__add__(
+        __name__.__len__().__floordiv__(__name__.__len__())
+    )
+    + (__name__.__len__().__floordiv__(__name__.__len__())).__add__(
+        __name__.__len__().__floordiv__(__name__.__len__())
+    )
+)
 ```
 
 Now before we move on, we need to address something.
@@ -269,7 +323,9 @@ So instead of using string replace, we will use AST replacement using `ast.NodeT
 
 # Try #2: Let's rewrite this logic as an AST transformer
 
-TODO
+TODO: One visitor for turning numbers into these `__name__.__len__()` things,
+one visitor for turning operators into dunders.
+Include `__neg__()` in there as well to support negative numbers.
 
 ## strings
 
@@ -436,7 +492,11 @@ __import__(__chr__(116) + __chr__(104) + __chr__(105) + __chr__(115))
 And make sure to change the `'chr'` string to the abomination we created:
 
 ```python
-__chr__ = __builtins__.__getattribute__(__name__.__reduce__.__name__[6] + __name__.__add__.__class__.__name__[3] + __name__.__class__.__name__[-1])
+__chr__ = __builtins__.__getattribute__(
+    __name__.__reduce__.__name__[6]
+    + __name__.__add__.__class__.__name__[3]
+    + __name__.__class__.__name__[-1]
+)
 
 __import__(__chr__(116) + __chr__(104) + __chr__(105) + __chr__(115))
 ```
@@ -444,24 +504,154 @@ __import__(__chr__(116) + __chr__(104) + __chr__(105) + __chr__(115))
 Now we change all numbers to use the `__len__` trick:
 
 ```python
-__chr__ = __builtins__.__getattribute__(__name__.__reduce__.__name__[(__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__())] + __name__.__add__.__class__.__name__[(__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__())] + __name__.__class__.__name__[-(__name__.__len__() // __name__.__len__())])
+__chr__ = __builtins__.__getattribute__(
+    __name__.__reduce__.__name__[
+        (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+    ]
+    + __name__.__add__.__class__.__name__[
+        (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+    ]
+    + __name__.__class__.__name__[-(__name__.__len__() // __name__.__len__())]
+)
 
-__import__(__chr__((__name__.__len__())*(__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__())) + __chr__((__name__.__len__())*(__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__())) + __chr__((__name__.__len__())*(__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__() // __name__.__len__())) + __chr__((__name__.__len__())*(__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__()) + (__name__.__len__() // __name__.__len__())))
+__import__(
+    __chr__(
+        (__name__.__len__()) * (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+    )
+    + __chr__(
+        (__name__.__len__()) * (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+    )
+    + __chr__(
+        (__name__.__len__()) * (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+    )
+    + __chr__(
+        (__name__.__len__()) * (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+        + (__name__.__len__() // __name__.__len__())
+    )
+)
 ```
 
-And of course, at the end, The operators get changed to `.__add__` and so on:
+And of course, at the end, The operators get changed to `.__add__()` and so on:
 
 ```python
-__chr__ = __builtins__.__getattribute__(__name__.__reduce__.__name__[(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__()))] + __name__.__add__.__class__.__name__[(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__()))] + __name__.__class__.__name__[-(__name__.__len__().__floordiv__(__name__.__len__()))])
+__chr__ = __builtins__.__getattribute__(
+    (
+        __name__.__reduce__.__name__[
+            (__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        ]
+    )
+    .__add__(
+        __name__.__add__.__class__.__name__[
+            (__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        ]
+    )
+    .__add__(
+        __name__.__class__.__name__[
+            -(__name__.__len__().__floordiv__(__name__.__len__()))
+        ]
+    )
+)
 
-__import__(__chr__(((__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__()))) + __chr__(((__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__()))) + __chr__(((__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__()))) + __chr__(((__name__.__len__()).__mul__(__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__((__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__())).__add__(__name__.__len__().__floordiv__(__name__.__len__()))))
+__import__(
+    __chr__(
+        ((__name__.__len__()).__mul__(__name__.__len__()))
+        .__add__((__name__.__len__()))
+        .__add__((__name__.__len__()))
+        .__add__((__name__.__len__()))
+        .__add__((__name__.__len__()))
+        .__add__((__name__.__len__()))
+        .__add__((__name__.__len__()))
+        .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+    )
+    .__add__(
+        __chr__(
+            ((__name__.__len__()).__mul__(__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+        )
+    )
+    .__add__(
+        __chr__(
+            ((__name__.__len__()).__mul__(__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        )
+    )
+    .__add__(
+        __chr__(
+            ((__name__.__len__()).__mul__(__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__((__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+            .__add__(__name__.__len__().__floordiv__(__name__.__len__()))
+        )
+    )
+)
 ```
 
 It's beautiful.
 
 And of course, it runs. Let's save this final version as `abomination.py`:
 
-```console
+```bash
 $ python3 abomination.py
 The Zen of Python, by Tim Peters
 
