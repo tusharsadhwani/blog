@@ -462,7 +462,7 @@ And `'r'` can be picked from the `str` class here:
 >>> __name__.__class__.__name__[-(__name__.__len__() // __name__.__len__())]
 'r'
 # And in the end it'll look like this
->>> __name__.__class__.__name__[-(__name__.__len__().__floordiv__(__name__.__len__()))]
+>>> __name__.__class__.__name__[(__name__.__len__().__floordiv__(__name__.__len__())).__neg__()]
 'r'
 ```
 
@@ -518,7 +518,7 @@ __chr__ = __builtins__.__getattribute__(
         + (__name__.__len__() // __name__.__len__())
         + (__name__.__len__() // __name__.__len__())
     ]
-    + __name__.__class__.__name__[-(__name__.__len__() // __name__.__len__())]
+    + __name__.__class__.__name__[(__name__.__len__() // __name__.__len__()).__neg__()]
 )
 
 __import__(
@@ -590,7 +590,7 @@ __chr__ = __builtins__.__getattribute__(
     )
     .__add__(
         __name__.__class__.__name__[
-            -(__name__.__len__().__floordiv__(__name__.__len__()))
+            (__name__.__len__().__floordiv__(__name__.__len__())).__neg__()
         ]
     )
 )
@@ -666,7 +666,7 @@ Nothing special really has to be done here; we just have to create more visitors
 
 - `StringVisitor` takes in strings and produces these `chr(N) + chr(M)` stuff
 - `ChrVisitor` converts every `chr` into `__builtins__.__getattribute__(__name__.__reduce__.__name__[6] + ...)`
-- Then our existing `NumberVisitor` which will convert the indexes like `-1` into `-(__name__.__len__()).__floordiv__(__name__.__len__())` etc.
+- Then our existing `NumberVisitor` which will convert the indexes like `-1` into `(__name__.__len__()).__floordiv__(__name__.__len__()).__neg__()` etc.
 
 If we run the Visitors in that order, even though `StringVisitor` produces `chr` calls and `ChrStringVisitor` produces numbers, at the end, _the entire code_ will have become dunders.
 
