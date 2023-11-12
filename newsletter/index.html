@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" class="astro-KKTFMSIY">
+<html lang="en" class="astro-5WALD5LL">
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
 
 <!-- Primary Meta Tags -->
-<title>How to setup PostgreSQL on Manjaro linux / Arch</title>
-<meta name="title" content="How to setup PostgreSQL on Manjaro linux / Arch">
-<meta name="description" content="This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.">
+<title>Tushar&#39;s Blog</title>
+<meta name="title" content="Tushar's Blog">
+<meta name="description" content="My thoughts and learnings.">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tushar.lol">
-<meta property="og:title" content="How to setup PostgreSQL on Manjaro linux / Arch">
-<meta property="og:description" content="This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.">
-<meta property="og:image" content="https://tushar.lol/images/postgres.jpg">
+<meta property="og:title" content="Tushar's Blog">
+<meta property="og:description" content="My thoughts and learnings.">
+<meta property="og:image" content="https://tushar.lol">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://tushar.lol">
-<meta property="twitter:title" content="How to setup PostgreSQL on Manjaro linux / Arch">
-<meta property="twitter:description" content="This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.">
-<meta property="twitter:image" content="https://tushar.lol/images/postgres.jpg">
+<meta property="twitter:title" content="Tushar's Blog">
+<meta property="twitter:description" content="My thoughts and learnings.">
+<meta property="twitter:image" content="https://tushar.lol">
 
 <link rel="stylesheet" href="/style/global.css">
 <link rel="stylesheet" href="/style/merged-themes.css">
@@ -33,29 +33,31 @@
 
 
 
-  <link rel="stylesheet" href="/assets/asset.e9fb454e.css"></link>
+    <link rel="stylesheet" href="/style/global.css">
+
+    
+  <link rel="stylesheet" href="/assets/asset.92342e57.css"></link>
 <link rel="stylesheet" href="/assets/asset.f321c214.css"></link>
-<link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.917bf5e28.js" astro-script="/post/setup-postgres/script-0"></script>
-<script type="module" data-astro-component-hydration astro-script="/post/setup-postgres/script-1">import setup from '../../entry.8eab8588.js';
+<link rel="stylesheet" href="/assets/asset.f96c2ed2.css"></link><style astro-style="true">astro-root, astro-fragment { display: contents; }</style><script type="module" src="/entry.917bf5e22.js" astro-script="/newsletter/script-0"></script>
+<script type="module" data-astro-component-hydration astro-script="/newsletter/script-1">import setup from '../entry.8eab8588.js';
 import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
-setup("Z1Tf25X", {name:"Newsletter",value: "preact"}, async () => {
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.9e2f0c78.js"), import("../../entry.a91cb9b9.js")]);
-  return (el, children) => hydrate(el)(Component, {"class":"astro-KKTFMSIY"}, children);
+setup("e6mKh", {name:"Newsletter",value: "preact"}, async () => {
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../entry.9e2f0c78.js"), import("../entry.a91cb9b9.js")]);
+  return (el, children) => hydrate(el)(Component, {"class":"astro-5WALD5LL"}, children);
 
 });
 </script>
-<script type="module" data-astro-component-hydration astro-script="/post/setup-postgres/script-2">import setup from '../../entry.8eab8588.js';
+<script type="module" data-astro-component-hydration astro-script="/newsletter/script-2">import setup from '../entry.8eab8588.js';
 import 'data:text/javascript;charset=utf-8,//[no before-hydration script]';
 setup("WpNq3", {name:"Switch",value: "preact"}, async () => {
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../../entry.c6bc87db.js"), import("../../entry.a91cb9b9.js")]);
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("../entry.c6bc87db.js"), import("../entry.a91cb9b9.js")]);
   return (el, children) => hydrate(el)(Component, {"class":"astro-ZEBAPXNU"}, children);
 
 });
 </script>
 </head>
-  
 
-  <body id="top">
+  <body>
     <header class="astro-ZEBAPXNU">
   <a href="/" class="astro-ZEBAPXNU">
     <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="400" height="400" version="1.1" class="astro-ZEBAPXNU">
@@ -74,76 +76,22 @@ setup("WpNq3", {name:"Switch",value: "preact"}, async () => {
 
 
 
-    <div class="layout astro-44HSQUML">
-  <header class="astro-44HSQUML">
-    <p class="publish-date astro-44HSQUML">Saturday, 26 September 2020</p>
-    <h1 class="title astro-44HSQUML">How to setup PostgreSQL on Manjaro linux / Arch</h1>
-    <p class="description astro-44HSQUML">This guide is here just because I’ve messed up the installs on arch before, and turns out it’s actually pretty easy to do.</p>
-    <img src="/images/postgres.jpg" title="How to setup PostgreSQL on Manjaro linux / Arch" alt="How to setup PostgreSQL on Manjaro linux / Arch" class="astro-44HSQUML">
-    
-<div class="author astro-BL6UQIAR">
-  <p class="astro-BL6UQIAR"><a href="https://twitter.com/sadhlife" class="astro-BL6UQIAR">@tusharsadhwani</a></p>
-</div>
+    <main class="content astro-5WALD5LL">
+      <section class="intro astro-5WALD5LL">
+        <video class="cat astro-5WALD5LL" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop></video>
+      </section>
 
-  </header>
-  <article class="content astro-44HSQUML">
-    <main class="astro-44HSQUML">
-      <p>This guide is here just because I've messed up the installs on arch before, and turns out it's actually pretty easy to do.</p><h2 id="step-1---install-the-dependencies">Step 1 - Install the dependencies</h2><pre class="language-plaintext"><code class="language-plaintext">sudo pacman -S yay
-yay postgresql pgadmin4</code></pre><p>This should automatically setup your postgres user and group.</p><h2 id="step-2---setup-postgres-service">Step 2 - Setup postgres service</h2><pre class="language-plaintext"><code class="language-plaintext">sudo -u postgres -i # login as postgres
-initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data/'
-exit
-
-sudo systemctl enable --now postgresql
-sudo systemctl status postgresql # to check for any errors</code></pre><h2 id="step-3---setup-password">Step 3 - Setup password</h2><pre class="language-plaintext"><code class="language-plaintext">psql -U postgres
-
-postgres=# \password # to set password</code></pre><h2 id="step-4---setup-connection-security">Step 4 - Setup connection security</h2><pre class="language-plaintext"><code class="language-plaintext">$ su
-
-# cd /var/lib/postgres/data
-# cp pg_hba.conf pg_hba.conf.backup # in case you mess up
-# nano pg_hba.conf</code></pre><p>Your default pg_hba.conf might look like this:</p><pre class="language-plaintext"><code class="language-plaintext"> TYPE  DATABASE        USER            ADDRESS                 METHOD
-
-# "local" is for Unix domain socket connections only
-local   all             all                                     trust
-# IPv4 local connections:
-host    all             all             127.0.0.1/32            trust
-# IPv6 local connections:
-host    all             all             ::1/128                 trust
-# Allow replication connections from localhost, by a user with the
-# replication privilege.
-local   replication     all                                     trust
-host    replication     all             127.0.0.1/32            trust
-host    replication     all             ::1/128                 trust</code></pre><p>"Method" is set to trust, meaning it won't ask for the password to anyone. To fix that, change the method from <code>trust</code> to <code>md5</code> everywhere.</p><p>And that should be it for postgres!</p><h2 id="bonus-shortcuts">Bonus: shortcuts</h2><pre class="language-plaintext"><code class="language-plaintext">> psql dbname postgres # to directly open a database
-
-postgres=# \c                       # see current database
-postgres=# \l                       # see list of databases
-postgres=# \c dbname                # set database
-postgres=# create database dbname;  # create database
-postgres=# \dt                      # see list of tables</code></pre><h2 id="step-6---pgadmin">Step 6 - PgAdmin</h2><p>Open up pgadmin, click on "Add New Server", and add the following:</p><pre class="language-plaintext"><code class="language-plaintext">Host: localhost
-Port: 5432
-Maintenance database: postgres
-Username: postgres
-Password: &lt;your password></code></pre><p>And PgAdmin should work just fine.</p>
+      <section class="newsletter astro-5WALD5LL">
+        <p class="heading astro-5WALD5LL">Hi. I'm Tushar.</p>
+        <p class="astro-5WALD5LL">I do weird stuff with Python.</p>
+        <p class="astro-5WALD5LL">Sometimes I do cool stuff with Python.</p>
+        <p class="astro-5WALD5LL">When I do, I write a newsletter about it.</p>
+        <p class="astro-5WALD5LL">Interested?</p>
+        <astro-root uid="e6mKh"></astro-root>
+      </section>
     </main>
-  </article>
-</div>
 
-
-
-    <hr class="astro-KKTFMSIY">
-    <div class="centered astro-KKTFMSIY">
-      <astro-root uid="Z1Tf25X"></astro-root>
-    </div>
-    <div class="back-to-top-wrapper astro-KKTFMSIY">
-      <a href="#top" class="back-to-top-link astro-KKTFMSIY" aria-label="Scroll to Top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-up astro-KKTFMSIY" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" class="astro-KKTFMSIY"></path>
-        </svg>
-      </a>
-    </div>
-    <script src="https://utteranc.es/client.js" repo="tusharsadhwani/blog-comments" issue-term="title" theme="dark-blue" crossorigin="anonymous" async>
-    </script>
-  </body>
-  <hr class="astro-ZUKZCZIV">
+    <hr class="astro-ZUKZCZIV">
 <footer class="astro-ZUKZCZIV">
   <a href="https://twitter.com/sadhlife" class="astro-ZUKZCZIV">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="astro-ZUKZCZIV"><path fill="currentColor" d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z" class="astro-ZUKZCZIV"></path></svg>
@@ -164,8 +112,9 @@ Password: &lt;your password></code></pre><p>And PgAdmin should work just fine.</
 </footer>
 
 
-  <noscript>
-    <img src="https://analytics.tushar.lol/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-KKTFMSIY">
-  </noscript>
-  <script defer src="https://analytics.tushar.lol/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+    <noscript>
+      <img src="https://analytics.tushar.lol/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/pixel.gif" class="astro-5WALD5LL">
+    </noscript>
+    <script defer src="https://analytics.tushar.lol/ingress/f6c6e99f-df6a-43f3-9c16-f434cee0278e/script.js"></script>
+  </body>
 </html>
