@@ -589,6 +589,8 @@ Before Python 3.1, The class creation syntax only allowed passing base classes t
 
 But, we already have this, of course, in the code for calling regular functions. So it was proposed that the `Class X(...)` syntax will simply delegate to a function call underneath: `__build_class__('X', ...)`.
 
+You can read more in [PEP 3115](https://peps.python.org/pep-3115/) and in [this email from Guido](https://mail.python.org/pipermail/python-3000/2007-March/006338.html).
+
 ### `__cached__`
 
 This is an interesting one.
@@ -1452,14 +1454,13 @@ First, some intriguing yet confusing code.
 136556404561904 # same str object?
 ```
 
-Integers and strings are objects that are used in almost any program, and in many cases there are copies of the same integer value or the same string content. To save the time and memory of creating a whole new object when an exact same one is already there, CPython implements two common techniques used in many other languages: Small Integer Cache & String Interning. 
+Integers and strings are objects that are used in almost any program, and in many cases there are copies of the same integer value or the same string content. To save the time and memory of creating a whole new object when an exact same one is already there, CPython implements two common techniques used in many other languages: Small Integer Cache & String Interning.
 
-Although they have different names, the underlying idea is the same: make objects immutable and reuse them across different references (arrows). [Small Integer Cache](https://docs.python.org/3.8/c-api/long.html#c.PyLong_FromLong) makes integers in the range of [-5,256] reuse the same object for the same value. [String Interning](http://python-reference.readthedocs.io/en/latest/docs/functions/intern.html) points references to strings having the same content to the same object. 
+Although they have different names, the underlying idea is the same: make objects immutable and reuse them across different references (arrows). [Small Integer Cache](https://docs.python.org/3.8/c-api/long.html#c.PyLong_FromLong) makes integers in the range of [-5,256] reuse the same object for the same value. [String Interning](http://python-reference.readthedocs.io/en/latest/docs/functions/intern.html) points references to strings having the same content to the same object.
 
 This is just a simplified explanation, and you should read more if you care about the memory consumption of your Python program. Hopefully the code example makes sense to you now.
 
 </details>
-
 
 With `object`s, `==` and `is` behaves the same way:
 
