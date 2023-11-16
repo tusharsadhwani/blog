@@ -10,7 +10,7 @@ layout: "../../layouts/BlogPost.astro"
 
 > Hi! Before we start, a word of caution: This is an extremely long article, and it might take multiple hours to finish completely. But I promise it'll be worth it.
 >
-> Oh, and follow me on [twitter](https://twitter.com/sadhlife), I frequently post Python content there as well.
+> Oh, and follow me on [twitter](https://twitter.com/tusharisanerd), I frequently post Python content there as well.
 
 ### Index
 
