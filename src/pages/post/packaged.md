@@ -100,8 +100,8 @@ Linux, supporting 64-bit x86 and ARM.
 
 > I know, I know. I'm working on Windows support.
 
-Is this the whole project? Maybe. Unless you find use it, and you find bugs. And
-I'm sure you'll find bugs. I found a couple myself!
+Is this the whole project? Maybe. Unless you use it, and you find bugs. And I'm
+sure you'll find bugs. I found a couple myself!
 
 So try out `packaged`, and stop worrying about how to ship this Python app
 to your users.
