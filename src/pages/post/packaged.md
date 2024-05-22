@@ -92,7 +92,7 @@ packaged ./myapp 'pip install -r requirements.txt' 'python myapp.py'
 
 It started as [100 lines of code][5]. And it works _so well_.
 
-**Check the demo website: [packaged.live](https://packaged.live).**
+### Check the demo website here: [packaged.live](https://packaged.live)
 
 It contains GUI applications with various C and Python dependencies, TUI apps,
 CLI apps, you name it. All packaged as a standalone executable, for MacOS and
