@@ -89,9 +89,9 @@ setup("WpNq3", {name:"Switch",value: "preact"}, async () => {
   <article class="content astro-44HSQUML">
     <main class="astro-44HSQUML">
       <h2 id="prelude">Prelude</h2><p>A year or so ago, I stumbled upon this repository called <a href="https://github.com/indygreg/python-build-standalone">python-build-standalone</a>.
-And this was a <em>ridiculous</em> thing to stumble upon.</p><p>This repository essentially contains <strong>portable Pythons</strong>. Python interpreters
-that can be unzipped into any folder, and they just work.</p><p>This immediately opened some insane opportunities for me. I also found a way to
-use this package at work. But first of all, I decided to build <a href="https://github.com/tusharsadhwani/yen">yen</a>.</p><h2 id="the-first-puzzle-piece-yen">The first puzzle piece: <code>yen</code></h2><p><code>yen</code> was my idea of a <code>pyenv</code> replacement. While also being incredibly simple.</p><p>What <code>pyenv</code> promises is being able to install any version of Python on any
+And this was a <em>*ridiculous*</em> thing to stumble upon.</p><p>This repository essentially contains <strong>portable Pythons</strong>. Python interpreters
+that can be unzipped into any folder, and they just work.</p><p>This immediately sparked some weird ideas in my head. I also found a way to
+use this package at work!</p><p>But first of all, I decided to build <a href="https://github.com/tusharsadhwani/yen">yen</a>.</p><h2 id="the-first-puzzle-piece-yen">The first puzzle piece: <code>yen</code></h2><p><code>yen</code> was my idea of a <code>pyenv</code> replacement. While also being incredibly simple.</p><p>What <code>pyenv</code> promises is being able to install any version of Python on any
 machine. Well, so long as that machine has the dependencies to build Python. And
 that's the big problem with <code>pyenv</code>: it kinda sucks.</p><p>Not only does it build Python from source on your machine, so it's not as
 straightforward as one would think... it also is notorious for the compiled
@@ -112,16 +112,17 @@ essentially backed by the same technology. However <code>rye</code> can do a lot
 </blockquote><h2 id="the-second-puzzle-piece-makeself">The second puzzle piece: <code>makeself</code></h2><p>Then a few weeks ago, I found <a href="https://github.com/megastep/makeself">makeself</a>.</p><p><code>makeself</code> is a tool that can create <a href="https://en.wikipedia.org/wiki/Self-extracting_archive">self-extracting archives</a>. This
 basically means that instead of creating a zipfile that you have to extract and
 then find what item to run inside it, <code>makeself</code> will embed the zipfile inside
-a bash script, that will <em>extract itself</em> and then run the command to run the
+a bash script, that will <em><em>extract itself</em></em> and then run the command to run the
 extracted file.</p><p>It's a beautiful piece of tech, and it works flawlessly. And as soon as I
 learned about it, I knew what I had to do: <strong>self-contained Python programs</strong>.</p><h2 id="the-finale-packaged">The finale: <code>packaged</code></h2><p>So <code>packaged</code> literally just does this:</p><ul>
-<li>Use <code>yen</code> to download a specified Python version inside your project directory</li>
-<li>Install your project into the downloaded Python, with a command that you give</li>
-<li>Package up the whole project with <code>makeself</code> to create a self-extracting
+<li>Use <code>yen</code> to download a specific Python version inside your project directory,</li>
+<li>Install your project inside the downloaded Python, with a command that you
+provide,</li>
+<li>And package up the whole project with <code>makeself</code> to create a self-extracting
 executable, alongside your startup command that also points to the packaged
 Python version.</li>
 </ul><p>In essence, it's just a zipfile of your project with a Python interpreter that
-extracts and runs itself.</p><p>It started as <a href="https://github.com/tusharsadhwani/packaged/blob/0620d67/src/packaged/__init__.py">100 lines of code</a>. And it works <em>so well</em>.</p><p><strong>Check the demo website: <a href="https://packaged.live">packaged.live</a>.</strong></p><p>It contains GUI applications with various C and Python dependencies, TUI apps,
+extracts and runs itself.</p><p>You can package your project into a single file with something as simple as:</p><pre class="language-bash"><code class="language-bash">packaged ./myapp <span class="token string">'pip install -r requirements.txt'</span> <span class="token string">'python myapp.py'</span></code></pre><p>It started as <a href="https://github.com/tusharsadhwani/packaged/blob/0620d67/src/packaged/__init__.py">100 lines of code</a>. And it works <em>so well</em>.</p><p><strong>Check the demo website: <a href="https://packaged.live">packaged.live</a>.</strong></p><p>It contains GUI applications with various C and Python dependencies, TUI apps,
 CLI apps, you name it. All packaged as a standalone executable, for MacOS and
 Linux, supporting 64-bit x86 and ARM.</p><blockquote>
 <p>I know, I know. I'm working on Windows support.</p>
