@@ -97,6 +97,16 @@ I'm sure you'll find bugs. I found a couple myself!
 So try out `packaged`, and stop worrying about how to ship this Python app
 to your users.
 
+## Special mention: `PyOxidizer`
+
+I did find out eventually that PyOxidizer is essentially a much more capable
+version of what I've built, while it's not as straightforward as one command,
+but it lets you have a lot more complicated build setups, you can embed Rust
+code in your built executable, and a lot more.
+
+So if your usecase calls for it, you can pull out [PyOxidizer][6] as your
+preferred packaging tool as well.
+
 ## What else
 
 If you've read my blogs before, I swear I haven't stopped writing blogs. I have
@@ -111,4 +121,5 @@ Oh, and if you want to talk, I'm most easily reachable on [twitter][twitter].
 [3]: https://github.com/megastep/makeself
 [4]: https://en.wikipedia.org/wiki/Self-extracting_archive
 [5]: https://github.com/tusharsadhwani/packaged/blob/0620d67/src/packaged/__init__.py
+[6]: https://github.com/indygreg/PyOxidizer
 [twitter]: https://twitter.com/tusharisanerd
