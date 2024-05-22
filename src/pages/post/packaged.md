@@ -11,13 +11,15 @@ layout: "../../layouts/BlogPost.astro"
 ## Prelude
 
 A year or so ago, I stumbled upon this repository called [python-build-standalone][1].
-And this was a _ridiculous_ thing to stumble upon.
+And this was a _\*ridiculous\*_ thing to stumble upon.
 
 This repository essentially contains **portable Pythons**. Python interpreters
 that can be unzipped into any folder, and they just work.
 
-This immediately opened some insane opportunities for me. I also found a way to
-use this package at work. But first of all, I decided to build [yen][2].
+This immediately sparked some weird ideas in my head. I also found a way to
+use this package at work!
+
+But first of all, I decided to build [yen][2].
 
 ## The first puzzle piece: `yen`
 
@@ -62,7 +64,7 @@ Then a few weeks ago, I found [makeself][3].
 `makeself` is a tool that can create [self-extracting archives][4]. This
 basically means that instead of creating a zipfile that you have to extract and
 then find what item to run inside it, `makeself` will embed the zipfile inside
-a bash script, that will _extract itself_ and then run the command to run the
+a bash script, that will _*extract itself*_ and then run the command to run the
 extracted file.
 
 It's a beautiful piece of tech, and it works flawlessly. And as soon as I
@@ -72,14 +74,21 @@ learned about it, I knew what I had to do: **self-contained Python programs**.
 
 So `packaged` literally just does this:
 
-- Use `yen` to download a specified Python version inside your project directory
-- Install your project into the downloaded Python, with a command that you give
-- Package up the whole project with `makeself` to create a self-extracting
+- Use `yen` to download a specific Python version inside your project directory,
+- Install your project inside the downloaded Python, with a command that you
+  provide,
+- And package up the whole project with `makeself` to create a self-extracting
   executable, alongside your startup command that also points to the packaged
   Python version.
 
 In essence, it's just a zipfile of your project with a Python interpreter that
 extracts and runs itself.
+
+You can package your project into a single file with something as simple as:
+
+```bash
+packaged ./myapp 'pip install -r requirements.txt' 'python myapp.py'
+```
 
 It started as [100 lines of code][5]. And it works _so well_.
 
