@@ -1680,6 +1680,7 @@ Now that I've mentioned inheritence, I think I should also elaborate how the "me
 ...
 >>> class B(A):
 ...     def __init__(self):
+...         super().__init__()
 ...         self.z = 'z'
 ...
 >>> a = A()
