@@ -1,10 +1,10 @@
 ---
-title: "dunderhell - convert your Python code entirely into dunders"
-description: "Nobody stopped me to question why, so it's kinda all your fault."
+title: "Convert your Python code entirely into dunders"
+description: "In today's episode of “Building a library that nobody asked for”."
 publishDate: "Tuesday, 10 October 2023"
 author: "Tushar Sadhwani"
 heroImage: "/images/dunderhell.jpg"
-alt: "dunderhell - convert your Python code entirely into dunders"
+alt: "Convert your Python code entirely into dunders"
 layout: "../../layouts/BlogPost.astro"
 ---
 
