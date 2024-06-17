@@ -1092,7 +1092,8 @@ AttributeError<span class="token punctuation">:</span> <span class="token string
 <span class="token operator">>></span><span class="token operator">></span> attr_name <span class="token operator">=</span> <span class="token string">'value'</span>
 <span class="token operator">>></span><span class="token operator">></span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> attr_name<span class="token punctuation">)</span>
 <span class="token number">42</span>  <span class="token comment"># It works!</span></code></pre><p><code>setattr</code> and <code>delattr</code> work the same way: they take in the attribute name as a string, and sets/deletes the corresponding attribute accordingly.</p><pre class="language-python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">class</span> <span class="token class-name">X</span><span class="token punctuation">:</span>
-<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     value <span class="token operator">=</span> <span class="token number">42</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>         value <span class="token operator">=</span> <span class="token number">42</span>
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token operator">>></span><span class="token operator">></span> x <span class="token operator">=</span> X<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token operator">>></span><span class="token operator">></span> <span class="token builtin">setattr</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token string">'value'</span><span class="token punctuation">,</span> <span class="token number">84</span><span class="token punctuation">)</span>
@@ -1186,7 +1187,7 @@ ValueError<span class="token punctuation">:</span> marks cannot be negative</cod
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>         <span class="token keyword">return</span> cls<span class="token punctuation">.</span>__name__
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token operator">>></span><span class="token operator">></span> x <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token operator">>></span><span class="token operator">></span> x<span class="token punctuation">.</span>class_name
+<span class="token operator">>></span><span class="token operator">></span> x<span class="token punctuation">.</span>class_name<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token string">'C'</span></code></pre>
 </li>
 <li>
