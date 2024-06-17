@@ -1900,7 +1900,8 @@ Yeah, it doesn't take the variable's value. This should be pretty obvious. But t
 
 ```python
 >>> class X:
-...     value = 42
+...     def __init__(self):
+...         value = 42
 ...
 >>> x = X()
 >>> setattr(x, 'value', 84)
@@ -2062,7 +2063,7 @@ We're reaching the end of all the class and object-related builtin functions, th
   ...         return cls.__name__
   ...
   >>> x = C()
-  >>> x.class_name
+  >>> x.class_name()
   'C'
   ```
 
