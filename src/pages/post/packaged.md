@@ -108,10 +108,12 @@ to your users.
 
 ## Special mention: `PyOxidizer`
 
-I did find out eventually that PyOxidizer is essentially a much more capable
+PyOxidizer is essentially a more complex, more capable
 version of what I've built, while it's not as straightforward as one command,
 but it lets you have a lot more complicated build setups, you can embed Rust
 code in your built executable, and a lot more.
+
+Unfortunately, it seems it's not under active development anymore though.
 
 So if your usecase calls for it, you can pull out [PyOxidizer][6] as your
 preferred packaging tool as well.
