@@ -20,7 +20,7 @@ jobs:
 
       - name: Build astro pages
         run: |
-          npm install
+          npm ci
           npm run build
           echo 'tushar.lol' > ./dist/CNAME
 
