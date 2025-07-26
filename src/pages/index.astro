@@ -76,7 +76,7 @@ const latestPosts = allPosts.sort((a, b) => new Date(b.frontmatter.publishDate) 
       <section class="intro">
         <h1 class="latest">{title}</h1>
         <p>{description}</p>
-        <video class="cat" src="/cat.mp4" alt="Cat typing on keyboard" autoplay muted loop />
+        <video class="cat" src="/cat.mp4" playsinline alt="Cat typing on keyboard" autoplay muted loop />
         <Newsletter client:only="preact" />
       </section>
       <section>
